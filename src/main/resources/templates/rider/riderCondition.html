@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>라이더 조건</title>
+    <link rel="stylesheet" href="/layout/rider/css/rider_main_header.css">
+    <link rel="stylesheet" href="/rider/css/rider-condition.css">
+    <link rel="stylesheet" href="/layout/rider/css/footer.css">
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/rider/rider-header :: rHeaderContent}"></header>
+
+<br/>
+<h1>味추홀라이더자격 & 근무조건</h1>
+
+<div class="container">
+    <div class="text-section">
+        <p><strong>Q. 해당 경력이 없는 초보자도 味추홀라이더가 될 수 있나요?</strong><br>
+            관련 경력이 없어도 지원할 수 있습니다.
+        </p>
+        <br/>
+        <p><strong>Q. 나이 제한이 있나요?</strong><br>
+            현재는 미성년자를 제외한 모든 연령대가 지원 가능합니다.<br>
+            만 18세 이상이라면 학력, 경력, 성별에 상관없이 누구나 지원할 수 있습니다.
+        </p>
+        <br/>
+        <p><strong>Q. 면허가 필수인가요?</strong><br>
+            운전면허는 필수가 아닙니다.<br>
+            걷기, 자전거, 킥보드, 스쿠터 등 다양한 방식으로 배달 가능합니다.
+        </p>
+    </div>
+    <div class="image-section">
+        <img src="/rider/img/이미지/ridercity.png" alt="배달 라이더 이미지">
+    </div>
+</div>
+
+<footer th:insert="~{layout/rider/rider-footer :: footerContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+<script src="/layout/member/js/header.js"></script>
+<script>
+    $('#rlogin').click(() => {
+        location.href = "/rLoginForm";
+    });
+
+    $('#rLogout').click(() => {
+        location.href = "/rLogout";
+    });
+</script>
+<!--<script src="/layout/member/js/header.js"></script>-->
+</html>

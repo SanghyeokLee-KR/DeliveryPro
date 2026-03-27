@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/common/css/question.css" rel="stylesheet">
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>문의하기</title>
+</head>
+<body>
+<!-- 헤더 -->
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<!-- 중앙 부분 -->
+<div class="question-container">
+    <form action="/bWrite" method="post">
+
+        <!-- 목록 (body-header 부분) -->
+        <div class="question-header">
+            <div class="question-top-section">
+                <a href="/qnaForm" class="question-back">< 목록</a>
+                <p class="header-text">문의하기</p>
+            </div>
+
+            <!-- 제목 -->
+            <div class="question-title-section">
+                <label for="boardTitle">제목</label>
+                <input type="text" id="boardTitle" name="boardTitle" placeholder="제목작성" required>
+            </div>
+
+            <!-- 내용 작성 -->
+            <div class="question-content-section">
+                <textarea id="board_content" name="boardContent" rows="10" cols="50" placeholder="글내용작성" required></textarea>
+            </div>
+        </div>
+
+        <!-- 작성 버튼 -->
+        <div class="question-footer">
+            <button type="submit">작성완료</button>
+        </div>
+    </form>
+</div>
+
+<!-- 푸터 -->
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+</body>
+<script src="/layout/member/js/header.js"></script>
+</html>

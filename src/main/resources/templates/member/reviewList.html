@@ -1,0 +1,36 @@
+<div class="reviewList-entire" th:fragment="reviewListContent">
+  <div class="reviewList-container">
+    <!-- 상단 필터 -->
+    <div class="reviewList-filter-section">
+      <div class="reviewList-date-filter">
+        <div class="reviewList-label">
+          <label for="start-date">기간설정</label></div>
+        <input type="date" id="start-date">
+        <div class="reviewList-label1">
+          ~
+        </div>
+        <input type="date" id="end-date">
+      </div>
+      <div class="reviewList-sort">
+        <select>
+          <option value="recent">최신순</option>
+          <option value="views">조회순</option>
+          <option value="recommend">추천순</option>
+        </select>
+      </div>
+    </div>
+    <!-- 리뷰 카드 -->
+    <div class="reviewList-reviews" id="reviewList">
+
+    </div>
+        </div>
+      </div>
+    <!-- 추가 리뷰 카드 복사 가능 -->
+
+    <!-- 페이지네이션 -->
+    <div class="reviewList-pagination">
+      <button class="reviewList-page active">1</button>
+      <button class="reviewList-page">2</button>
+      <button class="reviewList-page">3</button>
+      <button class="reviewList-page">4</button>
+    </div>

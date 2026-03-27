@@ -1,0 +1,59 @@
+<div class="header-container" th:fragment="rHeaderContent">
+    <!-- 로고 및 토글 -->
+    <div class="logo">
+        <a href="/rider">
+            <img alt="Logo" src="/rider/img/logo/rLogo.png">
+        </a>
+        <div class="toggle-button-cover">
+            <div class="button r" id="button-3">
+                <input class="checkbox" type="checkbox">
+                <div class="knobs"></div>
+                <div class="layer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 로그인 및 주소 -->
+    <div class="user-menu">
+        <div style="display: flex; flex-direction: column; width: 300px; margin-left: 100px;">
+            <div style="margin: 5px; display: flex;">
+                <!-- 로그인 전 -->
+                <span th:if="${session.rider_no eq null and loggedIn == null}">
+                    <a class="main-jl" href="rLoginForm">로그인</a>
+                    <span class="ilo">|</span>
+                    <a class="main-jl" href="r_JoinForm">회원가입</a>
+                </span>
+
+                <!-- 로그인 후 -->
+                <span class="main-ut" th:if="${session.rider_no ne null or loggedIn != null}">
+                    <a class="main-jl" href="/rLogout">로그아웃</a>
+                    <span class="ilo">|</span>
+                    <a class="main-jl main-nickname" th:text="${session.rider_name}"></a>
+                </span>
+
+                <!-- 마이페이지 아이콘 -->
+                <!-- 여기서 onclick="return loginConfirm(event)"가 핵심 -->
+                <a class="loginConfirm"
+                   onclick="return loginConfirm2(event)"
+                   th:href="@{/riderInfoPage/{rId}(rId=${session.rider_no})}">
+                    <svg data-name="레이어 1" id="_레이어_1" viewBox="0 0 132.83 135.96" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <style>
+                                .cls-1 {
+                                    fill: #404040;
+                                    stroke-width: 0px;
+                                }
+                            </style>
+                        </defs>
+                        <path class="cls-1"
+                              d="M66.42,13.38c11.07,0,20.04,8.97,20.04,20.04s-8.97,20.04-20.04,20.04-20.04-8.97-20.04-20.04,8.97-20.04,20.04-20.04M66.42,2.03c-17.31,0-31.39,14.08-31.39,31.39s14.08,31.39,31.39,31.39,31.39-14.08,31.39-31.39S83.72,2.03,66.42,2.03h0Z"/>
+                        <path class="cls-1"
+                              d="M125.18,133.93c-3.13,0-5.67-2.54-5.67-5.67,0-22.82-18.56-41.38-41.38-41.38h-23.41c-22.82,0-41.38,18.56-41.38,41.38,0,3.13-2.54,5.67-5.67,5.67s-5.67-2.54-5.67-5.67c0-29.07,23.65-52.73,52.73-52.73h23.41c29.07,0,52.73,23.65,52.73,52.73,0,3.13-2.54,5.67-5.67,5.67Z"/>
+                    </svg>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>

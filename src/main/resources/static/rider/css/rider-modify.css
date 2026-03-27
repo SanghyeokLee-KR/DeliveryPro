@@ -1,0 +1,189 @@
+/* styles.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.rider-modifyprofile-profile-card {
+    width: 800px;
+    height: 650px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 20px auto;
+}
+
+.modifyprofile-header {
+    display: flex;
+    margin-left: 50px;
+    margin-top: 25px;
+}
+
+.modifyprofile-header-1 {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 60px;
+}
+
+.rider-modifyprofile-profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.rider-modifyprofile-profile-header h1 {
+    font-size: 18px;
+    color: #333;
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.rider-modifyprofile-exit-button {
+    background-color: #d5d5d5;
+    border: none;
+    color: #ffffff;
+    font-size: 14px;
+    border-radius: 15px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.rider-modifyprofile-exit-button:hover {
+    background-color: #dee2e6;
+}
+
+.rider-modifyprofile-profile-content {
+    padding: 16px;
+}
+
+.rider-modifyprofile-profile-avatar {
+    margin-bottom: 16px;
+}
+
+.rider-modifyprofile-avatar-placeholder {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    margin: 0 auto;
+}
+
+.rider-modifyprofile-badge {
+    background-color: #c2e1f5;
+    color: #313f4a;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-left: 30px;
+    font-weight: bold;
+}
+
+.rider-modifyprofile-badge p {
+    margin-top: 5px;
+}
+
+.modifyprofile-id p {
+    margin-top: 14px;
+    color: #c5c5c5;
+    margin-left: 60px;
+}
+
+.rider-modifyprofile-edit-button {
+    background-color: #007fdd;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 19px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.rider-modifyprofile-edit-button:hover {
+    background-color: #0056b3;
+}
+
+.rider-modifyprofile-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 테스트 */
+.rider-modifyprofile-info {
+    display: flex; /* Flexbox 적용 */
+    margin-left: 70px;
+    gap: 70px; /* 묶인 div 간의 간격 설정 */
+    margin-top: 25px;
+}
+
+.rider-modifyprofile-details,
+.rider-modifyprofile-detail-infos {
+    display: flex;
+    flex-direction: column; /* 세로 방향 정렬 */
+}
+
+.rider-modifyprofile-detail {
+    margin-bottom: 20px; /* 각 항목 간의 간격 설정 (선택 사항) */
+}
+
+.rider-modifyprofile-detail-info {
+    margin-bottom: 9px; /* 각 항목 간의 간격 설정 (선택 사항) */
+}
+
+.rider-modifyprofile-details {
+    color: #818181;
+    font-weight: bold;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    font-size: 18px;
+}
+
+.rider-modifyprofile-detail-infos {
+    color: #818181;
+    font-weight: 490;
+    margin-top: 13px;
+    margin-bottom: 13px;
+    font-size: 18px;
+}
+
+/* 성별 드롭다운 스타일 */
+.input-wrapper select {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 8px 5px;
+    background-color: transparent;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f9f9f9;
+    height: 35px;
+}
+
+input{
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 8px 5px;
+    background-color: transparent;
+}
+
+
+
+

@@ -1,0 +1,114 @@
+<div class="admin-dashboard-container" th:fragment="statistics-editContent">
+
+    <!-- 날짜 선택 -->
+    <div class="admin-date-picker">
+        <input type="date" id="datePicker">
+        <button id="fetchStatistics">조회</button>
+    </div>
+
+
+    <!-- 상단 대시보드 카드 -->
+    <div class="admin-dashboard-cards">
+        <!-- 가입한 회원 -->
+        <div style="display: flex; flex-direction: column;">
+            <div class="admin-dashboard-title-con">
+                <div class="admin-card">
+                    <p class="admin-card-title">오늘 가입한 회원</p>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="admin-card-number" th:text="${dash['todayMember']}"></p><span class="admin-myeong">명</span>
+                    </div>
+                </div>
+                <img src="/admin/img/dashboard/대시보드-01.svg" />
+            </div>
+            <div class="admin-card-mini red-bg">
+                <span>전체 회원 수</span><span class="admin-dashboard-etr" th:text="${dash['totalMember']} + 명"></span>
+            </div>
+        </div>
+
+        <!-- 가입한 라이더 -->
+        <div style="display: flex; flex-direction: column;">
+            <div class="admin-dashboard-title-con">
+                <div class="admin-card">
+                    <p class="admin-card-title">오늘 가입한 라이더</p>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="admin-card-number" th:text="${dash['riderCount']}"></p><span class="admin-myeong">명</span>
+                    </div>
+                </div>
+                <img src="/admin/img/dashboard/대시보드-02.svg" />
+            </div>
+            <div class="admin-card-mini blue-bg">
+                <span>전체 라이더 수</span><span class="admin-dashboard-etr" th:text="${dash['totalRider']} + 명"></span>
+            </div>
+        </div>
+
+        <!-- 문의지수 -->
+        <div style="display: flex; flex-direction: column;">
+            <div class="admin-dashboard-title-con">
+                <div class="admin-card">
+                    <p class="admin-card-title">문의갯수</p>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="admin-card-number" th:text="${dash['totalBoard']}"></p><span class="admin-myeong">개</span>
+                    </div>
+                </div>
+                <img src="/admin/img/dashboard/대시보드-03.svg" />
+            </div>
+            <div class="admin-card-mini gray-bg">
+                <span>안읽은 문의</span><span class="admin-dashboard-etr" th:text="${dash['unanswered']} + 개"></span>
+            </div>
+        </div>
+
+        <!-- 추가된 사업자 -->
+        <div style="display: flex; flex-direction: column;">
+            <div class="admin-dashboard-title-con">
+                <div class="admin-card">
+                    <p class="admin-card-title">오늘 추가된 사업자</p>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="admin-card-number" th:text="${dash['preMemCount']}"></p><span class="admin-myeong">명</span>
+                    </div>
+                </div>
+                <img src="/admin/img/dashboard/대시보드-01.svg" />
+            </div>
+            <div class="admin-card-mini green-bg">
+                <span>전체 사업자 회원 수</span><span class="admin-dashboard-etr" th:text="${dash['totalPreMem']} + 명"></span>
+            </div>
+        </div>
+
+        <!-- 오늘 추가된 가게 -->
+        <div style="display: flex; flex-direction: column;">
+            <div class="admin-dashboard-title-con">
+                <div class="admin-card">
+                    <p class="admin-card-title">오늘 추가된 가게</p>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="admin-card-number" th:text="${dash['preStoCount']}"></p><span class="admin-myeong">건</span>
+                    </div>
+                </div>
+                <img src="/admin/img/dashboard/대시보드-05.svg" />
+            </div>
+            <div class="admin-card-mini green-bg">
+                <span>전체 가게 수</span><span class="admin-dashboard-etr" th:text="${dash['totalPreSto']} + 개"></span>
+            </div>
+        </div>
+
+        <!-- 베스트 카테고리 -->
+        <div style="display: flex; flex-direction: column;">
+            <div class="admin-dashboard-title-con">
+                <div class="admin-card">
+                    <p class="admin-card-title">오늘 많이 주문된 카테고리</p>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="admin-card-number" th:text="${#strings.isEmpty(dash['mostOrderedCategory']) ? '□ □' : dash['mostOrderedCategory']}"></p>
+                    </div>
+                </div>
+                <img src="/admin/img/dashboard/대시보드-04.svg" />
+            </div>
+            <div class="admin-card-mini green-bg">
+                <span>해당 카테고리 주문 횟수</span><span class="admin-dashboard-etr" th:text="${dash['mostOrderedCategoryCount']} + 건"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 카테고리별 주문량 차트 -->
+    <div class="admin-chart-container">
+        <h3>카테고리별 주문량</h3>
+        <canvas id="categoryChart" width="350" height="150"></canvas>
+    </div>
+</div>

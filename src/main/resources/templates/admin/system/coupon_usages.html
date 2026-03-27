@@ -1,0 +1,24 @@
+<!-- src/main/resources/templates/admin/system/coupon_usages.html -->
+<div class="coupon-usages-container" th:fragment="couponUsagesContent">
+    <h2>쿠폰 사용 기록</h2>
+    <table class="coupon-usages-table">
+        <thead>
+        <tr>
+            <th>사용 기록 ID</th>
+            <th>쿠폰 ID</th>
+            <th>쿠폰 코드</th>
+            <th>사용 시각</th>
+            <!-- 회원 정보는 표시하지 않음 -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="usage : ${usages}">
+            <td th:text="${usage.id}">1</td>
+            <td th:text="${usage.coupon.id}">101</td>
+            <td th:text="${usage.coupon.code}">CPN-2025-01</td>
+            <td th:text="${#temporals.format(usage.usedAt, 'yyyy-MM-dd HH:mm:ss')}">2025-01-15 14:30:00</td>
+            <!-- 회원 정보는 표시하지 않음 -->
+        </tr>
+        </tbody>
+    </table>
+</div>

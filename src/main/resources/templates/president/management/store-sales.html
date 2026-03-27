@@ -1,0 +1,195 @@
+<div th:fragment="store-sales">
+    <!-- 전체 컨테이너 -->
+    <div class="store-sales-container">
+        <!-- 위 2개 묶음 -->
+        <div class="store-sales-top">
+            <!-- 매출 현황 묶음 -->
+            <div class="store-sales-top-left">
+                <!-- 매출 현황 타이틀 -->
+                <div class="store-sales-top-left-title">
+                    매출현황
+                </div>
+                <!-- 매출 현황 4개 묶음 -->
+                <div class="store-sales-top-left-total">
+                    <!-- 매출 현황 위 2개 묶음 -->
+                    <div class="store-sales-top-left-total-top">
+                        <!-- 오늘 -->
+                        <div class="store-sales-top-left-total-top-left">
+                            <!-- 오늘 텍스트 -->
+                            <div class="store-sales-top-left-total-top-left-text">오늘</div>
+                            <!-- 오늘 매출 -->
+                            <div class="store-sales-top-left-total-top-left-revenue">
+                                <!-- 오늘 매출 가격 -->
+                                <div id="todayStoreAmount" class="store-sales-revenue"></div>
+                                <!-- 원 -->
+                                <div class="store-sales-own">원</div>
+                            </div>
+                        </div>
+                        <!-- 이번주 -->
+                        <div class="store-sales-top-left-total-top-right">
+                            <!-- 이번주 텍스트 -->
+                            <div class="store-sales-top-left-total-top-right-text">이번주</div>
+                            <!-- 이번주 매출 -->
+                            <div class="store-sales-top-left-total-top-right-revenue">
+                                <!-- 이번주 매출 가격 -->
+                                <div id="weekStoreAmount" class="store-sales-revenue"></div>
+                                <!-- 원 -->
+                                <div class="store-sales-own">원</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 매출 현황 아래 2개 묶음 -->
+                    <div class="store-sales-top-left-total-bottom">
+                        <!-- 이번달 -->
+                        <div class="store-sales-top-left-total-bottom-left">
+                            <!-- 이번달 텍스트 -->
+                            <div class="store-sales-top-left-total-bottom-left-text">이번달</div>
+                            <!-- 이번달 매출 -->
+                            <div class="store-sales-top-left-total-bottom-left-revenue">
+                                <!-- 이번달 매출 가격 -->
+                                <div id="monthStoreAmount" class="store-sales-revenue"></div>
+                                <!-- 원 -->
+                                <div class="store-sales-own">원</div>
+                            </div>
+                        </div>
+                        <!-- 전체 매출 -->
+                        <div class="store-sales-top-left-total-bottom-right">
+                            <!-- 전체 텍스트 -->
+                            <div class="store-sales-top-left-total-bottom-right-text">전체</div>
+                            <!-- 전체 매출 -->
+                            <div class="store-sales-top-left-total-bottom-right-revenue">
+                                <!-- 전체 매출 가격 -->
+                                <div id="totalStoreAmount" class="store-sales-revenue"></div>
+                                <!-- 원 -->
+                                <div class="store-sales-own">원</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 연령별 매출 -->
+            <div class="store-sales-top-right">
+                <!-- 연령별 매출 버튼 들어갈곳 -->
+                <div class="store-sales-top-right-top">
+                    <!-- 연령별 매출 텍스트 -->
+                    <div class="store-sales-top-right-title">연령별 매출</div>
+                </div>
+
+                <!-- 연령별 매출 그래프와 내용 들어갈곳 -->
+                <div class="store-sales-top-right-bottom">
+                    <!-- 연령별 매출 그래프 사진 들어갈곳 -->
+                    <div class="store-sales-top-right-bottom-img">
+                        <canvas id="memBirthChart" width="200" height="200"></canvas>
+                    </div>
+                    <!-- 연령별 매출 내용들 들어갈곳 -->
+                    <div class="store-sales-top-right-bottom-out">
+                        <!-- 연령별 매출 내용 들어갈곳  -->
+                        <div class="store-sales-top-right-bottom-info">
+                            <!-- 연령별 매출 컬러박스 들어갈곳 -->
+                            <div class="store-sales-top-right-bottom-info-colorbox" style="color: #de4344;">■</div>
+                            <!-- 연령 들어갈 곳-->
+                            <div class="store-sales-top-right-bottom-info-age">60세 이상</div>
+                        </div>
+                        <div class="store-sales-top-right-bottom-info">
+                            <!-- 연령별 매출 컬러박스 들어갈곳 -->
+                            <div class="store-sales-top-right-bottom-info-colorbox" style="color: #b9e25f;">■</div>
+                            <!-- 연령 들어갈 곳-->
+                            <div class="store-sales-top-right-bottom-info-age">50세</div>
+                        </div>
+                        <div class="store-sales-top-right-bottom-info">
+                            <!-- 연령별 매출 컬러박스 들어갈곳 -->
+                            <div class="store-sales-top-right-bottom-info-colorbox" style="color: #358800;">■</div>
+                            <!-- 연령 들어갈 곳-->
+                            <div class="store-sales-top-right-bottom-info-age">40세</div>
+                        </div>
+                        <div class="store-sales-top-right-bottom-info">
+                            <!-- 연령별 매출 컬러박스 들어갈곳 -->
+                            <div class="store-sales-top-right-bottom-info-colorbox" style="color: #59a8e5;">■</div>
+                            <!-- 연령 들어갈 곳-->
+                            <div class="store-sales-top-right-bottom-info-age">30세</div>
+                        </div>
+                        <div class="store-sales-top-right-bottom-info">
+                            <!-- 연령별 매출 컬러박스 들어갈곳 -->
+                            <div class="store-sales-top-right-bottom-info-colorbox" style="color: #002a88;">■</div>
+                            <!-- 연령 들어갈 곳-->
+                            <div class="store-sales-top-right-bottom-info-age">20세</div>
+                        </div>
+                        <div class="store-sales-top-right-bottom-info">
+                            <!-- 연령별 매출 컬러박스 들어갈곳 -->
+                            <div class="store-sales-top-right-bottom-info-colorbox" style="color: #fcc300;">■</div>
+                            <!-- 연령 들어갈 곳-->
+                            <div class="store-sales-top-right-bottom-info-age">10세 이상</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 아래 3개 묶음 -->
+        <div class="store-sales-bottom">
+            <!-- 주문자 성비 -->
+            <div class="store-sales-bottom-left">
+                <!-- 주문자 성비 버튼 들어갈곳  -->
+                <div class="store-sales-bottom-left-top">
+                    <!-- 주문자 성비 -->
+                    <div class="store-sales-bottom-left-top-title">주문자 성비</div>
+                </div>
+                <!-- 주문자 성비 그래프 들어갈곳  -->
+                <div class="store-sales-bottom-left-mid">
+                    <div class="store-sales-bottom-left-mid-img">
+                        <canvas id="memGenderChart" width="200" height="200"></canvas>
+                    </div>
+                </div>
+                <!-- 주문자 성비 들어갈곳  -->
+                <div class="store-sales-bottom-left-bottom">
+                    <div class="store-sales-bottom-left-info">
+                        <!-- (컬러박스, 성별) 퍼센트 -->
+                        <div class="store-sales-bottom-left-info-1">
+                            <!-- (컬러박스, 성별) -->
+                            <div class="store-sales-bottom-left-info-2">
+                                <div class="store-sales-colorbox" style="color: #a5d7f1;">■</div>
+                                <div class="store-sales-gender">남자</div>
+                            </div>
+                            <!-- 퍼센트 -->
+                            <div id="malePercent" class="store-sales-percent"></div>
+                        </div>
+                        <div class="store-sales-bottom-left-info-1">
+                            <!-- (컬러박스, 성별) -->
+                            <div class="store-sales-bottom-left-info-2">
+                                <div class="store-sales-colorbox1" style="color: #fd9e9f;">■</div>
+                                <div class="store-sales-gender">여자</div>
+                            </div>
+                            <!-- 퍼센트 -->
+                            <div id="femalePercent" class="store-sales-percent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 매출 순위 -->
+            <div class="store-sales-bottom-mid">
+                <!-- 매출 순위 버튼 들어갈곳 -->
+                <div class="store-sales-bottom-mid-top">
+                    <!-- 매출 순위 버튼 -->
+                    <div class="store-sales-bottom-mid-top-title">매출 순위</div>
+                </div>
+                <!-- 매출 순위 리스트 들어갈곳 -->
+                <div class="store-sales-bottom-mid-mid">
+                    <!-- 매출 순위 내용 들어갈곳 -->
+                    <div id="menuRankList"></div>
+                </div>
+            </div>
+            <!-- 최다 주문 고객 -->
+            <div class="store-sales-bottom-right">
+                <!-- 최다 주문 고객 버튼 들어갈곳 -->
+                <div class="store-sales-bottom-right-top">
+                    <!-- 최다 주문 고객 버튼 -->
+                    <div class="store-sales-bottom-right-top-title">이번 주 주문</div>
+                </div>
+                <div class="store-sales-bottom-right-mid">
+                    <canvas id="storeOrderChart" width="180" height="150"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--  -->

@@ -1,0 +1,66 @@
+/* 내가 테스트한 부분 */
+.add_test_out {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.add_test_header {
+    display: flex;
+    justify-content: space-between; /* 제목과 버튼을 양쪽 끝으로 정렬 */
+    width: 100%; /* 부모 요소의 너비를 100%로 설정 */
+}
+
+.add_test_button {
+    margin-top: 20px;
+    display: flex; /* 버튼을 가로로 나열 */
+    gap: 10px; /* 버튼 사이에 간격 추가 */
+}
+
+.add_test_button-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+}
+
+.add_test_input[type="radio"] {
+    accent-color: red;
+}
+
+.add_test_button button {
+    border: 1px solid #ddd;
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 30px;
+}
+
+.add_test_button button:hover {
+    background: #f0f0f0;
+}
+
+.ad_add-address {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.add_test_info {
+    width: 950px;
+}
+
+.add_test_img {
+    /*display: flex;*/
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    padding: 20px 0 0 0;
+    margin: 0 20px;
+}

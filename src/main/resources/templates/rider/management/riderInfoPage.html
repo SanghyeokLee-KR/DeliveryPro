@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>사장님 셀프서비스</title>
+    <link rel="stylesheet" href="/layout/rider/css/header.css">
+    <link rel="stylesheet" href="/layout/rider/css/sidebar.css">
+    <link rel="stylesheet" href="/rider/css/rider-management.css">
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+
+<body>
+<!-- 상단 헤더 -->
+<header class="header" th:insert="~{layout/rider/management/management-header :: managementheaderContent}"></header>
+<!-- 메인 레이아웃 -->
+<div class="main-container">
+    <!-- 왼쪽 사이드바 -->
+    <aside class="sidebar"
+           th:insert="~{layout/rider/management/management-sidebar :: managementsidebarContent}"></aside>
+
+
+    <!-- 오른쪽 메인 콘텐츠 영역 -->
+    <main class="main-content">
+
+
+    </main>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script src="/rider/js/management_sh.js"></script>
+</body>
+</html>

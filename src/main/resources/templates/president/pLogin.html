@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>사장님 사이트</title>
+    <link href="/layout/store/css/store_main_header.css" rel="stylesheet">
+    <link href="/store/css/pLogin.css" rel="stylesheet">
+    <link href="/store/css/president.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+<!-- 로그인 Form -->
+<div class="login-container">
+    <h1>로그인</h1>
+    <form action="/pLogin" id="loginForm" method="POST">
+        <div class="input-group">
+            <span class="l-icon"><img alt="아이콘" src="/member/img/join/user.svg"></span>
+            <input id="preMemUserId" name="preMemUserId" placeholder="아이디를 입력하세요" required type="text">
+        </div>
+        <div class="input-group">
+            <span class="l-icon"><img alt="아이콘" src="/member/img/join/lock.svg"></span>
+            <input id="preMemPassword" name="preMemPassword" placeholder="비밀번호를 입력하세요" required type="password">
+        </div>
+        <div class="login-button">
+            <button type="submit">로그인</button>
+        </div>
+    </form>
+
+    <div class="options">
+        <a href="#">비밀번호찾기</a> | <a href="#">아이디찾기</a> | <a href="/pJoinForm">회원가입</a>
+    </div>
+</div>
+
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+</body>
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script>
+
+</script>
+</html>

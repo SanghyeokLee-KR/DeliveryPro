@@ -1,0 +1,67 @@
+<div class="grade-mypage-info" th:fragment="gradeContent">
+    <div class="grade-mypage-title">
+        <h1>마이페이지</h1>
+    </div>
+    <div class="grade-mypage-reward">
+        <div class="grade-mypage-reward-title">
+            <h3>My 리워드</h3>
+        </div>
+        <div class="grade-mypage-details">
+            <div class="grade-badge">
+                <img class="rewardBadge" alt="badge" src="">
+            </div>
+            <div class="grade-welcome-text">
+                <p>
+                    <span class="grade-welcome-span" th:text="${session.mem_username}"></span> 님은<br>
+                    <span id="grade-text" class="grade-welcome-span">Welcome 회원</span> 입니다.
+                </p>
+                <div class="grade-points">
+                    <div class="grade-points-detail">
+                        <a href="" id="rewardLink">
+                            <p>리워드 및 혜택 미리보기</p>
+                        </a>
+                    </div>
+                    <div class="grade-points-level">
+                        <p>포인트<span class="grade-point-span" id="point-span">200</span>p
+                        </p>
+                        <span class="grade-point-l">|</span>
+                        <p>쿠폰<span class="grade-point-span">0</span>매</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-cn">
+                <div class="image">
+                    <img class="rewardBadge" alt="badge" src="" width="80px">
+                </div>
+                <div class="details">
+                    <div class="row" style="margin-top: 20px;">
+                        <span class="nickname-span" th:text="${session.mem_username} + '님'"></span>
+                        <div class="value_badge">Welcome</div>
+                    </div>
+                    <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="progressbar">
+                            <div id="progress" class="progress"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="label">누적금액</div>
+                        <div id="totalAmount" class="value">32,000원</div>
+                    </div>
+                    <div class="row">
+                        <div class="label">다음등급까지</div>
+                        <div id="nextAmount" class="value">18,000원</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="arrow-container" style="margin: 10px 0;">
+        <img id="arrow" src="/common/img/icons/화살표1.png" style="transition: transform 0.3s;" width="30">
+    </div>
+
+</div>

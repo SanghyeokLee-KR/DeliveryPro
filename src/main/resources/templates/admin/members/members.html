@@ -1,0 +1,102 @@
+<div class="member-container" th:fragment="membersContent">
+    <!-- 헤더 섹션: 제목과 검색 바 -->
+    <div class="member-header">
+        <h2 class="member-title">회원 관리</h2>
+        <div class="member-search">
+            <form class="member-search-form" method="get" th:action="@{/admin/members}">
+                <input name="searchQuery" placeholder="아이디 또는 이름 검색" th:value="${searchQuery}" type="text">
+
+                <select class="filter-select" name="gender">
+                    <option value="">모든 성별</option>
+                    <option th:selected="${gender == '남성'}" value="남성">남성</option>
+                    <option th:selected="${gender == '여성'}" value="여성">여성</option>
+                </select>
+
+                <select class="filter-select" name="grade">
+                    <option value="">모든 등급</option>
+                    <option th:selected="${grade == 'Welcome'}" value="Welcome">Welcome</option>
+                    <option th:selected="${grade == 'Family'}" value="Family">Family</option>
+                    <option th:selected="${grade == 'VIP'}" value="VIP">VIP</option>
+                    <option th:selected="${grade == 'VVIP'}" value="VVIP">VVIP</option>
+                </select>
+
+                <select class="filter-select" name="status">
+                    <option value="">모든 상태</option>
+                    <option th:selected="${status == '활성'}" value="활성">활성</option>
+                    <option th:selected="${status == '정지'}" value="정지">정지</option>
+                    <option th:selected="${status == '탈퇴'}" value="탈퇴">탈퇴</option>
+                </select>
+
+                <button class="member-search-button" type="submit">검색</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 회원 리스트 테이블 -->
+    <table class="member-table">
+        <thead>
+        <tr>
+            <th>회원 ID</th>
+            <th>아이디</th>
+            <th>실명</th>
+            <th>연락처</th>
+            <th>성별</th>
+            <th>등급</th>
+            <th>상태</th>
+            <th>주소</th>
+            <th>등록일</th>
+            <th>관리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.mId}">1</td>
+            <td th:text="${member.userId}">user123</td>
+            <td th:text="${member.username}">홍길동</td>
+            <td th:text="${member.phone}">010-1234-5678</td>
+            <td th:text="${member.gender}">남성</td>
+            <td th:text="${member.grade}">VIP</td>
+            <td>
+                <span class="member-data-status" th:text="${member.status}">활성</span>
+            </td>
+            <td th:text="${member.address}">서울시 강남구...</td>
+            <!-- 포맷된 등록일 사용 -->
+            <td th:text="${member.formattedRegisterDate}">2023-10-01 12:34</td>
+            <td>
+                <a class="status-change-button" th:href="@{/admin/members/{id}/edit(id=${member.mId})}">편집</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징 네비게이션 -->
+    <div class="member-pagination">
+        <!-- 이전 페이지 링크 -->
+        <a class="pagination-item"
+           th:href="@{/admin/members(page=${currentPage - 1}, size=${membersPage.size}, sortField=${sortField}, sortDir=${sortDir}, searchQuery=${searchQuery}, gender=${gender}, grade=${grade}, status=${status})}"
+           th:if="${membersPage.hasPrevious()}">
+            이전
+        </a>
+
+        <!-- 페이지 번호 링크 또는 현재 페이지 표시 -->
+        <span th:each="i : ${#numbers.sequence(0, membersPage.totalPages - 1)}">
+                <a class="pagination-item"
+                   th:href="@{/admin/members(page=${i}, size=${membersPage.size}, sortField=${sortField}, sortDir=${sortDir}, searchQuery=${searchQuery}, gender=${gender}, grade=${grade}, status=${status})}"
+                   th:if="${i != currentPage}"
+                   th:text="${i + 1}">
+                </a>
+                <span aria-current="page"
+                      class="pagination-current"
+                      th:if="${i == currentPage}"
+                      th:text="${i + 1}">
+                </span>
+            </span>
+
+        <!-- 다음 페이지 링크 -->
+        <a class="pagination-item"
+           th:href="@{/admin/members(page=${currentPage + 1}, size=${membersPage.size}, sortField=${sortField}, sortDir=${sortDir}, searchQuery=${searchQuery}, gender=${gender}, grade=${grade}, status=${status})}"
+           th:if="${membersPage.hasNext()}">
+            다음
+        </a>
+    </div>
+</div>

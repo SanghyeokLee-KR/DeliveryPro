@@ -1,0 +1,125 @@
+/*************************************************
+ * 1) 헤더 (고정 영역)
+ *************************************************/
+.header-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+    padding: 0 20px;
+}
+
+/* 왼쪽 (로고, 페이지명 등) */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    height: 40px;
+}
+
+.admin-page-text {
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* 오른쪽 (관리자명, 내 정보, 아이콘버튼 등) */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 햄버거 메뉴 (모바일 전용) */
+.hamburger {
+    display: none; /* PC에선 숨김, 모바일에서 보이게 */
+    width: 30px;
+    cursor: pointer;
+}
+
+.hamburger div {
+    width: 100%;
+    height: 3px;
+    background-color: #333;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* 로그인/회원가입 링크 */
+.login-link, .join-link {
+    color: #333;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.login-link:hover, .join-link:hover {
+    background-color: #f3f3f3;
+}
+
+.ilo {
+    margin: 0 4px;
+    color: #999;
+}
+
+/* 관리자명 표시 */
+.admin-name {
+    color: #333;
+    font-weight: 500;
+    margin-right: 4px;
+}
+
+/* “내 정보” 등 텍스트 버튼 */
+.btn-text {
+    background: none;
+    border: 1px solid #ddd;
+    color: #333;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.btn-text:hover {
+    background-color: #f3f3f3;
+}
+
+/* 아이콘 버튼 (알림, 다크모드 등) */
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-icon:hover {
+    background-color: #f3f3f3;
+}
+
+.btn-icon img {
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}

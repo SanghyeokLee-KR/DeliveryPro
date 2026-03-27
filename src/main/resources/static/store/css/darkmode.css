@@ -1,0 +1,422 @@
+/***********************************
+                가게정보
+ ***********************************/
+/* 다크 모드 - store-info-table */
+.store-details-container.dark-mode .store-account-text {
+    color: #ffffff;
+}
+
+.store-details-container.dark-mode{
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border:none;
+
+}
+.store-details-container.dark-mode .store-info-table {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: 1px solid #2c2c2c;
+}
+.store-details-container.dark-mode .store-info-table th {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    border: 1px solid #2c2c2c;
+}
+.store-details-container.dark-mode .store-info-table td {
+    background-color:#3a3a3a;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+.store-details-container.dark-mode .store-info-table tr {
+    border: 1px solid #2c2c2c;
+}
+
+
+/***********************************
+                가게 리스트
+ ***********************************/
+.store-list-item.dark-mode{
+    background-color: #2c2c2c;
+    border: 1px solid #2c2c2c;
+    color:#FFFFFF;
+}
+/* 다크 모드에서도 이미지(`img`)에는 적용되지 않도록 예외 처리 */
+.store-list-item.dark-mode img {
+    filter: none !important; /* 색상 변경 방지 */
+    background-color: #3a3a3a !important; /* 배경 투명 유지 */
+    border: 1px solid #1F1F1F;
+}
+.store-list-item.dark-mode p{
+    color: #FFFFFF;
+}
+.store-list-item.dark-mode button{
+    background-color: #736f6f;
+}
+
+.store-list-add-container-div.dark-mode{
+    background-color: #2c2c2c;
+    border: 1px solid #2c2c2c;
+    color:#FFFFFF;
+}
+.store-list-add-container-div.dark-mode h3,
+.store-list-add-container-div.dark-mode p {
+    color:#FFFFFF;
+}
+/***********************************
+                가게 추가하기
+ ***********************************/
+#store-registration-container.dark-mode{
+    background-color: #2c2c2c;
+    border: 1px solid #2c2c2c;
+    color:#FFFFFF;
+}
+#store-registration-container.dark-mode label{
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+#store-registration-container.dark-mode input{
+    background-color: #4c4c4c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+#store-registration-container.dark-mode input::placeholder{
+    background-color: #4c4c4c;
+    color: #FFFFFF;
+}
+#store-registration-container.dark-mode select{
+    background-color: #4c4c4c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+#store-registration-container.dark-mode option{
+    color: #FFFFFF;
+}
+
+#store-registration-container.dark-mode button{
+    background-color: #736f6f;
+    border: 1px solid #2c2c2c;
+}
+#store-registration-container.dark-mode textarea{
+    background-color: #736f6f;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+#store-registration-container.dark-mode textarea::placeholder{
+    color: #FFFFFF;
+}
+
+.day-box{
+    background-color: #4c4c4c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+/***********************************
+                주문서 추가하기
+ ***********************************/
+
+
+
+/***********************************
+                영업시간1
+ ***********************************/
+.timeview-store-container .timeview-container.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+.timeview-store-container .closed-container.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+/* 다크 모드 - .timeview-content 내부 span */
+.timeview-container.dark-mode span,
+.timeview-container.dark-mode a,
+.timeview-container.dark-mode label,
+.timeview-container.dark-mode input,
+.timeview-container.dark-mode input::placeholder{
+    color: #ffffff;
+}
+.timeview-container.dark-mode input,
+.timeview-container.dark-mode button{
+    background-color: #3c3c3c;
+    border:none;
+}
+
+
+/***********************************
+                영업시간2
+ ***********************************/
+.closed-container.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+.closed-container.dark-mode span,
+.closed-container.dark-mode h2,
+.closed-container.dark-mode p,
+.closed-container.dark-mode a,
+.closed-container.dark-mode label,
+.closed-container.dark-mode input,
+.closed-container.dark-mode select,
+.closed-container.dark-mode input::placeholder{
+    color: #ffffff;
+}
+
+.closed-container.dark-mode input,
+.closed-container.dark-mode button,
+.closed-container.dark-mode select{
+    background-color: #4c4c4c;
+    border:none;
+
+}
+.closed-container.dark-mode label{
+    background-color: #2c2c2c;
+
+}
+/***********************************
+             정기 휴무일 설정
+ ***********************************/
+.holiday-container.dark-mode,
+.tem-holiday-container.dark-mode,
+.stop-container.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+    border: 1px solid #2c2c2c;
+}
+/***********************************
+             정기 휴무일 설정1
+ ***********************************/
+.holiday-container.dark-mode label,
+.holiday-container select,
+.holiday-container option,
+.holiday-container button{
+    color: #FFFFFF;
+    border: none;
+
+}
+.holiday-container.dark-mode button,
+.holiday-container.dark-mode select{
+    background-color: #4c4c4c;
+    border: none;
+
+}
+.holiday-add-button.dark-mode{
+    background-color: #2c2c2c !important;
+    border: none;
+
+}
+/***********************************
+             정기 휴무일 설정2
+ ***********************************/
+.tem-holiday-container.dark-mode label,
+.tem-holiday-container.dark-mode input,
+.tem-holiday-container.dark-mode select,
+.tem-holiday-container.dark-mode button,
+.tem-holiday-header.dark-mode{
+    border: none;
+
+    color: #ffffff;
+}
+.tem-holiday-container.dark-mode input,
+.tem-holiday-container.dark-mode select,
+.tem-holiday-container.dark-mode button{
+    border: none;
+    background-color: #4c4c4c;
+}
+
+/***********************************
+             정기 휴무일 설정3
+ ***********************************/
+.stop-title.dark-mode,
+.stop-container.dark-mode span,
+.stop-container.dark-mode label,
+.stop-container.dark-mode button,
+.stop-text.dark-mode{
+    border: none;
+
+    color: #FFFFFF;
+}
+.stop-container.dark-mode label,
+.stop-status.dark-mode{
+    border: none;
+
+    background-color: #4c4c4c;
+}
+.stop-status-active.dark-mode,
+.stop-container.dark-mode button{
+    border: none;
+
+    background-color: #4c4c4c;
+}
+
+.stop-radio.dark-mode:checked + .stop-time-option{
+    background-color: #1c1c1c;
+    color: #fff;
+    border: none;
+}
+
+
+
+/***********************************
+            영업시간
+ ***********************************/
+.setting-container.dark-mode{
+    background-color: #2c2c2c;
+}
+.setting-container.dark-mode label,
+.setting-container.dark-mode select,
+.setting-container.dark-mode a
+{
+    color: #FFFFFF;
+    border: none;
+}
+.setting-container.dark-mode select{
+    background-color: #3c3c3c;
+}
+.setting-remove-btn.dark-mode{
+    background-color: #3c3c3c;
+    color: white;
+}
+
+/*영업시간 체크 박스*/
+/* 체크박스 기본 스타일 제거 */
+.setting-toggle.dark-mode input[type="checkbox"] {
+    -webkit-appearance: none;  /* 기본 체크박스 스타일 제거 */
+    -moz-appearance: none;     /* Firefox에서 기본 스타일 제거 */
+    appearance: none;          /* 최신 브라우저에서 기본 스타일 제거 */
+    width: 20px;               /* 체크박스 크기 설정 */
+    height: 20px;              /* 체크박스 크기 설정 */
+    border: none;
+    border-radius: 4px;        /* 둥근 모서리 */
+    background-color: #4c4c4c; /* 다크 모드 배경 색 */
+    position: relative;        /* 상대 위치 설정 */
+    cursor: pointer;          /* 커서 스타일 */
+}
+
+/* 체크박스가 체크된 상태 */
+.setting-toggle.dark-mode input[type="checkbox"]:checked {
+    background-color: #4c4c4c; /* 체크된 상태 배경 색 */
+    border: none;
+}
+
+/* 체크된 상태에 체크 아이콘 표시 */
+.setting-toggle.dark-mode input[type="checkbox"]:checked::before {
+    content: "✔";              /* 체크 표시 */
+    position: absolute;
+    top: 0;
+    left: 3px;
+    color: #fff;               /* 체크 아이콘 색상 */
+    font-size: 15px;           /* 체크 아이콘 크기 */
+}
+
+/*24 시간 체크 박스*/
+.setting-hour24.dark-mode input[type="checkbox"] {
+    -webkit-appearance: none;  /* 기본 체크박스 스타일 제거 */
+    -moz-appearance: none;     /* Firefox에서 기본 스타일 제거 */
+    appearance: none;          /* 최신 브라우저에서 기본 스타일 제거 */
+    width: 13px;               /* 체크박스 크기 설정 */
+    height: 13px;              /* 체크박스 크기 설정 */
+    border: none;
+    border-radius: 4px;        /* 둥근 모서리 */
+    background-color: #4c4c4c; /* 다크 모드 배경 색 */
+    position: relative;        /* 상대 위치 설정 */
+    cursor: pointer;          /* 커서 스타일 */
+}
+
+/* 체크박스가 체크된 상태 */
+.setting-hour24.dark-mode input[type="checkbox"]:checked {
+    background-color: #4c4c4c; /* 체크된 상태 배경 색 */
+    border: none;
+}
+
+/* 체크된 상태에 체크 아이콘 표시 */
+.setting-hour24.dark-mode input[type="checkbox"]:checked::before {
+    content: "✔";              /* 체크 표시 */
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    color: #fff;               /* 체크 아이콘 색상 */
+    font-size: 10px;           /* 체크 아이콘 크기 */
+}
+
+/***********************************
+                메뉴관리
+ ***********************************/
+
+
+/***********************************
+                배달관리-배달지역설정
+ ***********************************/
+.store-delivery-section.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+}
+.store-delivery-section.dark-mode p{
+    color: #FFFFFF;
+}
+.store-delivery-section.dark-mode th{
+    background-color: #3c3c3c;
+    border: solid#4c4c4c;
+}
+.store-delivery-section.dark-mode td{
+    border: solid#4c4c4c;
+}
+
+/***********************************
+                배달관리-배달관리(미완 테이블 부분 데이터 입력 시 수정)
+ ***********************************/
+.delivery-wrapper.dark-mode,
+.delivery-order-history.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+}
+.delivery-section.dark-mode{
+    background-color: #3c3c3c;
+}
+.delivery-section h3{
+    color: #FFFFFF;
+}
+
+.delivery-order-history.dark-mode select{
+    background-color: #3c3c3c;
+    color: #FFFFFF;
+}
+.delivery-order-history-table.dark-mode th{
+    background-color: #3c3c3c;
+
+}
+/***********************************
+                리뷰관리
+ ***********************************/
+.scoreboard-review-container.dark-mode{
+    background-color: #2c2c2c;
+
+}
+.review-container.dark-mode{
+    background-color: #2c2c2c;
+    color: #FFFFFF;
+    border: none;
+}
+.review-container.dark-mode label{
+    color: #ffffff;
+}
+.review-container.dark-mode input,
+.review-container.dark-mode select,
+.review-container.dark-mode option{
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border: none;
+}
+.review-tab.active.dark-mode{
+    color: #ffffff;
+    background-color: #4c4c4c;
+    border-bottom: 2px solid transparent;
+}
+.review-tab.dark-mode{
+    color: #000000;
+    background-color: #ffffff;
+    border-bottom: 2px solid transparent;
+}
+
+

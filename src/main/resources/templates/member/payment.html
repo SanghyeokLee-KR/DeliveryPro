@@ -1,0 +1,110 @@
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>결제하기</title>
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link href="/member/css/payment.css" rel="stylesheet">
+</head>
+<body>
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+<div class="section">
+    <div class="container">
+        <!-- 메인 콘텐츠 -->
+
+        <form action="/orders" method="POST" class="payment-form">
+            <!-- 배달 정보 -->
+            <div class="payment-section">
+                <div class="payment-margin">
+                    <div class="delivery-info">
+                        <div class="payment-title">
+                            <h2>결제하기</h2>
+                        </div>
+                        <h3 class="delivery-title">배달정보</h3>
+                        <div class="delivery-content">
+                            <span th:text="${session.mem_address}">기본 주소 없음</span>
+                        </div>
+                    </div>
+
+                    <!-- 고객 요청 사항 -->
+                    <div class="request-info">
+                        <h3>고객 요청사항</h3>
+                        <textarea class="customer_message" id="customer_message" name="customerMessage"
+                                  placeholder="고객 요청사항을 입력해주세요."
+                                  maxlength="100"></textarea>
+                        <div class="request-1">
+                            <span class="char-count-customer">0 / 100</span>
+                        </div>
+                    </div>
+
+                    <!-- 배달 요청 사항 -->
+                    <div class="delivery-request-info">
+                        <h3>배달 요청사항</h3>
+                        <textarea class="delivery_message" id="delivery_message" name="deliveryMessage"
+                                  placeholder="배달 요청사항을 입력해주세요."
+                                  maxlength="100"></textarea>
+                        <div class="request-1">
+                            <span class="char-count-delivery">0 / 100</span>
+                        </div>
+                    </div>
+
+                    <!-- 결제 수단 선택 -->
+                    <div class="payment-method">
+                        <h3>결제수단 선택</h3>
+                        <select name="paymentMethod" required>
+                            <option value="카드">신용카드</option>
+                            <option value="현금">현금</option>
+                            <option value="온라인">휴대폰 결제</option>
+                        </select>
+                    </div>
+
+                    <div class="coupon-section">
+                        <h3>할인쿠폰 선택 <span>💸</span></h3>
+                        <div class="coupon-select">
+                            <select id="couponSelect" name="couponId">
+                                <option value="">쿠폰선택</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 배달 유형 선택 -->
+                    <div class="delivery-type">
+                        <h3>배달 유형 선택</h3>
+                        <select name="deliveryType" id="delivery_type" required>
+                            <option value="한집배달" selected>한집배달</option>
+                            <option value="묶음배달" >묶음배달</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="deliveryStatus" value="배달전">
+                    <input type="hidden" id="deliveryFee" name="deliveryFee" value="0">
+                </div>
+            </div>
+            <div id="dynamic-order-items">
+            </div>
+
+        </form>
+        <!-- 주문 총 금액 -->
+        <div class="order-summary">
+            <h3>주문내역</h3>
+            <div class="order-details"></div> <!-- 주문 아이템 추가 영역 -->
+            <hr>
+            <p class="total">총 결제 금액 <span id="total_amount_display">0원</span></p>
+            <input type="hidden" id="total_amount" name="orderTotalPrice" value="0">
+            <input type="hidden" id="discountPrice" name="discountAmount" value="0">
+            <button type="button" class="pay-button" onclick="pay()">결제하기</button>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script src="/layout/member/js/header.js"></script>
+<script src="/member/js/payment.js"></script>
+</body>
+</html>

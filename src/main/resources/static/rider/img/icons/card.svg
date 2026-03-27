@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_1" data-name=" 레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68.03 68.03">
+    <defs>
+        <style>
+            .cls-1 {
+            fill: #0080de;
+            }
+
+            .cls-1, .cls-2 {
+            stroke-width: 0px;
+            }
+
+            .cls-2 {
+            fill: #fff;
+            }
+        </style>
+    </defs>
+    <rect id="_사각형_1023" data-name="사각형 1023" class="cls-1" x="1.35" y="11.48" width="65.34" height="45.06" rx="9.01" ry="9.01"/>
+    <rect id="_사각형_1024" data-name="사각형 1024" class="cls-2" x="4.73" y="22.75" width="58.58" height="9.01"/>
+</svg>

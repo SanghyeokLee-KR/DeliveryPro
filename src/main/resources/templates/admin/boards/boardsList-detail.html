@@ -1,0 +1,53 @@
+
+<div class="board-detail-container" th:fragment="boardsList-detail">
+  <div class="board-detail-form">
+    <div class="qna-mark">
+      <p class="qna-mark-p">QnA</p>
+    </div>
+    <div class="board-detail-header">
+
+      <div class="board-detail-title">
+        <div class="title-left">
+          <p th:text="${board.boardTitle}" class="board-title"></p>
+        </div>
+        <div class="title-right">
+          <p class="status pending">미답변</p>
+        </div>
+      </div>
+
+      <div class="board-meta">
+        <div class="meta-left">
+          <p>작성자</p>
+          <p>|</p>
+          <span th:text="${board.memId}"></span>
+        </div>
+        <div class="meta-right">
+          <span th:text="${#temporals.format(board.boardCreatedAt, 'yyyy-MM-dd')}"></span>
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin: 20px 0;"  class="board-detail-hr">
+    <br>
+    <div class="board-content">
+      <pre th:text="${board.boardContent}" class="board-detail-text"></pre>
+    </div>
+    <br>
+    <hr style="margin: 20px 0;" class="board-detail-hr">
+
+    <div class="board-detail-buttons">
+      <a th:href="@{/admin/boardsList}" class="btn">&lt; 목록</a>
+      <button class="board-remove-btn" id="delete">삭제</button>
+    </div>
+  </div>
+  <!-- ✅ 댓글 작성 폼 추가 -->
+  <div class="comment-form">
+    <p class="comment-p">답변작성하기</p>
+    <form th:action="@{/admin/boardsList/{id}/comment(id=${board.boardId})}" method="post">
+      <input type="hidden" name="boardId" th:value="${board.boardId}">
+      <input type="hidden" name="adminId" th:value="${session.admin_id}"> <!-- 로그인된 어드민 ID -->
+      <textarea name="commentContents" rows="3" placeholder="답변 내용 작성" required></textarea>
+      <button type="submit">확인</button>
+    </form>
+  </div>
+</div>

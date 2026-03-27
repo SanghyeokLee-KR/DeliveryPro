@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사장님 사이트</title>
+    <link rel="stylesheet" href="/layout/store/css/store_main_header.css">
+    <link rel="stylesheet" href="/store/css/president.css">
+    <link rel="stylesheet" href="/layout/member/css/footer.css">
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+
+<div class="president-container">
+    <div class="president-banner-and-menu">
+        <div class="president-banner">
+            <img src="/store/img/광고배너/배너-11.jpg" alt="사장님" class="president-banner-image">
+        </div>
+        <!-- 메뉴 리스트 섹션 -->
+        <div class="president-section">
+            <div class="president-item">
+                <a href="businessHours">
+                    <div class="button">
+                        <img src="/store/img/사장님메뉴/영업시간.jpg" alt="영업시간">
+                    </div>
+                </a>
+            </div>
+            <div class="president-item">
+                <a href="manageCoupons">
+                    <div class="button">
+                        <img src="/store/img/사장님메뉴/쿠폰관리.jpg" alt="쿠폰관리">
+                    </div>
+                </a>
+            </div>
+            <div class="president-item">
+                <a href="deliveryCost">
+                    <div class="button">
+                        <img src="/store/img/사장님메뉴/배달요금.jpg" alt="배달요금">
+                    </div>
+                </a>
+            </div>
+            <div class="president-item">
+                <a href="cooNotation">
+                    <div class="button">
+                        <img src="/store/img/사장님메뉴/원산지표기.png" alt="추천광고">
+                    </div>
+                </a>
+            </div>
+            <div class="president-item">
+                <a href="menuManagement">
+                    <div class="button">
+                        <img src="/store/img/사장님메뉴/메뉴관리.png" alt="메뉴품절">
+                    </div>
+                </a>
+            </div>
+            <div class="president-item">
+                <a href="closedDays">
+                    <div class="button">
+                        <img src="/store/img/사장님메뉴/휴무일.jpg" alt="휴무일">
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- Tips -->
+        <p class="tipTitle">사장님 맞춤 Tip</p>
+        <div class="tips">
+            <div class="tip popular-menu">
+                <img src="/store/img/사장님팁/메뉴판아이콘.svg" alt="메뉴판">
+                <h3>내 가게를 대표하는 인기메뉴</h3>
+                <p>우리가게 대표 메뉴를 설정하고 <br/> 주문수를 둘러보세요</p>
+                <button class="tip-button" onclick="window.location.href='/store-management/' + '${session.preMem_id}'">대표메뉴 설정하기</button>
+
+
+
+            </div>
+            <div class="tip store-coupon">
+                <img src="/store/img/사장님팁/쿠폰아이콘.svg" alt="쿠폰">
+                <h3>마음을 움직이는 가게쿠폰</h3>
+                <p>가게쿠폰은 우리가게 주문수와 객단가 <br/> 증가에 효과가 있어요!</p>
+                <button class="tip-button" onclick="window.location.href='/store-management/' + '${session.preMem_id}'">쿠폰 발행하기</button>
+
+            </div>
+            <div class="tip delivery-fee">
+                <img src="/store/img/사장님팁/헬멧아이콘.svg" alt="헬멧">
+                <h3>고객부담을 낮추는 배달요금</h3>
+                <p>배달요금을 잘 설정하면 고객 부담은 <br/> 낮아지고, 주문수는 올라요</p>
+                <button class="tip-button" onclick="window.location.href='/store-management/' + '${session.preMem_id}'">배달요금 설정하기</button>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- 로그인 -->
+    <div class="president-all">
+        <div class="president-loginwithtips">
+            <div class="president-login-section">
+                <div class="president-login-box">
+                <span th:if="${session.preMem_id eq null}">
+                    <p>味추홀에 가입하여 가게를<br> 편리하게 관리해보세요!</p>
+                    <button id="plogin" class="president-login-button">
+                        <img src="/store/img/logo/logo_white.png" width="70">로그인
+                    </button>
+                    <div class="president-login-links">
+                        <a href="#">아이디</a> |
+                        <a href="#">비밀번호찾기</a> |
+                        <a href="/pJoinForm">회원가입</a>
+                    </div>
+                </span>
+                    <!--  이 부분 수정 -->
+                    <span th:if="${session.preMem_id ne null}">
+                        <!-- 바뀜 -->
+                        <span>
+                            <!-- login-->
+                        <div class="login-header">
+                                <!-- 위쪽 전체-->
+                            <div class="login-top-section">
+
+                                <!-- 위 왼쪽-->
+                                <div class="top-left-section">
+                                <p th:text="${session.preMem_username} + ' 님'"></p>
+                                <b>사장님</b>
+                                </div>
+                                <!-- 위 아래쪽 -->
+                                <div class="top-right-section">
+                                <span class="user-main-logout"><a href="pLogout">로그아웃</a></span>
+                                </div>
+                            </div>
+                            <!-- 아래 왼쪽 -->
+                            <div class="login-bottom-section">
+                                <p th:text="${session.preMem_userid}" style="color: #c2b8b8"></p>
+                            </div>
+
+                        </div>
+
+                    </span>
+
+                        <!-- ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss-->
+                        <br>
+                        <hr>
+                        <br>
+
+                        <div class="pre-service-con">
+                            <a id="storeService" th:href="@{/store-management/{preId}(preId=${session.preMem_id})}"
+                               class="president-button-u">
+                                <!--<img src="/member/img/join/user.svg" width="25">-->사장님 서비스
+                            </a>
+                        </div>
+                    </span>
+                    <!-- ..............................................................................................................................................................................................................-->
+                </div>
+            </div>
+            <!-- 로그인 섹션 아래에 배너 추가 -->
+            <div class="login-banner">
+                <img src="/store/img/광고배너/배너-10.jpg" alt="배너 이미지">
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script>
+    $('#plogin').click(() => {
+        location.href = "/pLoginForm";
+    });
+</script>
+</html>

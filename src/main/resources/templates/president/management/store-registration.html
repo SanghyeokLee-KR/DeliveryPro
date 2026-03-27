@@ -1,0 +1,317 @@
+<!-- src/main/resources/templates/president/management/store-registration.html -->
+<div th:fragment="store-registration">
+    <div class="container">
+        <h2 class="add-store-title">가게 추가하기</h2>
+        <hr>
+        <br>
+        <form action="/addStore" class="add-store-form" enctype="multipart/form-data" id="add-store-form"
+              method="POST">
+
+            <!-- preMem_id 값을 히든 필드로 전달 -->
+            <input name="preStoPreMemId" th:value="${session.preMem_id}" type="hidden"/>
+
+            <!-- 가게 이름 -->
+            <div class="store-add--name">
+                <label class="add-store-label" for="store-name">가게 이름:</label>
+                <input class="add-store-input" id="store-name" name="preStoName" placeholder="가게 이름을 입력하세요" required
+                       type="text"/>
+            </div>
+            <br>
+
+            <!-- 카테고리 -->
+            <div class="store-add-category">
+                <label class="add-store-label" for="store-category">카테고리:</label>
+                <select class="add-store-select" id="store-category" name="preStoCategory" required>
+                    <option value="">선택하세요</option>
+                    <option value="패스트푸드">패스트푸드</option>
+                    <option value="치킨">치킨</option>
+                    <option value="피자">피자</option>
+                    <option value="양식">양식</option>
+                    <option value="중식">중식</option>
+                    <option value="한식">한식</option>
+                    <option value="도시락">도시락</option>
+                    <option value="카페·디저트">카페·디저트</option>
+                    <option value="샐러드">샐러드</option>
+                    <option value="분식">분식</option>
+                    <option value="족발·보쌈">족발·보쌈</option>
+                    <option value="일식">일식</option>
+                </select>
+            </div>
+            <br>
+
+            <!-- 주소 -->
+            <div class="store-add-address">
+                <label class="add-store-label" for="store-address">주소:</label>
+
+                <div class="store-add-address-right">
+                    <input class="add-store-input" id="store-address" name="preStoBaseAddress" placeholder="주소를 입력하세요" required type="text" readonly/>
+                    <button type="button" class="address-search-button" onclick="openPostcode()">주소 검색</button>
+                </div>
+            </div>
+            <br>
+
+            <!-- 상세 주소 -->
+            <div class="store-add-detail-address">
+                <label class="add-store-label" for="store-detail-address">상세 주소:</label>
+                <input class="add-store-input" id="store-detail-address" name="preStoDetailAddress" placeholder="상세 주소를 입력하세요 (예: 201호)" required type="text"/>
+            </div>
+            <br>
+
+            <!-- 숨겨진 필드: 결합된 전체 주소 -->
+            <input type="hidden" id="preStoAddress" name="preStoAddress"/>
+
+            <!-- 대표 사진 URL -->
+            <div class="store-add-photo">
+                <label class="add-store-label" for="store-photo">대표 사진 URL:</label>
+                <input class="add-store-input" id="store-photo" name="prePhoto" placeholder="사진 URL을 입력하세요" required
+                       type="file"/>
+            </div>
+            <br>
+
+            <!-- 전화번호 -->
+            <div class="store-add-phone">
+
+                <label class="add-store-label" for="store-phone">전화번호:</label>
+                <input class="add-store-input" id="store-phone" name="preStoPhone" placeholder="전화번호 입력" required type="tel" value="010-" />
+            </div>
+            <small>(-)제외하고 입력</small>
+            <br>
+
+            <!-- 가게 소개 -->
+            <div class="store-add-into">
+                <label class="add-store-label" for="store-intro">가게 소개:</label>
+                <textarea class="add-store-input" id="store-intro" name="preStoIntro" placeholder="가게 소개를 입력하세요"
+                          required></textarea>
+            </div>
+            <br>
+
+            <!-- 최소 주문 금액 -->
+            <div class="store-add-min-cash">
+                <label class="add-store-label" for="store-min-order-amount">최소 주문 금액:</label>
+                <input class="add-store-input" id="store-min-order-amount" name="preStoMinOrderAmount"
+                       placeholder="최소 주문 금액을 입력하세요"
+                       required type="text"/> <!-- 타입을 'text'로 설정 -->
+            </div>
+            <small id="min-order-error" style="color: red; display: none;">숫자만 입력 가능합니다.</small>
+
+
+            <br>
+
+            <!-- 배달 팁 -->
+            <div class="store-add-rider-tip">
+                <label class="add-store-label" for="store-delivery-fee">배달 팁:</label>
+                <select class="add-store-choice" id="store-delivery-fee" name="preStoDeliveryFee" required>
+                    <option value="" disabled selected>배달 팁을 선택하세요</option>
+                    <option value="1000">1,000원</option>
+                    <option value="2000">2,000원</option>
+                    <option value="3000">3,000원</option>
+                    <option value="4000">4,000원</option>
+                    <option value="5000">5,000원</option>
+                    <option value="6000">6,000원</option>
+                    <option value="7000">7,000원</option>
+                    <option value="8000">8,000원</option>
+                    <option value="9000">9,000원</option>
+                    <option value="10000">10,000원</option>
+                    <option value="11000">11,000원</option>
+                    <option value="12000">12,000원</option>
+
+                    <!-- 필요한 배달 팁 금액을 추가 -->
+                </select>
+            </div>
+            <br>
+
+            <!-- 최소 배달 예상 시간 -->
+            <div class="store-add-min-time">
+                <label class="add-store-label" for="store-delivery-time-min">최소 배달 예상 시간(분):</label>
+                <select class="add-store-choice" id="store-delivery-time-min" name="preStoDeliveryTimeMin" required>
+                    <option value="" disabled selected>최소 배달 시간을 선택하세요</option>
+                    <option value="10">10분</option>
+                    <option value="20">20분</option>
+                    <option value="30">30분</option>
+                    <option value="40">40분</option>
+                    <option value="50">50분</option>
+                    <option value="60">60분</option>
+                    <option value="70">70분</option>
+                    <option value="80">80분</option>
+                    <option value="90">90분</option>
+
+                </select>
+            </div>
+
+            <br>
+
+            <!-- 최대 배달 예상 시간 -->
+            <div class="store-add-max-time">
+                <label class="add-store-label" for="store-delivery-time-max">최대 배달 예상 시간(분):</label>
+                <select class="add-store-choice" id="store-delivery-time-max" name="preStoDeliveryTimeMax" required>
+                    <option value="" disabled selected>최대 배달 시간을 선택하세요</option>
+                    <option value="40">40분</option>
+                    <option value="50">50분</option>
+                    <option value="60">60분</option>
+                    <option value="70">70분</option>
+                    <option value="80">80분</option>
+                    <option value="90">90분</option>
+                    <option value="100">100분</option>
+                    <option value="110">110분</option>
+                    <option value="120">120분</option>
+                </select>
+            </div>
+
+            <br>
+
+            <!-- 운영일 -->
+            <div class="store-add-operating-day">
+                <label class="add-store-label" for="preStoOperatingDays">운영일:</label>
+                <div class="day-selection-group" id="preStoOperatingDays">
+                    <div class="day-box" data-value="월">월</div>
+                    <div class="day-box" data-value="화">화</div>
+                    <div class="day-box" data-value="수">수</div>
+                    <div class="day-box" data-value="목">목</div>
+                    <div class="day-box" data-value="금">금</div>
+                    <div class="day-box" data-value="토">토</div>
+                    <div class="day-box" data-value="일">일</div>
+                </div>
+                <!-- 선택된 요일을 결합하여 서버로 전송할 hidden input -->
+                <input type="hidden" id="store-operating-days" name="preStoOperatingDays" required>
+            </div>
+            <br>
+            <!-- Start & End Times -->
+            <label class="add-store-label" for="preStoOpeningHours">운영시간:</label>
+            <div class="store-set-time-open-end" id="preStoOpeningHoursContainer">
+                <!-- 시작 시간 -->
+                <div class="store-set-time">
+                    <select id="openingHourStart">
+                        <!-- 예시: 00 ~ 24 -->
+                        <option value="00">00</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09" selected>09</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                    </select>
+                    <span>시</span>
+                    <select id="openingMinuteStart">
+                        <option value="00" selected>00</option>
+                        <option value="30">30</option>
+                    </select>
+                    <span>분</span>
+                </div>
+                <span>~</span>
+                <!-- 종료 시간 -->
+                <div class="store-set-time">
+                    <select id="openingHourEnd">
+                        <option value="00">00</option>
+                        <option value="01">01</option>
+                        <option value="02">02</option>
+                        <option value="03">03</option>
+                        <option value="04">04</option>
+                        <option value="05">05</option>
+                        <option value="06">06</option>
+                        <option value="07">07</option>
+                        <option value="08">08</option>
+                        <option value="09">09</option>
+                        <option value="10" selected>10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                    </select>
+                    <span>시</span>
+                    <select id="openingMinuteEnd">
+                        <option value="00" selected>00</option>
+                        <option value="30">30</option>
+                    </select>
+                    <span>분</span>
+                </div>
+                <!-- 두 select의 값을 결합한 결과를 담을 hidden input -->
+                <input type="hidden" id="preStoOpeningHours" name="preStoOpeningHours" />
+            </div>
+            <br>
+
+            <!-- 휴무일 -->
+            <div class="store-add-closed-day">
+                <label class="add-store-label" for="store-day-off">휴무일:</label>
+                <div class="closed-day-container">
+                    <input type="text" class="add-store-input" id="store-day-off" name="preStoDayOff" placeholder="고정 휴무일을 입력하세요" required/>
+                    <select class="add-store-select" id="store-holiday-week" name="preStoHolidayWeek" required>
+                        <option value="">선택하세요</option>
+                        <option value="매주">매주</option>
+                        <option value="매월 첫번째 주">매월 첫번째 주</option>
+                        <option value="매월 두번째 주">매월 두번째 주</option>
+                        <option value="매월 세번째 주">매월 세번째 주</option>
+                    </select>
+                </div>
+            </div>
+            </br>
+
+            <!-- 배달 가능 지역 -->
+            <div class="store-add-delivery-area">
+                <label for="preStoDeliveryArea" class="add-store-label">배달 불가 지역</label>
+                <!-- 단일 선택용 select -->
+                <select id="preStoDeliveryArea" class="area-select">
+                    <option value="숭의1·3동">숭의1·3동</option>
+                    <option value="숭의2동">숭의2동</option>
+                    <option value="용현1·4동">용현1·4동</option>
+                    <option value="용현2동">용현2동</option>
+                    <option value="용현3동">용현3동</option>
+                    <option value="용현5동">용현5동</option>
+                    <option value="학익1동">학익1동</option>
+                    <option value="학익2동">학익2동</option>
+                    <option value="도화1동">도화1동</option>
+                    <option value="도화2·3동">도화2·3동</option>
+                    <option value="주안1동">주안1동</option>
+                    <option value="주안2동">주안2동</option>
+                    <option value="주안3동">주안3동</option>
+                    <option value="주안4동">주안4동</option>
+                    <option value="주안5동">주안5동</option>
+                    <option value="주안6동">주안6동</option>
+                    <option value="주안7동">주안7동</option>
+                    <option value="주안8동">주안8동</option>
+                    <option value="관교동">관교동</option>
+                    <option value="문학동">문학동</option>
+                </select>
+            </div>
+            <!-- 선택된 지역들을 보여줄 영역 -->
+            <div id="selected-areas" class="selected-areas-container">
+                <!-- 선택된 지역들이 여기에 표시됩니다 -->
+            </div>
+            <!-- 선택된 값을 콤마로 결합하여 폼 전송 시 서버로 전달 -->
+            <input type="hidden" id="selectedAreasInput" name="preStoDeliveryArea">
+            <!-- select 아래에 선택된 지역들이 표시될 영역 -->
+
+            <br>
+
+            <!-- 제출 버튼 -->
+            <button class="add-store-submit-button" type="submit">확인</button>
+        </form>
+    </div>
+</div>

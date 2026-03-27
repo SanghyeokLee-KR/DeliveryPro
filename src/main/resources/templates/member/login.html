@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>로그인 페이지</title>
+    <link href="/member/css/login.css" rel="stylesheet">
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+</head>
+
+<body>
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<!-- 로그인 Form -->
+<div class="login-container">
+    <h1>로그인</h1>
+    <form action="/mLogin" id="loginForm" method="post">
+        <div class="input-group">
+            <span class="l-icon"><img alt="아이콘" src="/member/img/join/user.svg"></span>
+            <input id="userId" name="userId" placeholder="아이디를 입력하세요" required type="text">
+        </div>
+        <div class="input-group">
+            <span class="l-icon"><img alt="아이콘" src="/member/img/join/lock.svg"></span>
+            <input id="password" name="password" placeholder="비밀번호를 입력하세요" required type="password">
+        </div>
+        <div class="login-button">
+            <button type="submit">로그인</button>
+        </div>
+    </form>
+
+    <div class="options">
+        <a href="#">비밀번호찾기</a> | <a href="#">아이디찾기</a> | <a href="/join">회원가입</a>
+    </div>
+    <div class="sns-login">
+        <p>SNS 회원가입</p>
+        <a href="#" onclick="document.getElementById('n_loginFrom').submit();">
+            <img src="/member/img/my-page/sns/btnG_아이콘원형.png" width="70">
+        </a>
+
+        <form action="/nLogin" id="n_loginFrom" method="post" style="display: none;"></form>
+
+        <a href="#" onclick="document.getElementById('K_loginForm').submit();">
+            <img src="/member/img/my-page/sns/kakaoLogin.png" width="70">
+        </a>
+
+        <form action="/kLogin" id="K_loginForm" method="post" style="display: none;"></form>
+
+        <a href="#" onclick="document.getElementById('G_loginForm').submit();">
+            <img src="/member/img/my-page/sns/Google__G__logo.png" width="70">
+        </a>
+
+        <form action="/gLogin" id="G_loginForm" method="post" style="display: none;"></form>
+    </div>
+</div>
+
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+
+<script>
+    // 로그인 폼 제출 시 AJAX 요청 보내기
+    $('#loginForm').submit(function (event) {
+        event.preventDefault(); // 기본 폼 제출 동작 방지
+        $.ajax({
+            type: 'POST',
+            url: '/mLogin', // 실제 로그인 요청을 처리하는 서버 엔드포인트로 변경해야 합니다.
+            data: $(this).serialize(),
+            success: function (response) {
+                window.location.href = "/customer"
+            },
+            error: function () {
+                alert('아이디 또는 비밀번호가 일치하지 않습니다.');
+            }
+        });
+    });
+</script>
+<script src="/layout/member/js/header.js"></script>
+</body>
+</html>

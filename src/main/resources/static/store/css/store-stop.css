@@ -1,0 +1,124 @@
+/* Container styling */
+.stop-container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.stop-section {
+    /*background-color: #fff;*/
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.stop-button-start {
+    text-align: center; /* 자식 요소 수평 가운데 정렬 */
+}
+
+.stop-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+    color: #333;
+
+}
+
+.stop-status {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.stop-label {
+    margin-right: 10px;
+}
+
+.stop-status-active {
+    padding: 4px 8px;
+    background-color: #dff4df;
+    color: #28a745;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/*.stop-status-stop {*/
+/*    padding: 4px 8px;*/
+/*    background-color: #f8d7da; !* 연한 빨강 배경 *!*/
+/*    color: #d93025;           !* 진한 빨강 텍스트 *!*/
+/*    border-radius: 4px;*/
+/*    font-weight: bold;*/
+/*}*/
+
+.stop-time {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 18px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+/* Hide the radio buttons */
+.stop-radio {
+    display: none;
+}
+
+/* Style labels to look like buttons */
+.stop-time-option {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.3s ease;
+    width: 12%;
+}
+
+/* Hover effect for labels */
+.stop-time-option:hover {
+    background-color: #f0f0f0;
+}
+
+/* Active styling when radio is checked */
+.stop-radio:checked + .stop-time-option {
+    background-color: #358800;
+    color: #fff;
+    border-color: #358800;
+}
+
+/* 버튼 스타일 */
+.stop-button {
+    width: 20%;
+    padding: 10px 0;
+    background-color: #358800;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px; /* 다른 요소와의 간격 */
+}
+
+.stop-button:hover {
+    background-color: #2b6c00;
+}
+
+.stop-text {
+    padding-bottom: 8px;
+    color: #999;
+}

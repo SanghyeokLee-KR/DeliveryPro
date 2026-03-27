@@ -1,0 +1,170 @@
+/* 기본 스타일 */
+.reviewList-entire {
+    display: flex;
+}
+
+/* 컨테이너 */
+.reviewList-container {
+    width: 900px;
+    max-width: 1024px;
+    margin-top: 20px;
+    margin-left: 50px;
+    background-color: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.reviewList-entire {
+    margin: 0 auto;
+}
+
+
+
+.reviewList-all {
+    display: flex;
+    margin-top: 30px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+
+}
+
+/* 필터 섹션 */
+.reviewList-filter-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reviewList-date-filter input {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.reviewList-date-filter {
+    display: flex;
+}
+
+.reviewList-sort select {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+
+/* 리뷰 카드 */
+.reviewList-reviews {
+    margin-bottom: 20px;
+}
+
+.reviewList-card {
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.reviewList-category {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.reviewList-store-info {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.reviewList-rating {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.reviewList-Order-details {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #999;
+}
+
+.reviewList-score {
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.reviewList-stars {
+    color: #ffc107;
+    font-size: 18px;
+    margin-left: 50px;
+}
+
+.reviewList-label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-right: 20px;
+}
+.reviewList-label1 {
+    margin-top: 7px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.reviewList-text {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.reviewList-images img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #e5e5e5;
+}
+
+
+/* 페이지네이션 */
+.reviewList-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.reviewList-page {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border: 1px solid #dcdcdc;
+    background-color: #ffffff;
+    color: #358800;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.reviewList-page.active {
+    background-color: #358800;
+    color: #ffffff;
+    border: 1px solid #2b6700;
+}
+
+.reviewList-right {
+    margin-left: 120px;
+}
+
+.reviewList-date-day {
+    font-size: 12px;          /* 폰트 크기 12px */
+    color: #999;              /* 옅은 회색 (#999) */
+}

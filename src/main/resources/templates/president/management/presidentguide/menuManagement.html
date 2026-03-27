@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사장님 사이트</title>
+  <link rel="stylesheet" href="/layout/store/css/store_main_header.css">
+  <link rel="stylesheet" href="/store/css/presidentguide/menuManagement.css">
+  <link rel="stylesheet" href="/layout/member/css/footer.css">
+  <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+
+<div class="container">
+  <div class="tag">메뉴관리</div>
+  <h1>메뉴 관리 안내</h1>
+  <p class="date" id="current-date">오늘 날짜</p>
+
+  <div class="line"></div>
+
+  <p>효율적인 메뉴 관리를 통해 고객에게 정확한 정보를 제공해주세요.        </p>
+
+  <div class="card">
+    <h3>메뉴 추가하기</h3>
+    <p>새로운 메뉴를 등록하고 가격, 설명, 사진을 추가하세요 !
+      <br>메뉴 카테고리를 지정하여 고객이 원하는 음식을 쉽게 찾을 수 있도록 해주세요.</p>
+  </div>
+
+  <div class="card">
+    <h3>인기 메뉴 설정</h3>
+    <p>자주 판매되는 메뉴를 인기 메뉴로 설정하여 상단에 노출할 수 있습니다.<br>인기 메뉴 설정을 통해 고객의 주문을 유도해 보세요!</p>
+  </div>
+
+  <div class="card">
+    <h3>메뉴 수정하기</h3>
+    <p>가격, 설명, 사진 등을 언제든지 수정할 수 있습니다.<br> 품절 상태로 변경하여 주문을 일시적으로 중단할 수 있습니다.</p>
+  </div>
+
+  <p>정확한 메뉴 정보로 고객의 신뢰를 높이고, 원활한 주문을 유도하세요!</p>
+
+  <div class="line"></div>
+
+</div>
+
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script>
+  // 현재 날짜 가져오기
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+  const day = String(today.getDate()).padStart(2, '0');
+
+  // 날짜 형식: YYYY. MM. DD
+  const formattedDate = `${year}. ${month}. ${day}`;
+
+  // HTML 요소에 날짜 삽입
+  document.getElementById('current-date').textContent = formattedDate;
+</script>
+</html>

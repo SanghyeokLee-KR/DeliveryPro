@@ -1,0 +1,161 @@
+<!-- src/main/resources/templates/admin/admin.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>운영자 페이지</title>
+
+    <!-- 어드민 전용 CSS -->
+    <link href="/admin/css/admin.css" rel="stylesheet">
+    <!-- 다른 CSS 파일들 -->
+    <link href="/admin/css/header.css" rel="stylesheet">
+    <link href="/admin/css/sidebar.css" rel="stylesheet">
+    <link href="/admin/css/members.css" rel="stylesheet">
+    <link href="/admin/css/admin-info.css" rel="stylesheet">
+    <link href="/admin/css/member-edit-table.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon-4.ico" type="image/x-icon"/>
+    <link href="/admin/css/dashboard.css" rel="stylesheet">
+    <link href="/admin/css/sales.css" rel="stylesheet">
+    <link href="/admin/css/marketing.css" rel="stylesheet">
+    <link href="/admin/css/riderList.css" rel="stylesheet">
+
+    <!-- 광고 CSS -->
+    <link th:href="@{/admin/css/adv_advertisements.css}" rel="stylesheet"/>
+    <link th:href="@{/admin/css/coupons.css}" rel="stylesheet"/> <!-- 추가된 CSS -->
+    <!-- 매장 관리 CSS -->
+    <link th:href="@{/admin/css/store_admin_stores.css}" rel="stylesheet"/> <!-- 추가된 CSS -->
+    <link th:href="@{/admin/css/board_admin_boards.css}" rel="stylesheet"/> <!-- 추가된 CSS -->
+    <!-- 게시글 상세보기 CSS -->
+    <link th:href="@{/admin/css/boardList_detail.css}" rel="stylesheet"/> <!-- 추가된 CSS-->
+</head>
+
+<body>
+<!-- 상단 헤더 -->
+<header class="header" th:insert="~{layout/admin/adminheader :: adminheaderContent}"></header>
+
+<!-- 메인 레이아웃 -->
+<div class="main-container">
+    <!-- 왼쪽 사이드바 -->
+    <aside aria-label="사이드바 메뉴" class="sidebar"
+           th:insert="~{layout/admin/adminsidebar :: adminsidebarContent}">
+    </aside>
+
+    <!-- 오른쪽 메인 콘텐츠 영역 -->
+    <main class="main-content">
+
+        <!-- 성공 메시지 표시 -->
+        <div th:if="${msg}">
+            <div class="success-message" th:text="${msg}"></div>
+        </div>
+        <!-- 오류 메시지 표시 -->
+        <div th:if="${error}">
+            <div class="error-message" th:text="${error}"></div>
+        </div>
+
+        <div th:switch="${content}">
+            <div th:case="'members'">
+                <div th:replace="~{admin/members/members :: membersContent}"></div>
+            </div>
+            <div th:case="'member-edit'">
+                <div th:replace="~{admin/members/member-edit :: membersContent}"></div>
+            </div>
+
+            <div th:case="'advertisements'">
+                <!-- advertisements-single.html 의 adsContent 프래그먼트를 불러옴 -->
+                <div th:replace="~{admin/system/advertisements-single :: adsContent}"></div>
+            </div>
+
+            <div th:case="'coupons'">
+                <div th:replace="~{admin/system/coupons :: couponsContent}"></div>
+            </div>
+
+            <div th:case="'couponUsages'">
+                <div th:replace="~{admin/system/coupon_usages :: couponUsagesContent}"></div>
+            </div>
+
+            <div th:case="'memberUsages'">
+                <div th:replace="~{admin/system/coupon_usages :: memberUsagesContent}"></div>
+            </div>
+
+            <div th:case="'stores'">
+                <div th:replace="~{admin/stores/stores :: storesContent}"></div>
+            </div>
+
+            <div th:case="'storesList'">
+                <div th:replace="~{admin/stores/storesList :: storesListContent}"></div>
+            </div>
+
+            <div th:case="'storeList-edit'">
+                <div th:replace="~{admin/stores/storeList-edit :: store-editContent}"></div>
+            </div>
+
+            <div th:case="'boardList'">
+                <div th:replace="~{admin/boards/boardList :: boardsListContent}"></div>
+            </div>
+
+            <div th:case="'boardList-detail'">
+                <div th:replace="~{admin/boards/boardsList-detail :: boardsList-detail}"></div>
+            </div>
+
+            <!--      내가 추가함 시작     -->
+            <div th:case="'admin-info'">
+                <div th:replace="~{admin/admin-info :: admin-info}"></div>
+            </div>
+            <!--      내가 추가함  끝    -->
+
+            <div th:case="'statistics'">
+                <div th:replace="~{admin/statisticsSales/statistics :: statistics-editContent}"></div>
+            </div>
+
+            <div th:case="'sales'">
+                <div th:replace="~{admin/statisticsSales/sales :: sales-editContent}"></div>
+            </div>
+
+            <div th:case="'marketing'">
+                <div th:replace="~{admin/statisticsSales/marketing :: marketing-editContent}"></div>
+            </div>
+
+            <div th:case="'riderReg'">
+                <div th:replace="~{admin/rider/riderReg :: riderReg-editContent}"></div>
+            </div>
+
+            <div th:case="'riderList'">
+                <div th:replace="~{admin/rider/riderList :: riderList-editContent}"></div>
+            </div>
+
+            <div th:case="'riderList-edit'">
+                <div th:replace="~{admin/rider/riderList-edit :: rider-editContent}"></div>
+            </div>
+
+            <div th:case="'logs'">
+                <div th:replace="~{admin/members/membersLogs :: logsContent}"></div>
+            </div>
+
+
+            <!-- 다른 케이스들 추가 가능 -->
+            <div th:case="*">
+                <!-- 기본 메인 콘텐츠 -->
+                <h1>메인 콘텐츠</h1>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<!-- 차트 cdn -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- JS: 햄버거 메뉴 및 다크모드 토글 등 -->
+<script src="/admin/js/admin.js"></script>
+<!-- 광고 관련 JS (모달 등) -->
+<script src="/admin/js/adv_advert.js"></script>
+<!-- 쿠폰 관련 JS -->
+<script src="/admin/js/coupons.js"></script> <!-- 추가된 JS -->
+<!-- 대쉬보드차트 JS -->
+<script src="/admin/js/dashboard.js"></script>
+<!-- 매출차트 JS -->
+<script src="/admin/js/sales.js"></script>
+<!-- 마케팅차트 JS -->
+<script src="/admin/js/marketing.js"></script>
+</body>
+</html>

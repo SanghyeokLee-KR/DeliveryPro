@@ -1,0 +1,107 @@
+<div th:fragment="store-holiday">
+  <div class="holiday-container">
+    <div class="holiday-section">
+      <div class="holiday-header">
+        <span>영업시간</span></div>
+      <div class="holiday-form-group">
+        <label class="holiday-label">정기휴무</label>
+        <div class="holiday-select-container">
+          <select style="width: 40%;">
+            <option>매주</option>
+            <option>매월 첫번째</option>
+            <option>매월 두번째</option>
+            <option>매월 세번째</option>
+          </select>
+          <select style="width: 40%;">
+            <option>월요일</option>
+            <option>화요일</option>
+            <option>수요일</option>
+            <option>목요일</option>
+            <option>금요일</option>
+            <option>토요일</option>
+            <option>일요일</option>
+          </select>
+          <button class="holiday-delete-button" style="margin-left: 50px;">삭제</button>
+        </div>
+      </div>
+      <div class="holiday-footer1">
+        <button class="holiday-add-button">+ 정기 휴무일 추가</button>
+      </div>
+      <div class="holiday-footer2">
+      <button class="holiday-confirm-button">확인</button>
+      </div>
+    </div>
+  </div>
+  <div class="tem-holiday-container">
+    <div class="tem-holiday-section">
+      <div class="tem-holiday-header">임시 휴무일</div>
+      <div class="tem-holiday-body">
+        <div class="tem-holiday-row">
+          <label class="holiday-label" for="start-date" style="font-size: 16px;">시작</label>
+          <input type="date" id="start-date" class="tem-custom-date" value="2025-01-01" style="width: 33%; height: 40px; text-align: left;" />
+
+          <span>~</span>
+          <label class="holiday-label" for="end-date" style="font-size: 16px;">종료</label>
+          <input type="date" id="end-date" class="tem-custom-date" value="2025-01-01" style="width: 33%; height: 40px; text-align: left;" />
+        </div>
+        <div class="tem-holiday-row1">
+          <div class="tem-label1"><label class="holiday-label" for="reason" >사유</label></div>
+          <select id="reason" style="width: 80%;">
+            <option>선택해주세요.</option>
+            <option>재료가 모두 소진되었습니다. 다음에 다시 찾아주세요.</option>
+            <option>개인적인 사정으로인한 휴무입니다. 다음에 다시 찾아주세요.</option>
+          </select>
+        </div>
+
+        <div class="tem-holiday-footer">
+          <button type="button" class="tem-confirm-btn">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stop-container">
+    <div class="stop-section">
+      <div class="stop-title">일시중지</div>
+      <div class="stop-status">
+        <span class="stop-label" id="StoreName">나비 치킨 매장</span>
+        <span class="stop-status-active">영업 중</span>
+        <!--            <span class="stop-status-stop">영업중지</span>-->
+
+      </div>
+      <div class="stop-text">중지시간</div>
+      <form action="/storeBreakTime" method="POST">
+        <div class="stop-time">
+          <input type="hidden" th:value="${session.pre_store_id}" name="preStoId">
+
+          <!-- 기존 라디오 버튼들 -->
+          <input type="radio" id="stop-30min" name="preStoBreakTime" class="stop-radio" value="30"/>
+          <label for="stop-30min" class="stop-time-option">30분</label>
+
+          <input type="radio" id="stop-1hour" name="preStoBreakTime" class="stop-radio" value="60"/>
+          <label for="stop-1hour" class="stop-time-option">1시간</label>
+
+          <input type="radio" id="stop-2hours" name="preStoBreakTime" class="stop-radio" value="120"/>
+          <label for="stop-2hours" class="stop-time-option">2시간</label>
+
+          <input type="radio" id="stop-today" name="preStoBreakTime" class="stop-radio" value="1440"/>
+          <label for="stop-today" class="stop-time-option">오늘 하루</label>
+
+<!--          &lt;!&ndash; "직접 설정" 라디오 버튼 &ndash;&gt;
+          <input type="radio" id="stop-custom" name="preStoBreakTime" class="stop-radio" value="custom"/>
+          <label for="stop-custom" class="stop-time-option">직접 설정</label>
+
+          &lt;!&ndash; Custom input field that appears when "직접 설정" is selected &ndash;&gt;
+          <div id="custom-time-input" style="display: none;">
+            <label for="custom-time">휴식 시간을 입력하세요:</label>
+            <input type="text" id="custom-time" name="customTime" placeholder="예: 1시간 30분"/>
+          </div>-->
+        </div>
+        <div class="stop-button-start">
+          <button type="submit" class="stop-button">일시 중지</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+

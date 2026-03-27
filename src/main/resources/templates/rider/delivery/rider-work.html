@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>라이더 배달 서비스</title>
+    <!-- CSS 파일들 -->
+    <link rel="stylesheet" href="/layout/rider/css/delivery-header.css"/>
+    <link rel="stylesheet" href="/layout/rider/css/delivery-sidebar.css"/>
+    <link rel="stylesheet" href="/rider/css/rider-management.css"/>
+    <link rel="stylesheet" href="/rider/css/main.css"/>
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+    <style>
+        /* 지도 위 액션버튼 등 */
+        .segment-info {
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .map-action-btn {
+            background-color: #FFA500;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+        }
+        .map-action-btn.disabled {
+            background-color: #A9A9A9;
+            cursor: default;
+        }
+        .auto-follow-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+        /* 금액 표시용(거리 덮어쓰기 방지) */
+        .price-info {
+            font-weight: bold;
+            text-align: right;
+            display: inline-block;
+            min-width: 60px;
+            white-space: nowrap;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+<!-- 헤더 영역 (Thymeleaf 삽입) -->
+<header class="header" th:insert="~{layout/rider/delivery/delivery-header :: deliveryheaderContent}"></header>
+
+<!-- 메인 레이아웃 컨테이너 -->
+<div class="main-container">
+    <!-- 사이드바 영역 (Thymeleaf fragment 삽입) -->
+    <aside class="sidebar" th:insert="~{layout/rider/delivery/delivery-sidebar :: deliverysidebarContent}"></aside>
+
+    <!-- 자동 팔로우 토글 UI -->
+    <div class="auto-follow-container">
+        <label>
+            <input type="checkbox" id="autoFollowToggle" checked/>
+            자동 팔로우
+        </label>
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content">
+        <!-- 지도 표시 영역 -->
+        <div id="main_map"></div>
+        <!-- 거리/소요시간 및 액션 버튼 표시 영역 -->
+        <div id="distanceInfoSidebar" style="padding:10px; font-size:16px;"></div>
+    </main>
+</div>
+
+<!-- 카카오 지도 SDK (appkey 포함) -->
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d8822c35851508a88d440e6883daef52&libraries=services" type="text/javascript"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<!-- 분리된 자바스크립트 파일 (haversine_formula.js) -->
+<script src="/rider/js/haversine_formula.js"></script>
+<script>
+    /////////////////////////////////////////////////////////////
+    // (참고용) 콜 타임 포맷팅 함수
+    function formatCallTime(callTime) {
+        if (!callTime) return "null";
+        let date = new Date(callTime.replace(/-/g, '/'));
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, '0');
+        let day = String(date.getDate()).padStart(2, '0');
+        let hour = String(date.getHours()).padStart(2, '0');
+        let min = String(date.getMinutes()).padStart(2, '0');
+        let sec = String(date.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
+    }
+    /////////////////////////////////////////////////////////////
+    // 자동 팔로우 여부 플래그
+    let autoFollow = true;
+    $(function () {
+        $('#autoFollowToggle').on('change', function () {
+            autoFollow = $(this).is(':checked');
+            console.log("자동 팔로우 모드:", autoFollow);
+        });
+    });
+    /////////////////////////////////////////////////////////////
+    // 두 좌표 비교 (오차 허용치)
+    function isSamePoint(p1, p2) {
+        const threshold = 0.0001;
+        return Math.abs(Number(p1.x) - Number(p2.x)) < threshold &&
+            Math.abs(Number(p1.y) - Number(p2.y)) < threshold;
+    }
+    /////////////////////////////////////////////////////////////
+    // 주소 정리: 앞쪽 숫자(지번) 제거
+    function cleanAddress(address) {
+        if (typeof address !== "string") {
+            address = address.address || address.toString();
+        }
+        let parts = address.trim().split(/\s+/);
+        if (parts.length > 0 && /^\d+$/.test(parts[0])) {
+            parts.shift();
+        }
+        return parts.join(" ");
+    }
+    /////////////////////////////////////////////////////////////
+    // KakaoGeocoderUtil (지오코딩 + 최적화)
+    const KakaoGeocoderUtil = {
+        geocodeAddress: function (address, callback) {
+            if (typeof address !== "string") {
+                address = address.address || "";
+            }
+            let cleanedAddress = cleanAddress(address);
+            console.log("[KakaoGeocoderUtil] 정제된 주소:", cleanedAddress);
+            let geocoder = new kakao.maps.services.Geocoder();
+            geocoder.addressSearch(cleanedAddress, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    let coords = {x: result[0].x, y: result[0].y};
+                    console.log("[KakaoGeocoderUtil] 좌표:", coords);
+                    callback(coords);
+                } else {
+                    console.error("[KakaoGeocoderUtil] 주소 검색 실패:", cleanedAddress);
+                    callback(null);
+                }
+            });
+        },
+        geocodeAddresses: function (addresses, callback) {
+            let addressStrings = addresses.map(addr =>
+                (typeof addr === "string") ? addr : (addr.address || ""));
+            let results = [];
+            let count = addressStrings.length;
+            addressStrings.forEach(function (addr, idx) {
+                KakaoGeocoderUtil.geocodeAddress(addr, function (coords) {
+                    results[idx] = coords;
+                    if (results.filter(r => r !== null && r !== undefined).length === count) {
+                        console.log("[KakaoGeocoderUtil] 모든 주소의 좌표:", results);
+                        callback(results);
+                    }
+                });
+            });
+        },
+        RouteOptimizer: {
+            // 근사 알고리즘 (최근접 이웃)
+            optimizeRouteOrder: function (start, destinations) {
+                let remaining = destinations.slice();
+                let ordered = [];
+                let current = start;
+                while (remaining.length > 0) {
+                    let nearestIndex = 0;
+                    let nearestDist = Number.MAX_VALUE;
+                    for (let i = 0; i < remaining.length; i++) {
+                        let d = Math.hypot(Number(current.x) - Number(remaining[i].x),
+                            Number(current.y) - Number(remaining[i].y));
+                        if (d < nearestDist) {
+                            nearestDist = d;
+                            nearestIndex = i;
+                        }
+                    }
+                    let nextPoint = remaining[nearestIndex];
+                    ordered.push(nextPoint);
+                    current = nextPoint;
+                    remaining.splice(nearestIndex, 1);
+                }
+                return ordered;
+            }
+        }
+    };
+    /////////////////////////////////////////////////////////////
+    // 지도, 마커, 경로 변수
+    let map1;
+    let polylines = [];
+    let riderOverlays = [];
+    const driverX = 126.675113024566; // 라이더 초기 X
+    const driverY = 37.4388938204128; // 라이더 초기 Y
+    let storeMarker = null;
+    let actionOverlay = null;
+    const segmentColors = ["#FF0000", "#0000FF", "#00AA00", "#FFA500"];
+    /////////////////////////////////////////////////////////////
+    // 배달 데이터 전역
+    let groupDeliveryData = [];
+    let singleDeliveryData = [];
+    /////////////////////////////////////////////////////////////
+    // 각 카드 거리 업데이트 (매장→고객, 고객→고객)
+    function updateCardDistance($card) {
+        let storeAddr = $card.data("store-address");
+        let customerAddrsData = $card.data("customer-addresses");
+        let customerAddrs = (typeof customerAddrsData === "object") ?
+            customerAddrsData : JSON.parse(customerAddrsData);
+        // 매장 좌표
+        KakaoGeocoderUtil.geocodeAddress(storeAddr, function (storeCoords) {
+            if (!storeCoords) return;
+            // 매장 ~ 라이더 거리
+            $.ajax({
+                url: "/calcDistance",
+                type: "POST",
+                data: {
+                    fromX: driverX,
+                    fromY: driverY,
+                    toX: storeCoords.x,
+                    toY: storeCoords.y
+                },
+                dataType: "json",
+                success: function (response) {
+                    let distance = response.distance;
+                    // data-seg-index="0" 만 업데이트
+                    $card.find("span.segment-info[data-seg-index='0']").text(distance + "m");
+                }
+            });
+            // 매장 ~ 첫 고객, 이후 고객 간 거리
+            let prevCoord = storeCoords;
+            customerAddrs.forEach(function (addr, index) {
+                KakaoGeocoderUtil.geocodeAddress(addr, function (custCoords) {
+                    if (!custCoords) return;
+                    $.ajax({
+                        url: "/calcDistance",
+                        type: "POST",
+                        data: {
+                            fromX: prevCoord.x,
+                            fromY: prevCoord.y,
+                            toX: custCoords.x,
+                            toY: custCoords.y
+                        },
+                        dataType: "json",
+                        success: function (res) {
+                            let dist = res.distance;
+                            // 매장 이후는 index 순서대로
+                            let $customerSpan = $card.find("span.segment-info")
+                                .not("[data-seg-index='0']")
+                                .eq(index);
+                            $customerSpan.text(dist + "m");
+                            prevCoord = custCoords;
+                        }
+                    });
+                });
+            });
+        });
+    }
+    function updateCardDistances() {
+        $(".group-delivery-card").each(function () {
+            updateCardDistance($(this));
+        });
+    }
+    /////////////////////////////////////////////////////////////
+    // 페이지 로드 시
+    $(function () {
+        initMap();
+        // 탭 전환 (예제용)
+        $("input[name='delivery-status']").on('change', function () {
+            let val = $(this).val();
+            if (val === "배차") {
+                $("#tab-batcha, #tab-batcha2, #tab-jinhaeng, #tab-done").hide();
+                $("#tab-batcha, #tab-batcha2").show();
+            } else if (val === "진행중") {
+                $("#tab-batcha, #tab-batcha2").hide();
+                $("#tab-jinhaeng").show();
+                $("#tab-done").hide();
+            } else {
+                $("#tab-batcha, #tab-batcha2, #tab-jinhaeng").hide();
+                $("#tab-done").show();
+            }
+        });
+        $("input[name='delivery-status']:checked").trigger("change");
+        // 주문 목록 AJAX 호출 (서버에서 JSON 데이터 받음)
+        $.ajax({
+            url: "/orders/riderOrderList",
+            type: "POST",
+            dataType: "json",
+            success: function (res) {
+                console.log("[riderOrderList] result=", res);
+                renderGroupDelivery(res);
+                renderSingleDelivery(res);
+                updateCardDistances();
+            },
+            error: function (err) {
+                console.error("[riderOrderList] Ajax Error:", err);
+            }
+        });
+        // 수락 버튼 클릭 (그룹 및 단일 배달 모두 처리)
+        $(document).on("click", ".delivery-action", function () {
+            let $card = $(this).closest(".group-delivery-card");
+            console.log("주문 li 요소들:", $card.find("li[data-order-id]"));
+            // 그룹 배달인 경우 data-delivery-ids 속성이 존재
+            let deliveryIds = $card.data("delivery-ids");
+            if (deliveryIds) {
+                $.ajax({
+                    url: '/api/delivery/accept',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ deliveryIds: deliveryIds }),
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log("수락 성공:", response);
+                        $card.appendTo("#inProgressBox");
+                        $card.find(".delivery-action").remove();
+
+                        $("input[name='delivery-status'][value='진행중']")
+                            .prop("checked", true)
+                            .trigger("change");
+
+                        preloadRoute($card);
+                    },
+                    error: function(err) {
+                        console.error("수락 실패:", err);
+                        alert("배달 수락에 실패하였습니다.");
+                    }
+                });
+            } else {
+                // 단일 배달인 경우 (간단히 처리)
+                $.ajax({
+                    url: '/api/delivery/accept', // 단일 배달도 같은 엔드포인트에서 처리 가능하도록 구성
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ deliveryIds: [$card.attr("id")] }),
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log("수락 성공:", response);
+                        $card.appendTo("#inProgressBox");
+                        $card.find(".delivery-action").remove();
+                        preloadRoute($card);
+                    },
+                    error: function(err) {
+                        console.error("수락 실패:", err);
+                        alert("배달 수락에 실패하였습니다.");
+                    }
+                });
+            }
+        });
+        // 정렬 select -> "보기" 클릭 (예제)
+        $("#view-button").on("click", function () {
+            const criteria = $("#sort-select").val();
+            sortGroupData(criteria);
+            sortSingleData(criteria);
+        });
+    });
+    /////////////////////////////////////////////////////////////
+    // 지도 초기화
+    function initMap() {
+        map1 = new kakao.maps.Map(document.getElementById('main_map'), {
+            center: new kakao.maps.LatLng(driverY, driverX),
+            level: 3
+        });
+        // 라이더 오버레이
+        let riderDiv = document.createElement("div");
+        riderDiv.id = "riderOverlay-" + Date.now();
+        riderDiv.style.width = "80px";
+        riderDiv.style.height = "38px";
+        riderDiv.style.backgroundImage = "url('/rider/img/car.png')";
+        riderDiv.style.backgroundSize = "contain";
+        riderDiv.style.backgroundPosition = "center";
+        riderDiv.style.backgroundRepeat = "no-repeat";
+        riderDiv.style.position = "absolute";
+        riderDiv.style.transform = "rotate(0deg)";
+        riderDiv.style.zIndex = "100";
+        riderDiv.style.pointerEvents = "none";
+        let newRiderOverlay = new kakao.maps.CustomOverlay({
+            position: new kakao.maps.LatLng(driverY, driverX),
+            content: riderDiv,
+            yAnchor: 0.5,
+            xAnchor: 0.5
+        });
+        newRiderOverlay.setMap(map1);
+        riderOverlays.push(newRiderOverlay);
+    }
+    /////////////////////////////////////////////////////////////
+    // 경로 프리로드
+    function preloadRoute($card) {
+        const storeAddr = $card.data("store-address");
+        let customerAddrsData = $card.data("customer-addresses");
+        if (!customerAddrsData) return;
+        const customerAddrs = (typeof customerAddrsData === "object")
+            ? customerAddrsData
+            : JSON.parse(customerAddrsData);
+        KakaoGeocoderUtil.geocodeAddress(storeAddr, function (storeCoords) {
+            if (!storeCoords) return;
+            addStoreMarker(storeCoords.x, storeCoords.y);
+            let customerAddrStrs = customerAddrs.map(item =>
+                (typeof item === "string") ? item : (item.address || "")
+            );
+            KakaoGeocoderUtil.geocodeAddresses(customerAddrStrs, function (customerCoordsArray) {
+                let uniqueCustomerCoords = [];
+                customerCoordsArray.forEach(function (coord, idx) {
+                    if (coord && !uniqueCustomerCoords.some(c => isSamePoint(c, coord))) {
+                        uniqueCustomerCoords.push(coord);
+                        addCustomerMarker(coord.x, coord.y, customerAddrStrs[idx]);
+                    }
+                });
+                let optimizedRoute = KakaoGeocoderUtil.RouteOptimizer
+                    .optimizeRouteOrder(storeCoords, uniqueCustomerCoords);
+                // 라이더 위치에서 매장까지 경로 요청 및 애니메이션 (매장은 픽업 구간)
+                requestRouteAndAnimate(driverX, driverY, storeCoords.x, storeCoords.y, "#FF0000", function () {
+                    console.log("매장 도착! 이후 고객 구간");
+                    // 매장에 해당하는 첫 번째 segment-info(픽업 정보)를 "픽업완료"로 업데이트
+                    $card.find("span.segment-info[data-seg-index='0']").text("픽업완료");
+                    // 매장 도착 후 고객 구간 처리를 시작 (여기서부터는 집(배달) 구간)
+                    processRouteSegments(storeCoords, optimizedRoute, $card);
+                });
+            });
+        });
+    }
+    // 경로 요청 + 폴리라인 + 애니메이션
+    function requestRouteAndAnimate(fromX, fromY, toX, toY, color, onFinish) {
+        $.ajax({
+            url: '/pointAjax',
+            type: 'POST',
+            data: {fromX, fromY, toX, toY},
+            dataType: 'json',
+            success: function (routeResult) {
+                drawRouteOnMapWithColor(routeResult, color);
+                let path = [];
+                routeResult.segments.forEach(function (segment) {
+                    segment.coords.forEach(function (point) {
+                        path.push(new kakao.maps.LatLng(point.y, point.x));
+                    });
+                });
+                animatePath(path, onFinish);
+            },
+            error: function (err) {
+                console.error("[requestRouteAndAnimate] 경로 오류:", err);
+            }
+        });
+    }
+    // 라이더 아이콘 애니메이션
+    function animatePath(path, onFinish) {
+        if (riderOverlays.length < 1) return;
+        let myRiderOverlay = riderOverlays[riderOverlays.length - 1];
+        let idx = 0, fraction = 0;
+        function step() {
+            if (idx >= path.length - 1) {
+                if (onFinish) onFinish();
+                return;
+            }
+            if (fraction >= 1.0) {
+                fraction = 0;
+                idx++;
+                if (idx >= path.length - 1) {
+                    if (onFinish) onFinish();
+                    return;
+                }
+            }
+            let start = path[idx], end = path[idx + 1];
+            if (!end) {
+                if (onFinish) onFinish();
+                return;
+            }
+            let lat = start.getLat() + (end.getLat() - start.getLat()) * fraction;
+            let lng = start.getLng() + (end.getLng() - start.getLng()) * fraction;
+            let currentPos = new kakao.maps.LatLng(lat, lng);
+            myRiderOverlay.setPosition(currentPos);
+            if (autoFollow) map1.setCenter(currentPos);
+            let angle = calculateBearing(start, end);
+            angle = (angle - 90 + 360) % 360;
+            let riderElem = myRiderOverlay.getContent();
+            if (riderElem) {
+                riderElem.style.transform = `rotate(${angle}deg)`;
+            }
+            fraction += 0.02;
+            requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+    // 구간별 애니메이션
+    // 각 구간별 애니메이션 처리 (수정된 부분)
+    function processRouteSegments(startPoint, optimizedRoute, $card) {
+        let currentPoint = startPoint;
+        function processNextSegment(index) {
+            if (index >= optimizedRoute.length) {
+                // 모든 고객 구간을 완료하면 최종 배달완료 버튼 표시
+                showFinalDeliveryCompleteButton($card);
+                return;
+            }
+            let nextPoint = optimizedRoute[index];
+            showActionButtonOnMap("배달", function () {
+                requestRouteAndAnimate(
+                    currentPoint.x, currentPoint.y,
+                    nextPoint.x, nextPoint.y,
+                    "#0000FF", function () {
+                        // 도착 후 해당 주문(li[data-order-id]) 업데이트 (여기서 집 배달 완료)
+                        let $orderLi = $card.find("li[data-order-id]").eq(index);
+                        if ($orderLi.length > 0) {
+                            let orderId = $orderLi.data('order-id');
+                            console.log("도착 후 처리할 orderId:", orderId);
+                            if (orderId) {
+                                let $segmentSpan = $orderLi.find("span.segment-info");
+                                completeOrderSegment(orderId, $segmentSpan, "배달완료");
+                            } else {
+                                console.error("orderId is undefined at index", index);
+                            }
+                        } else {
+                            console.warn("No order element found at index", index, ". Skipping completeOrderSegment.");
+                        }
+                        currentPoint = nextPoint;
+                        processNextSegment(index + 1);
+                    }
+                );
+            });
+        }
+        processNextSegment(0);
+    }
+
+    // 지도 위 액션 버튼
+    function showActionButtonOnMap(label, callback) {
+        if (actionOverlay) {
+            actionOverlay.setMap(null);
+        }
+        let btnDiv = document.createElement("div");
+        btnDiv.className = "action-overlay";
+        btnDiv.innerHTML = `<button class="map-action-btn">${label}</button>`;
+        actionOverlay = new kakao.maps.CustomOverlay({
+            position: map1.getCenter(),
+            content: btnDiv,
+            xAnchor: 0.5,
+            yAnchor: 1.2
+        });
+        actionOverlay.setMap(map1);
+        btnDiv.querySelector("button").addEventListener("click", function () {
+            if (callback) callback();
+            actionOverlay.setMap(null);
+        });
+    }
+    // 최종 배달완료 버튼
+    function showFinalDeliveryCompleteButton($card, deliveryId) {
+        // deliveryId가 전달되지 않았다면 카드의 data-delivery-ids 속성에서 추출
+        if (!deliveryId) {
+            let deliveryIds = $card.data("delivery-ids");
+            // data-delivery-ids가 문자열이라면 JSON 파싱
+            if (typeof deliveryIds === "string") {
+                try {
+                    deliveryIds = JSON.parse(deliveryIds);
+                } catch (e) {
+                    console.error("delivery-ids 파싱 실패:", e);
+                }
+            }
+            // 배열인 경우 첫 번째 값을 사용 (필요에 따라 로직 수정)
+            deliveryId = (Array.isArray(deliveryIds) && deliveryIds.length > 0)
+                ? deliveryIds[0]
+                : undefined;
+        }
+        if (!deliveryId) {
+            console.error("최종 배달완료를 위한 deliveryId가 없습니다.");
+            return;
+        }
+
+        let $btn = $('<button id="finalDeliveryBtn" class="map-action-btn">최종 배달완료</button>');
+        let div = document.createElement("div");
+        div.className = "action-overlay";
+        div.appendChild($btn[0]);
+        let finalOverlay = new kakao.maps.CustomOverlay({
+            position: (riderOverlays.length > 0)
+                ? riderOverlays[riderOverlays.length - 1].getPosition()
+                : map1.getCenter(),
+            content: div,
+            yAnchor: 1.2,
+            xAnchor: 0.5
+        });
+        finalOverlay.setMap(map1);
+        $btn.on('click', function () {
+            $btn.prop('disabled', true).addClass('disabled');
+            finalOverlay.setMap(null);
+            // 수정된 부분: 추출한 deliveryId를 사용하여 그룹 배달 완료 API 호출
+            completeGroupDelivery(deliveryId, $card);
+        });
+    }
+    /////////////////////////////////////////////////////////////
+    // 매장/고객 마커
+    function addStoreMarker(x, y) {
+        if (storeMarker) {
+            storeMarker.setMap(null);
+        }
+        storeMarker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(y, x),
+            image: new kakao.maps.MarkerImage(
+                '/rider/img/store.png',
+                new kakao.maps.Size(40, 40),
+                {offset: new kakao.maps.Point(20, 20)}
+            ),
+            map: map1,
+            title: "매장"
+        });
+    }
+    function addCustomerMarker(x, y, address) {
+        let marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(y, x),
+            image: new kakao.maps.MarkerImage(
+                '/rider/img/customer.png',
+                new kakao.maps.Size(40, 40)
+            ),
+            map: map1,
+            title: "고객"
+        });
+    }
+    /////////////////////////////////////////////////////////////
+    // 방위각 계산
+    function calculateBearing(fromLatLng, toLatLng) {
+        let lat1 = fromLatLng.getLat() * Math.PI / 180;
+        let lon1 = fromLatLng.getLng() * Math.PI / 180;
+        let lat2 = toLatLng.getLat() * Math.PI / 180;
+        let lon2 = toLatLng.getLng() * Math.PI / 180;
+        let y = Math.sin(lon2 - lon1) * Math.cos(lat2);
+        let x = Math.cos(lat1) * Math.sin(lat2)
+            - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+        let brng = Math.atan2(y, x) * 180 / Math.PI;
+        return (brng + 360) % 360;
+    }
+
+    // 각 구간(주문) 배달 완료 버튼 클릭 시 호출하는 함수
+    function completeOrderSegment(orderId, $segmentSpan, statusText) {
+        $.ajax({
+            url: `/api/delivery/complete/order/${orderId}`,
+            type: "POST",
+            dataType: "json",
+            success: function(response) {
+                console.log("주문 상태 업데이트:", response);
+                $segmentSpan.text(statusText);
+            },
+            error: function(err) {
+                console.error("주문 상태 업데이트 실패:", err);
+                alert("주문 상태 업데이트에 실패하였습니다.");
+            }
+        });
+    }
+
+    // 최종 배달완료 버튼 클릭 시 호출하는 함수
+    function completeGroupDelivery(deliveryId, $card) {
+        $.ajax({
+            url: `/api/delivery/complete/group/${deliveryId}`,
+            type: "POST",
+            dataType: "json",
+            success: function(response) {
+                console.log("그룹 배달 완료:", response);
+                $card.find(".delivery-header")
+                    .append('<span class="final-status" style="color:green;"> 배달완료</span>');
+                $card.appendTo("#completedBox");
+                $("input[name='delivery-status'][value='완료']")
+                    .prop("checked", true)
+                    .trigger("change");
+            },
+            error: function(err) {
+                console.error("그룹 배달 완료 실패:", err);
+                alert("그룹 상태 업데이트에 실패하였습니다.");
+            }
+        });
+    }
+
+    /////////////////////////////////////////////////////////////
+    // 그룹(묶음) 배달 정렬 및 렌더링
+    function sortGroupData(criteria) {
+        if (!window.groupDeliveryData || window.groupDeliveryData.length === 0) return;
+        let sortedData = [];
+        if (criteria === "distance") {
+            sortedData = window.groupDeliveryData.slice().sort((a, b) => a.travelTime - b.travelTime);
+        } else if (criteria === "count") {
+            sortedData = window.groupDeliveryData.slice().sort((a, b) => b.count - a.count);
+        } else if (criteria === "fee") {
+            sortedData = window.groupDeliveryData.slice().sort((a, b) => b.totalFee - a.totalFee);
+        }
+        renderSortedGroupDelivery(sortedData);
+        updateCardDistances();
+    }
+    function renderSortedGroupDelivery(data) {
+        let html = "";
+        let courseIndex = 0;
+        data.forEach(item => {
+            let ordersForGroup = item.orders;
+            let storeAddr = item.storeAddr;
+            let count = item.count;
+            let totalFee = item.totalFee;
+            let pickupTimePlaceholder = "계산중";
+            let course = getCourse(courseIndex);
+            courseIndex = (courseIndex + 1) % 3;
+            let customerAddrsArr = ordersForGroup.map(o => ({
+                address: o.userAddress,
+                orderSequence: o.orderSequence
+            }));
+            let customerAddrsJSON = JSON.stringify(customerAddrsArr);
+            // 그룹 내 모든 주문의 deliveryId 배열 생성
+            let deliveryIds = JSON.stringify(ordersForGroup.map(o => o.deliveryId));
+            let groupId = item.groupId;
+            // 카드 HTML (data-delivery-ids 속성 추가)
+            let groupHtml = `
+          <div class="group-delivery-card"
+               data-store-address="${storeAddr}"
+               data-customer-addresses='${customerAddrsJSON}'
+               data-delivery-ids='${deliveryIds}'
+               id="${groupId}">
+            <div class="delivery-header">
+              <span class="delivery-id">${course}</span>
+              <span class="delivery-count">${count}건</span>
+              <span class="delivery-time">픽업: <span class="pickup-time">${pickupTimePlaceholder}</span></span>
+              <button class="delivery-action">수락</button>
+            </div>
+            <div class="delivery-details">
+              <ul class="delivery-list">
+                <li>
+                  <img src="/rider/img/icons/라이더-75.svg" class="location-icon" />
+                  <span>${storeAddr}</span>
+                  <span class="segment-info" data-seg-index="0">--</span>
+                </li>
+                `;
+            ordersForGroup.forEach(o => {
+                let userAddr = o.userAddress || "주소없음";
+                let msg = o.customerMessage || "";
+                let orderPrice = o.orderTotalPrice ? `${o.orderTotalPrice}원` : "";
+                groupHtml += `
+                <li data-order-id="${o.orderId}">
+                  <img src="/rider/img/icons/위치.svg" class="location-icon"/>
+                  <span>${userAddr}</span>
+                  <span class="segment-info" data-seg-index="${o.orderSequence}">${o.orderSequence || "--"}</span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/user.svg" class="location-icon"/>
+                  <span>[고객 요청 사항] ${msg}</span>
+                  <span></span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/card.svg" class="location-icon"/>
+                  <span>카드결제 (완료)</span>
+                  <span class="price-info">${orderPrice}</span>
+                </li>
+                    `;
+            });
+            groupHtml += `
+              </ul>
+            </div>
+            <hr style="margin:8px 0;" />
+            <div style="font-weight:bold; display:flex; align-items:center;">
+              <img src="/rider/img/icons/delivery-fee.svg" class="location-icon" style="margin-right:6px;" />
+              (배달비 총합): ${totalFee}원
+            </div>
+          </div>
+                `;
+            html += groupHtml;
+        });
+        $("#groupDeliveryBox").html(html);
+        // 픽업시간 업데이트
+        window.groupDeliveryData.forEach(function (data) {
+            KakaoGeocoderUtil.geocodeAddress(data.storeAddr, function (storeCoords) {
+                if (!storeCoords) {
+                    $("#" + $.escapeSelector(data.groupId) + " .pickup-time").text("알 수 없음");
+                    return;
+                }
+                let storeLatLng = new kakao.maps.LatLng(storeCoords.y, storeCoords.x);
+                let riderLatLng = new kakao.maps.LatLng(driverY, driverX);
+                let travelTimeMin = computeTravelTime(riderLatLng, storeLatLng);
+                let baseTimeDate = new Date();
+                baseTimeDate.setMinutes(baseTimeDate.getMinutes() + travelTimeMin);
+                let pickupHour = baseTimeDate.getHours().toString().padStart(2, '0');
+                let pickupMin = baseTimeDate.getMinutes().toString().padStart(2, '0');
+                let pickupTimeStr = `${pickupHour}:${pickupMin}`;
+                $("#" + $.escapeSelector(data.groupId) + " .pickup-time").text(pickupTimeStr);
+                data.travelTime = travelTimeMin;
+            });
+        });
+    }
+    // 묶음 배달 기본 렌더 (배달중)
+    function renderGroupDelivery(orders) {
+        let groupOrders = orders.filter(o =>
+            o.deliveryType.trim() === "묶음배달" && o.deliveryStatus.trim() === "배차중"
+        );
+        if (groupOrders.length < 1) {
+            $("#groupDeliveryBox").html("<p>묶음 배달 없음</p>");
+            window.groupDeliveryData = [];
+            return;
+        }
+        // 그룹화 (storeId + callTime 기준)
+        const groupedByKey = groupOrders.reduce((groups, order) => {
+            let storeId = order.storeId ? order.storeId.toString() : order.storeAddress;
+            let callTime = order.callTime ? order.callTime.trim() : "";
+            let key = storeId + "_" + callTime;
+            if (!groups[key]) groups[key] = [];
+            groups[key].push(order);
+            return groups;
+        }, {});
+        let html = "";
+        let courseIndex = 0;
+        window.groupDeliveryData = [];
+        for (const key in groupedByKey) {
+            let ordersForGroup = groupedByKey[key];
+            ordersForGroup.sort((a, b) => (a.orderSequence || 0) - (b.orderSequence || 0));
+            let firstOrder = ordersForGroup[0];
+            let storeAddr = firstOrder.storeAddress || "매장주소 없음";
+            let baseTime = new Date();
+            let customerAddrsArr = ordersForGroup.map(o => ({
+                address: o.userAddress,
+                orderSequence: o.orderSequence
+            }));
+            let customerAddrsJSON = JSON.stringify(customerAddrsArr);
+            let count = ordersForGroup.length;
+            let totalDeliveryFee = ordersForGroup.reduce((sum, o) => sum + (o.deliveryFee || 0), 0);
+            let course = getCourse(courseIndex);
+            courseIndex = (courseIndex + 1) % 3;
+            let groupId = "group-" + key.replace(/\s/g, '').replace(/[:]/g, '');
+            // 그룹 내 주문 deliveryId 배열
+            let deliveryIds = JSON.stringify(ordersForGroup.map(o => o.deliveryId));
+            html += `
+          <div class="group-delivery-card"
+               data-store-address="${storeAddr}"
+               data-customer-addresses='${customerAddrsJSON}'
+               data-delivery-ids='${deliveryIds}'
+               id="${groupId}">
+            <div class="delivery-header">
+              <span class="delivery-id">${course}</span>
+              <span class="delivery-count">${count}건</span>
+              <span class="delivery-time">픽업: <span class="pickup-time">계산중</span></span>
+              <button class="delivery-action">수락</button>
+            </div>
+            <div class="delivery-details">
+              <ul class="delivery-list">
+                <li>
+                  <img src="/rider/img/icons/라이더-75.svg" class="location-icon" />
+                  <span>${storeAddr}</span>
+                  <span class="segment-info" data-seg-index="0">--</span>
+                </li>
+                `;
+            ordersForGroup.forEach(o => {
+                let userAddr = o.userAddress || "주소없음";
+                let msg = o.customerMessage || "";
+                let orderPrice = o.orderTotalPrice ? `${o.orderTotalPrice}원` : "";
+                html += `
+                <li data-order-id="${o.orderId}">
+                  <img src="/rider/img/icons/위치.svg" class="location-icon"/>
+                  <span>${userAddr}</span>
+                  <span class="segment-info" data-seg-index="${o.orderSequence}">${o.orderSequence || "--"}</span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/user.svg" class="location-icon"/>
+                  <span>[고객 요청 사항] ${msg}</span>
+                  <span></span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/card.svg" class="location-icon"/>
+                  <span>카드결제 (완료)</span>
+                  <span class="price-info">${orderPrice}</span>
+                </li>
+                    `;
+            });
+            html += `
+              </ul>
+            </div>
+            <hr style="margin:8px 0;" />
+            <ul class="delivery-list">
+              <li>
+                <img src="/rider/img/icons/delivery-fee.svg" class="location-icon" />
+                <span>배달비 총합</span>
+                <span class="price-info">${totalDeliveryFee}원</span>
+              </li>
+            </ul>
+          </div>
+                `;
+            window.groupDeliveryData.push({
+                groupId: groupId,
+                storeAddr: storeAddr,
+                count: count,
+                totalFee: totalDeliveryFee,
+                baseTime: baseTime,
+                orders: ordersForGroup
+            });
+        }
+        $("#groupDeliveryBox").html(html);
+        // 픽업시간 업데이트
+        window.groupDeliveryData.forEach(function (data) {
+            KakaoGeocoderUtil.geocodeAddress(data.storeAddr, function (storeCoords) {
+                if (!storeCoords) {
+                    $("#" + $.escapeSelector(data.groupId) + " .pickup-time").text("알 수 없음");
+                    return;
+                }
+                let storeLatLng = new kakao.maps.LatLng(storeCoords.y, storeCoords.x);
+                let riderLatLng = new kakao.maps.LatLng(driverY, driverX);
+                let travelTimeMin = computeTravelTime(riderLatLng, storeLatLng);
+                let baseTimeDate = new Date();
+                baseTimeDate.setMinutes(baseTimeDate.getMinutes() + travelTimeMin);
+                let pickupHour = baseTimeDate.getHours().toString().padStart(2, '0');
+                let pickupMin = baseTimeDate.getMinutes().toString().padStart(2, '0');
+                let pickupTimeStr = `${pickupHour}:${pickupMin}`;
+                $("#" + $.escapeSelector(data.groupId) + " .pickup-time").text(pickupTimeStr);
+                data.travelTime = travelTimeMin;
+            });
+        });
+    }
+    /////////////////////////////////////////////////////////////
+    // A~Z 코스명 생성
+    function getCourse(index) {
+        const courses = [];
+        for (let i = 0; i < 26; i++) {
+            courses.push(String.fromCharCode(65 + i) + '코스');
+        }
+        return courses[index];
+    }
+    /////////////////////////////////////////////////////////////
+    // 한집 배달 렌더링 (그룹 호출 방식 적용)
+    function renderSingleDelivery(orders) {
+        // "한집배달"이고 "배차중"인 주문을 필터링
+        let single = orders.filter(o =>
+            o.deliveryType === "한집배달" && o.deliveryStatus === "배차중"
+        );
+        window.singleDeliveryData = single;
+        if (single.length < 1) {
+            $("#singleDeliveryBox").html("<p>한집 배달 없음</p>");
+            return;
+        }
+        let html = "";
+        let deliveryIdCounter = 1;
+        single.forEach(o => {
+            let storeAddr = o.storeAddress || "매장주소없음";
+            let userAddr = o.userAddress || "주소없음";
+            let msg = o.customerMessage || "";
+            let fee = o.deliveryFee || 0;
+            // 백엔드에서 생성한 deliveryId가 있다면 사용하고, 없으면 카운터값 사용
+            let deliveryId = (o.deliveryId !== null && o.deliveryId !== undefined)
+                ? o.deliveryId
+                : String(deliveryIdCounter).padStart(3, '0');
+            deliveryIdCounter++;
+            let pickupTimePlaceholder = "계산중";
+            // 그룹 호출 방식으로 처리하기 위해 data-delivery-ids 속성을 추가
+            html += `
+          <div class="group-delivery-card"
+               data-store-address="${storeAddr}"
+               data-customer-addresses='["${userAddr}"]'
+               data-delivery-ids='[${deliveryId}]'
+               id="${deliveryId}">
+            <div class="delivery-header">
+              <span class="delivery-id">${deliveryId}</span>
+              <span class="delivery-time">픽업: <span class="pickup-time">${pickupTimePlaceholder}</span></span>
+              <button class="delivery-action">수락</button>
+            </div>
+            <div class="delivery-details">
+              <ul class="delivery-list">
+                <li>
+                  <img src="/rider/img/icons/라이더-75.svg" class="location-icon" />
+                  <span>${storeAddr}</span>
+                  <span class="segment-info" data-seg-index="0">--</span>
+                </li>
+                <li data-order-id="${o.orderId}">
+                  <img src="/rider/img/icons/위치.svg" class="location-icon"/>
+                  <span>${userAddr}</span>
+                  <span class="segment-info" data-seg-index="1">--</span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/user.svg" class="location-icon"/>
+                  <span>[고객 요청 사항] ${msg}</span>
+                  <span></span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/card.svg" class="location-icon"/>
+                  <span>카드결제 (완료)</span>
+                  <span class="price-info">${o.orderTotalPrice ? o.orderTotalPrice + '원' : ''}</span>
+                </li>
+                <hr style="margin:8px 0;" />
+                <li>
+                  <img src="/rider/img/icons/delivery-fee.svg" class="location-icon"/>
+                  <span>배달비</span>
+                  <span class="price-info">${fee}원</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        `;
+        });
+        $("#singleDeliveryBox").html(html);
+
+        // 픽업시간 업데이트
+        window.singleDeliveryData.forEach(function (o, idx) {
+            // cardId는 백엔드에서 생성한 deliveryId가 있으면 그대로 사용,
+            // 없으면 "single-" 접두어 없이 카운터값을 사용하도록 함.
+            let cardId = (o.deliveryId !== null && o.deliveryId !== undefined)
+                ? o.deliveryId
+                : String(idx + 1).padStart(3, '0');
+            let storeAddr = o.storeAddress || "매장주소없음";
+            let baseTime = new Date();
+            KakaoGeocoderUtil.geocodeAddress(storeAddr, function (storeCoords) {
+                if (!storeCoords) {
+                    $("#" + $.escapeSelector(cardId) + " .pickup-time").text("알 수 없음");
+                    return;
+                }
+                let storeLatLng = new kakao.maps.LatLng(storeCoords.y, storeCoords.x);
+                let riderLatLng = new kakao.maps.LatLng(driverY, driverX);
+                let travelTimeMin = computeTravelTime(riderLatLng, storeLatLng);
+                o.travelTime = travelTimeMin;
+                baseTime.setMinutes(baseTime.getMinutes() + travelTimeMin);
+                let pickupHour = baseTime.getHours().toString().padStart(2, '0');
+                let pickupMin = baseTime.getMinutes().toString().padStart(2, '0');
+                $("#" + $.escapeSelector(cardId) + " .pickup-time").text(`${pickupHour}:${pickupMin}`);
+            });
+        });
+    }
+    /////////////////////////////////////////////////////////////
+    // 한집 배달 정렬
+    function sortSingleData(criteria) {
+        if (!window.singleDeliveryData || window.singleDeliveryData.length === 0) return;
+        let sortedData = [];
+        if (criteria === "distance") {
+            sortedData = window.singleDeliveryData.slice().sort((a, b) => a.travelTime - b.travelTime);
+        } else if (criteria === "fee") {
+            sortedData = window.singleDeliveryData.slice().sort((a, b) => (b.deliveryFee || 0) - (a.deliveryFee || 0));
+        } else if (criteria === "count") {
+            sortedData = window.singleDeliveryData.slice(); // 한집은 1건씩이므로
+        }
+        renderSortedSingleDelivery(sortedData);
+        updateCardDistances();
+    }
+    function renderSortedSingleDelivery(data) {
+        let html = "";
+        let deliveryIdCounter = 1;
+        data.forEach(o => {
+            let storeAddr = o.storeAddress || "매장주소없음";
+            let userAddr = o.userAddress || "주소없음";
+            let msg = o.customerMessage || "";
+            let fee = o.deliveryFee || 0;
+            let deliveryId = String(deliveryIdCounter).padStart(3, '0');
+            deliveryIdCounter++;
+            let pickupTimePlaceholder = "계산중";
+            html += `
+          <div class="group-delivery-card"
+               data-store-address="${storeAddr}"
+               data-customer-addresses='["${userAddr}"]'
+               id="single-${deliveryId}">
+            <div class="delivery-header">
+              <span class="delivery-id">${deliveryId}</span>
+              <span class="delivery-time">픽업: <span class="pickup-time">${pickupTimePlaceholder}</span></span>
+              <button class="delivery-action">수락</button>
+            </div>
+            <div class="delivery-details">
+              <ul class="delivery-list">
+                <li>
+                  <img src="/rider/img/icons/라이더-75.svg" class="location-icon" />
+                  <span>${storeAddr}</span>
+                  <span class="segment-info" data-seg-index="0">--</span>
+                </li>
+                <li data-order-id="${o.orderId}">
+                  <img src="/rider/img/icons/위치.svg" class="location-icon"/>
+                  <span>${userAddr}</span>
+                  <span class="segment-info" data-seg-index="1">--</span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/user.svg" class="location-icon"/>
+                  <span>[고객 요청 사항] ${msg}</span>
+                  <span></span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/card.svg" class="location-icon"/>
+                  <span>카드결제 (완료)</span>
+                  <span class="price-info">${o.orderTotalPrice ? o.orderTotalPrice + '원' : ''}</span>
+                </li>
+                <li>
+                  <img src="/rider/img/icons/delivery-fee.svg" class="location-icon"/>
+                  <span>배달비</span>
+                  <span class="price-info">${fee}원</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+                `;
+        });
+        $("#singleDeliveryBox").html(html);
+        data.forEach(function (o, idx) {
+            let cardId = "single-" + String(idx + 1).padStart(3, '0');
+            let storeAddr = o.storeAddress || "매장주소없음";
+            let baseTime = new Date();
+            KakaoGeocoderUtil.geocodeAddress(storeAddr, function (storeCoords) {
+                if (!storeCoords) {
+                    $("#" + $.escapeSelector(cardId) + " .pickup-time").text("알 수 없음");
+                    return;
+                }
+                let storeLatLng = new kakao.maps.LatLng(storeCoords.y, storeCoords.x);
+                let riderLatLng = new kakao.maps.LatLng(driverY, driverX);
+                let travelTimeMin = computeTravelTime(riderLatLng, storeLatLng);
+                o.travelTime = travelTimeMin;
+                baseTime.setMinutes(baseTime.getMinutes() + travelTimeMin);
+                let pickupHour = baseTime.getHours().toString().padStart(2, '0');
+                let pickupMin = baseTime.getMinutes().toString().padStart(2, '0');
+                $("#" + $.escapeSelector(cardId) + " .pickup-time").text(`${pickupHour}:${pickupMin}`);
+            });
+        });
+    }
+    /////////////////////////////////////////////////////////////
+    // 경로 그리기
+    function drawRouteOnMapWithColor(routeResult, polyColor) {
+        let path = [];
+        routeResult.segments.forEach(function (segment) {
+            segment.coords.forEach(function (point) {
+                path.push(new kakao.maps.LatLng(point.y, point.x));
+            });
+        });
+        let polyline = new kakao.maps.Polyline({
+            path: path,
+            strokeWeight: 5,
+            strokeColor: polyColor,
+            strokeOpacity: 0.8,
+            strokeStyle: 'solid'
+        });
+        polyline.setMap(map1);
+        polylines.push(polyline);
+    }
+    /////////////////////////////////////////////////////////////
+    // 거리/시간 계산
+    function computeTravelTime(fromLatLng, toLatLng) {
+        const from = (typeof fromLatLng.getLat === "function")
+            ? {lat: fromLatLng.getLat(), lng: fromLatLng.getLng()}
+            : {lat: fromLatLng.lat, lng: fromLatLng.lng};
+        const to = (typeof toLatLng.getLat === "function")
+            ? {lat: toLatLng.getLat(), lng: toLatLng.getLng()}
+            : {lat: toLatLng.lat, lng: toLatLng.lng};
+        const distance = haversineDistance(from, to);
+        const avgSpeed = 11.11; // m/s (예: 40km/h)
+        const timeInSeconds = distance / avgSpeed;
+        return Math.ceil(timeInSeconds / 60);
+    }
+</script>
+</body>
+</html>

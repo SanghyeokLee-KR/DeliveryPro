@@ -1,0 +1,169 @@
+/*************************************************
+ * 1) 탭 네비게이션
+ *************************************************/
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border: none;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 1rem;
+}
+
+.tab-button:hover {
+    background-color: #e0e0e0;
+}
+
+.tab-button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-bottom: 2px solid #007bff;
+}
+
+/*************************************************
+ * 2) 탭 콘텐츠
+ *************************************************/
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/*************************************************
+ * 3) 컨트롤 섹션 (검색, 필터, 버튼)
+ *************************************************/
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.controls .member-search input,
+.controls .store-search input,
+.controls .rider-search input,
+.controls .status-filter select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.controls .add-button {
+    margin-left: auto;
+    background-color: #28a745;
+}
+
+.controls .add-button:hover {
+    background-color: #218838;
+}
+
+/*************************************************
+ * 4) 데이터 테이블
+ *************************************************/
+.member-table,
+.store-table,
+.rider-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+.member-table th,
+.member-table td,
+.store-table th,
+.store-table td,
+.rider-table th,
+.rider-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.member-table th,
+.store-table th,
+.rider-table th {
+    background-color: #f4f4f4;
+}
+
+body.dark-mode .member-table th,
+body.dark-mode .store-table th,
+body.dark-mode .rider-table th {
+    background-color: #444;
+    color: #ccc;
+}
+
+body.dark-mode .member-table td,
+body.dark-mode .store-table td,
+body.dark-mode .rider-table td {
+    background-color: #2c2c2c;
+    color: #eee;
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+/*************************************************
+ * 5) 액션 버튼
+ *************************************************/
+.edit-button {
+    background-color: #ffc107;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #e0a800;
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
+
+/*************************************************
+ * 6) 반응형 디자인
+ *************************************************/
+@media screen and (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .controls .add-button {
+        margin-left: 0;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab-button {
+        width: 100%;
+        text-align: left;
+    }
+}

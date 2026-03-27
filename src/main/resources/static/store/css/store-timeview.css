@@ -1,0 +1,108 @@
+.timeview-container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.section {
+    /*background-color: #fff;*/
+    border-radius: 8px;
+    padding: 16px;
+}
+.header {
+    margin-bottom: 20px;
+}
+
+/* 섹션 헤더 스타일 */
+.timeview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.timeview-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 섹션 내용 스타일 */
+.timeview-content {
+    display: flex; /* 매일과 시간 한 줄로 정렬 */
+    gap: 8px; /* 두 요소 간의 간격 */
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.timeview-description {
+    font-weight: bold;
+    color: #444;
+}
+
+.timeview-hours {
+    color: #333;
+}
+
+.timeview-content1 {
+    display: flex; /* 매일과 시간 한 줄로 정렬 */
+    gap: 8px; /* 두 요소 간의 간격 */
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.edit-link {
+    cursor: pointer;
+    color: #007aff;
+    font-size: 14px;
+}
+
+.edit-link:active {
+    color: #145AFF;
+}
+
+.new-operation-days {
+    border-radius: 8px;
+    border: solid 1px #c9c9c9;
+    margin: 5px 20px 5px 5px;
+}
+
+.store-nop-save-btn {
+    background-color: #3C7D00;
+    width: 60px;
+    height: 35px;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+}
+
+.store-nop-save-btn:active {
+    background-color: #2b6c00;
+    color: #CCCCCC;
+}
+
+.timeview-label {
+    font-size: 14px;
+    color: #666666;
+}
+
+#save-temporary-holiday_del {
+    margin: 0 10px;
+    background-color: #C0395B;
+}

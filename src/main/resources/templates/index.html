@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>메인 페이지</title>
+    <link href="/common/css/index.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+</head>
+
+<body>
+<!-- 로고 -->
+<img alt="Logo" class="logo" src="/common/img/index/Logo.png">
+
+<!-- 구분선 -->
+<div class="line"></div>
+
+<!-- 지도 이미지 추가 -->
+<div id="staticMap" style="width:840px;height: 440px;"></div>
+
+<h2 class="welcome">味추홀에 오신 것을 환영합니다.</h2>
+
+<div class="card-container">
+    <!-- 사장님 사이트 -->
+    <a class="card" href="/president">
+        <img alt="사장님사이트" src="/common/img/index/chef.png">
+    </a>
+
+    <!-- 소비자 사이트 -->
+    <a class="card" href="/customer">
+        <img alt="소비자사이트" src="/common/img/index/consumer.png">
+    </a>
+
+    <!-- 라이더 사이트 -->
+    <a class="card" href="/rider">
+        <img alt="라이더사이트" src="/common/img/index/rider.png">
+    </a>
+</div>
+</body>
+
+<!-- Kakao 지도 API 스크립트 -->
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d8822c35851508a88d440e6883daef52" type="text/javascript"></script>
+<script>
+    // 드라이버의 좌표 (경도, 위도)
+    const driverX = 126.675113024566;
+    const driverY = 37.4388938204128;
+
+    // 카카오 지도 API는 new kakao.maps.LatLng(latitude, longitude) 순서로 좌표를 전달해야 합니다.
+    var markerPosition = new kakao.maps.LatLng(driverY, driverX);
+
+    // 이미지 지도에 표시할 마커 객체
+    var marker = {
+        position: markerPosition
+    };
+
+    var staticMapContainer = document.getElementById('staticMap'), // 이미지 지도를 표시할 div
+        staticMapOption = {
+            // 지도 중심 좌표도 위도, 경도 순으로 지정합니다.
+            center: new kakao.maps.LatLng(driverY, driverX),
+            level: 3, // 지도 확대 레벨
+            marker: marker // 표시할 마커 객체
+        };
+
+    // 이미지 지도 생성
+    var staticMap = new kakao.maps.StaticMap(staticMapContainer, staticMapOption);
+</script>
+</html>

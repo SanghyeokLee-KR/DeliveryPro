@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="shortcut icon" href="/favicon-4.ico" type="image/x-icon"/>
+    <title>운영자 로그인</title>
+    <style>
+        /* Reset 기본 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 배경 및 폰트 설정 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ab5dff 0%, #a3b6f1 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333333;
+        }
+
+        /* 로그인 컨테이너 스타일 */
+        .login-container {
+            background-color: #ffffff;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* 로그인 제목 */
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        /* 폼 필드 스타일 */
+        .login-container label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 100%;
+            padding: 14px 20px;
+            margin-bottom: 25px;
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .login-container input[type="text"]:focus,
+        .login-container input[type="password"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+            outline: none;
+        }
+
+        /* 로그인 버튼 스타일 */
+        .login-container button {
+            width: 100%;
+            padding: 14px;
+            background-color: #3498db;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .login-container button:hover {
+            background-color: #2980b9;
+            transform: scale(1.02);
+        }
+
+        /* 에러 메시지 스타일 */
+        .error-message {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none; /* 기본적으로 숨김 */
+            font-weight: 500;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 30px;
+            }
+
+            .login-container h2 {
+                font-size: 24px;
+            }
+
+            .login-container button {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <!-- 로그인 제목 -->
+    <h2>운영자 로그인</h2>
+
+    <!-- 에러 메시지 -->
+    <div class="error-message" id="error-message">
+        사용자 이름 또는 비밀번호가 올바르지 않습니다.
+    </div>
+
+    <!-- 로그인 폼 -->
+    <form action="/admin/login" id="login-form" method="post">
+        <!-- 사용자 이름 필드 -->
+        <label for="username">사용자 이름</label>
+        <input id="username" name="username" placeholder="사용자 이름을 입력하세요" required type="text">
+
+        <!-- 비밀번호 필드 -->
+        <label for="password">비밀번호</label>
+        <input id="password" name="password" placeholder="비밀번호를 입력하세요" required type="password">
+
+        <!-- 로그인 버튼 -->
+        <button type="submit">로그인</button>
+    </form>
+</div>
+
+<script>
+    // 로그인 폼 제출 시 에러 메시지 처리
+    document.getElementById('login-form').addEventListener('submit', function (event) {
+        // 실제 구현 시 서버의 응답에 따라 에러 메시지 표시 로직을 추가해야 합니다.
+        // 예를 들어, AJAX를 사용하여 비동기적으로 로그인 요청을 보내고, 실패 시 에러 메시지를 표시할 수 있습니다.
+        // 여기서는 단순히 폼 제출 후 페이지가 새로 고침될 때 URL에 에러 파라미터가 있는 경우 에러 메시지를 표시하도록 설정합니다.
+    });
+
+    // 페이지 로드 시 URL에 에러 파라미터가 있는지 확인하여 에러 메시지 표시
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error')) {
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        if (urlParams.has('logout')) {
+            alert('성공적으로 로그아웃되었습니다.');
+        }
+    };
+</script>
+</body>
+</html>

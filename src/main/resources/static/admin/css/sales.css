@@ -1,0 +1,187 @@
+.admin-sales-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+.admin-sales-map-title {
+    display: flex;
+    align-items: flex-end;
+    margin: 5px 0 20px 0;
+}
+
+.admin-sales-subtitle {
+    margin-bottom: 5px;
+    margin-left: 10px;
+    font-weight: bold;
+    color: #737070;
+}
+
+.admin-sales-summary,
+.admin-sales-daily,
+.admin-sales-top-stores {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sales-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #1F1F1F;
+    margin-left: 40px;
+}
+
+.admin-sales-cards {
+    display: flex;
+    margin: 0 auto;
+    gap: 20px;
+    width: 90%;
+}
+
+.admin-sales-card {
+    flex: 1;
+    padding: 15px 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.admin-sales-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.admin-sales-amount {
+    display: block;
+    font-size: 26px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #1F1F1F;
+}
+
+.admin-sales-store-list {
+    list-style: none;
+    padding: 0;
+}
+
+.admin-sales-store-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-sales-today{ color: #d5b914 }
+.admin-sales-month{ color: #117a25 }
+.admin-sales-week{ color: #036bb1 }
+.admin-sales-total{ color: #7a1111 }
+
+.admin-sales-store-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.admin-sales-summary {
+    flex: 1;
+    padding: 30px 50px;
+}
+
+.admin-sales-daily{
+    width: 68%;
+    padding: 30px 50px;
+}
+
+.admin-sales-top-stores {
+    width: 30%;
+    padding: 30px 50px 30px 0;
+}
+
+/* 새로운 레이아웃 수정 */
+.admin-sales-daily,
+.admin-sales-top-stores {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-best-store {
+    display: flex;
+    align-items: center;
+    margin: 30px 0;
+}
+
+.admin-best-store img {
+    width: 60px;
+    height: 60px;
+    margin: 0 10px;
+    border-radius: 50%;
+}
+
+#best-store-list {
+    margin-left: 40px;
+    max-height: 500px; /* 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 넘치면 세로 스크롤 */
+    scrollbar-width: thin; /* Firefox에서 스크롤바 얇게 */
+    scrollbar-color: #ccc transparent; /* Firefox에서 스크롤바 색상 */
+}
+
+/* Webkit (Chrome, Edge, Safari)에서 스크롤바 스타일 */
+#best-store-list::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 너비 */
+}
+
+#best-store-list::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* 스크롤바 색상 */
+    border-radius: 3px; /* 둥글게 */
+}
+
+#best-store-list::-webkit-scrollbar-track {
+    background: transparent; /* 배경 투명 */
+}
+
+
+.best-store-title {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.best-store-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #444444;
+    width: 150px;  /* 적절한 너비 설정 */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.best-store-memId {
+    font-size: 16px;
+    color: #6c6565;
+}
+
+.best-store-total-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #212121;
+    margin-top: 10px;
+    width: 120px;
+    text-align: right;
+}
+
+.best-store-rank {
+    width: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.best-store-total-amount.large-sales {
+    font-size: 18px;
+}

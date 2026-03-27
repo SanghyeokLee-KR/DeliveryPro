@@ -1,0 +1,509 @@
+<!-- src/main/resources/templates/president/management/management-page.html -->
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>사장님 셀프서비스</title>
+    <!-- 기존 CSS 파일들 -->
+    <link rel="stylesheet" href="/store/css/store-closed.css">
+    <link rel="stylesheet" href="/store/css/store-stop.css">
+    <link rel="stylesheet" href="/store/css/store-timeview.css">
+    <link rel="stylesheet" href="/store/css/store-setting.css">
+    <link rel="stylesheet" href="/store/css/store-holiday.css">
+    <link rel="stylesheet" href="/store/css/store-temholiday.css">
+    <link rel="stylesheet" href="/store/css/store-delivery.css">
+    <link rel="stylesheet" href="/store/css/store-management.css">
+    <link rel="stylesheet" href="/layout/store/css/header.css">
+    <link rel="stylesheet" href="/layout/store/css/sidebar.css">
+    <link rel="stylesheet" href="/store/css/store-detail.css">
+    <link rel="stylesheet" href="/store/css/puchase-order.css">
+    <link rel="stylesheet" href="/store/css/store-review.css">
+    <link rel="stylesheet" href="/store/css/store-registration.css">
+    <link rel="stylesheet" href="/store/css/store-detail-modify.css">
+    <link rel="stylesheet" href="/store/css/store-owner-notification.css">
+    <link rel="stylesheet" href="/store/css/toast.css">
+    <link rel="stylesheet" href="/store/css/store-sales.css">
+    <link rel="stylesheet" href="/store/css/store-sales-statis.css">
+    <link rel="stylesheet" href="/store/css/delivery-management.css">
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+
+<body>
+
+<input type="hidden" id="preSto-id" th:value="${session.pre_store_id}">
+<input type="hidden" id="order-id" th:value="${session.orderId}">
+<input type="hidden" id="mem-id" th:value="${session.mem_id}" />
+<!-- 상단 헤더 -->
+<header class="header" th:insert="~{layout/store/management/management-header :: managementheaderContent}"></header>
+
+<!-- 메인 레이아웃 -->
+<div class="main-container">
+    <!-- 왼쪽 사이드바 -->
+    <aside class="sidebar"
+           th:insert="~{layout/store/management/management-sidebar :: managementsidebarContent}"></aside>
+
+    <!-- 오른쪽 메인 콘텐츠 영역 -->
+    <main class="main-content">
+        <!-- 토스트 알림 컨테이너: 하단 고정 -->
+        <div id="toastContainer" class="toast-container" style="display: none;"></div>
+
+        <!-- 여기는 가게 추가 영역입니다. -->
+        <div class="add-store-container" style="display: none;"
+             th:insert="~{president/management/store-registration :: store-registration}"></div>
+        <!-- 여기까지 가게 추가 코드 -->
+
+        <!-- 여기는 가게 수정 영역입니다. -->
+        <div class="modi-store-container" style="display: none;"
+             th:insert="~{president/management/store-modify :: store-modify}">
+        </div>
+        <!-- 여기까지 가게 수정 코드 -->
+
+        <!-- 여기는 가게 사장 알림 영역입니다. -->
+        <div class="store-owner-notification" style="display: none;"
+             th:insert="~{president/management/store-owner-notification :: store-owner-notification}">
+        </div>
+        <!-- 여기까지 가게 사장 알림 코드 -->
+
+        <!-- 가게 리스트들 출력 영역 -->
+        <div id="storeList"></div>
+
+        <!-- 메뉴 추가 모달 -->
+        <div id="menu-add-modal" class="menu-add-modal"
+             th:insert="~{president/management/store-add-menu-modal :: store-add-menu-modal}"></div>
+
+        <!-- 여기는 가게 상세보기 & 메뉴 추가 부분입니다. -->
+        <div id="store-detail-menu-view" style="display: none;"></div>
+
+        <!-- 메뉴 수정 모달 -->
+        <div class="menu-modify-modal"
+             th:insert="~{president/management/store-menu-modify-modal :: store-menu-modify-modal}"></div>
+
+        <!-- 여기는 영업시간 관리 메인 영역입니다. -->
+        <div class="timeview-store-container" style="display: none;">
+            <div class="store-timeview" th:insert="~{president/management/store-timeview :: store-timeview}"></div>
+        </div>
+        <!-- 여기까지 영업시간 관리 관리 코드 -->
+
+        <!-- 여기는 정기 휴무일 설정 영역입니다. -->
+        <div class="holiday-store-container" style="display: none;">
+            <div class="store-holiday" th:insert="~{president/management/store-holiday :: store-holiday}"></div>
+        </div>
+        <!-- 여기까지 정기 휴무일 설정 코드 -->
+
+        <!-- 여기는 영업시간 설정 메인 영역입니다. -->
+        <div class="setting-store-container" style="display: none;">
+            <div class="store-setting" th:insert="~{president/management/store-setting :: store-setting}"></div>
+        </div>
+        <!-- 여기까지 영업시간 설정 관리 코드 -->
+
+        <!-- 여기는 배달 지역 관리 영역입니다. -->
+        <div class="delivery-store-container" style="display: none;">
+            <div class="store-delivery" th:insert="~{president/management/store-delivery :: store-delivery}"></div>
+        </div>
+
+        <!-- 여기까지 배달 지역 관리 코드 -->
+        <div class="delivery-manangement-container" style="display : none;">
+            <div class="delivery-management"
+                 th:insert="~{president/management/delivery-manangement :: delivery-manangement}"></div>
+        </div>
+
+        <div class="OrderContainer" style=" display: none"
+             th:insert="~{president/management/Puchase-order :: puchase-order}">
+        </div>
+
+        <div class="SSSContainer" style=" display: none"
+             th:insert="~{president/management/store-sales-statistics :: store-sales-statistics}">
+        </div>
+
+        <div class="review-store-container" style="display: none;">
+            <div class="store-review" th:insert="~{president/management/store-review :: store-review}"></div>
+        </div>
+
+        <div class="salesContainer" style="display: none;">
+            <div class="sales-container" th:insert="~{president/management/store-sales :: store-sales}"></div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-storeName" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-storeName')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>매장이름 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body">
+                        <h3>매장 이름</h3>
+                        <p>사용할 매장 이름을 입력해주세요</p>
+                        <div class="store-details-modify-change-box">
+                            <div class="store-details-input-con">
+                                <input type="text" id="storeName-field" maxlength="20" required
+                                       oninput="updateCharacterCount()"/>
+                                <span class="store-detail-input-counter" id="char-count">0/20</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateStoreDetails('storeName')">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-category" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-category')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>매장 종류 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body"
+                         style="display: flex; align-items: center; justify-content: space-evenly;">
+                        <h3>매장 종류 선택 : </h3>
+                        <div class="store-details-modify-change-box">
+                            <select class="store-detail-category-choice" id="store-detail-category"
+                                    name="preStoCategory" required>
+                                <option value="">선택하세요</option>
+                                <option value="패스트푸드">패스트푸드</option>
+                                <option value="치킨">치킨</option>
+                                <option value="피자">피자</option>
+                                <option value="양식">양식</option>
+                                <option value="중식">중식</option>
+                                <option value="한식">한식</option>
+                                <option value="도시락">도시락</option>
+                                <option value="카페·디저트">카페·디저트</option>
+                                <option value="샐러드">샐러드</option>
+                                <option value="분식">분식</option>
+                                <option value="족발·보쌈">족발·보쌈</option>
+                                <option value="일식">일식</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateStoreDetails('category')">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-address" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-address')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>매장 주소 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body">
+                        <h3>매장 주소</h3>
+                        <p>사용할 매장 주소을 찾아 입력해주세요</p>
+                        <div class="store-details-modify-change-box">
+                            <!-- 다음 주소 api 들어갈 부분 -->
+                            <input class="btn" type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"
+                                   style="width: 120px;"/><br/>
+                            <input type="text" size="40" id="sample6_address" placeholder="주소"/><br/>
+                            <input type="text" size="40" id="sample6_detailAddress" placeholder="상세주소"/>
+                            <!-- 도로명주소와 상세주소를 합쳐서 mAddr 이름으로 서버 전송 -->
+                            <input type="hidden" id="preStoAddress" name="preStoAddress"/>
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateAddress()">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-phone" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-phone')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>매장 전화번호 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body">
+                        <h3>매장 전화번호</h3>
+                        <p>사용할 매장 전화번호를 찾아 입력해주세요</p>
+                        <div class="store-details-modify-change-box">
+                            <input type="text" id="phone-field">
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateStoreDetails('phone')">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-intro" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-intro')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>매장 소개글 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body">
+                        <h3>매장 소개글</h3>
+                        <p>사용할 매장 소개글을 입력해주세요</p>
+                        <div class="store-details-modify-change-box">
+                            <textarea class="add-store-input" id="intro-field" name="preStoIntro"
+                                      placeholder="가게 소개를 입력하세요" required></textarea>
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateStoreDetails('intro')">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-minOder" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-minOder')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>최소 주문 금액 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body">
+                        <h3>최소 주문 금액</h3>
+                        <p>매장에서 정한 최소 주문금액은?</p>
+                        <div class="store-details-modify-change-box">
+                            <input type="number" id="minOrder-field">
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateStoreDetails('minOrder')">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="store-details-modify-modal" id="modal-deliFee" style="display: none;">
+            <div class="store-details-modify-modal-content">
+                <span class="store-details-modify-close-btn" onclick="closeModal('modal-deliFee')">&times;</span>
+                <div class="store-details-modify-modal-all">
+                    <div class="store-details-modify-modal-header">
+                        <p>배달 팁 변경</p>
+                    </div>
+                    <hr style="width: 100%;"/>
+                    <div class="store-details-modify-modal-body">
+                        <h3>배달 팁</h3>
+                        <p>어리석은 손님들의 팁을 얼마나 요구하시겠습니까?</p>
+                        <div class="store-details-modify-change-box">
+                            <input type="number" id="deliFee-field">
+                        </div>
+                    </div>
+                    <div class="store-details-modify-modal-check-btn">
+                        <button type="button" onclick="updateStoreDetails('deliFee')">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+
+<!-- jQuery 로드 -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+<!-- 기존 JS 파일들 -->
+<script src="/store/js/management.js"></script>
+<script src="/store/js/management_sh.js"></script>
+
+
+<!-- SockJS와 Stomp.js 라이브러리 로드 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- 알림 관련 JS 파일 로드 -->
+<script src="/store/js/alarm.js"></script>
+
+<script src="/store/js/store-registration.js"></script>
+<script src="/store/js/store-review.js"></script>
+<script src="/store/js/store-sales-static.js"></script>
+<script src="/store/js/store-order.js"></script>
+<script src="/store/js/store-Operating.js"></script>
+<script src="/store/js/store-order-paging.js"></script>
+<script src="/store/js/store-sales.js"></script>
+<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+<script>
+
+    // 모든 li와 매칭되는 숨겨진 div 요소의 ID를 매핑
+    const menuMapping = {
+        "store-times": ".time-store-container", // 영업시간
+        "store-closed": ".closed-store-container", // 휴무일
+        "store-stop": ".stop-store-container", // 일시중지
+        "store-timeview": ".timeview-store-container", // 영업시간 관리 메인
+        "store-setting": ".setting-store-container", // 영업시간 관리 메인
+        "store-delivery": ".delivery-store-container", // 배달지역 관리 (예시)
+        "store-holiday": ".holiday-store-container", // 정기 휴무일 관리 (예시)
+        "store-temholiday": ".temholiday-store-container", // 임시 휴무일 관리 (예시)
+        "store-list-view": "#storeList",
+        "store-add-btn": ".add-store-container",
+        "store-menu-list": "#store-detail-menu-view",
+        "store-modify": ".modi-store-container",
+        "store-review": ".review-store-container", // 임시 휴무일 관리 (예시)
+        "store-Notification": ".store-owner-notification",
+        "orderbtn": ".OrderContainer",
+        "delivery-management": ".delivery-manangement-container",
+        "SSSbtn" : ".SSSContainer",
+        "sales" : ".salesContainer"
+    };
+
+    // 매핑된 ID에 따라 이벤트 핸들러 추가
+    Object.keys(menuMapping).forEach((menuId) => {
+        const menuElement = document.getElementById(menuId);
+        const targetContainer = $(menuMapping[menuId]); // jQuery로 선택
+
+        if (menuElement && targetContainer) {
+            menuElement.addEventListener("click", () => {
+                // 먼저 모든 컨테이너를 숨김
+                Object.values(menuMapping).forEach((selector) => {
+                    const container = $(selector); // jQuery로 선택
+                    if (container.length) { // 컨테이너가 존재하면
+                        container.hide(); // 컨테이너를 숨김
+                    }
+                });
+
+                // 클릭한 메뉴에 해당하는 컨테이너만 보이게 함
+                if (targetContainer.is(":hidden")) { // targetContainer가 숨겨져 있으면
+                    targetContainer.show(); // 보이게 설정
+                }
+            });
+        } else {
+            console.warn(`요소를 찾을 수 없습니다. ID: ${menuId}, 컨테이너: ${menuMapping[menuId]}`);
+        }
+    });
+
+    // 이미지 선택 시 미리보기
+    $('#mpFile').on('change', function (event) {
+        const file = event.target.files[0];  // 선택된 파일
+        if (file) {
+            // 이미지 파일만 처리
+            const reader = new FileReader();  // 파일 리더 객체
+
+            // 파일 리더로 이미지 파일을 읽고, 미리보기 업데이트
+            reader.onload = function (e) {
+                const imgUrl = e.target.result;  // 읽은 이미지의 URL
+
+                // 이미지 미리보기 업데이트
+                $('#menuImagePreview').attr('src', imgUrl);  // 미리보기 이미지 설정
+                $('#menu-img-title').text("변경할 이미지: ");  // 텍스트 변경
+                $('#menuImgName').text(file.name);  // 선택한 파일 이름 텍스트로 표시
+            };
+
+            // 파일 읽기 (이미지 파일을 읽어들임)
+            reader.readAsDataURL(file);
+        } else {
+            // 파일을 선택하지 않으면 미리보기 비우기
+            $('#menuImagePreview').attr('src', '');  // 빈 상태로 설정
+            $('#menu-img-title').text("현재 적용중인 이미지: ");  // 텍스트 원래대로 되돌리기
+            $('#menuImgName').text('');  // 텍스트 비우기
+        }
+    });
+
+    // 파일 선택 시 미리보기 및 히든 필드 업데이트
+    $(document).on('change', '#mpFile', function (event) {
+        const file = event.target.files[0];  // 사용자가 선택한 파일
+        if (file) {
+            // 파일 이름을 'menuPictureUrl' 히든 필드에 저장
+            $('#menuPictureUrl').val(file.name);
+
+            // 선택한 파일의 이름을 텍스트로 표시
+            $('#menuImgName').text(file.name);
+
+            // 선택한 파일을 미리보기 이미지로 표시
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                $('#menuImagePreview').attr('src', e.target.result);  // 미리보기 이미지로 설정
+            };
+            reader.readAsDataURL(file);
+        } else {
+            // 파일을 선택하지 않았을 경우 히든 필드와 미리보기 이미지 초기화
+            $('#menuPictureUrl').val('');
+            $('#menuImgName').text('');
+            $('#menuImagePreview').attr('src', '');  // 빈 이미지로 처리
+        }
+    });
+
+    // 주소 관리 함수 (Daum Postcode API 기본 팝업 사용)
+    function openPostcode() {
+        new daum.Postcode({
+            oncomplete: function (data) {
+                // 선택한 주소 타입에 따라 주소 값을 가져옴
+                var address = '';
+                if (data.userSelectedType === 'R') { // 도로명 주소
+                    address = data.roadAddress;
+                } else { // 지번 주소
+                    address = data.jibunAddress;
+                }
+
+                if (address.indexOf("미추홀구") === -1) {
+                    alert("미추홀구에 해당하는 주소만 선택 가능합니다. 다시 선택해주세요.");
+                    return; // 주소 업데이트 중단
+                }
+
+
+                // 기본 주소 필드에 값 설정
+                document.getElementById('store-address').value = address;
+            }
+        }).open();
+    }
+
+    // 폼 제출 시 주소 결합하여 preStoAddress에 설정
+    document.getElementById('add-store-form').addEventListener('submit', function (event) {
+        // 기본 주소와 상세 주소 가져오기
+        var baseAddress = document.getElementById('store-address').value.trim();
+        var detailAddress = document.getElementById('store-detail-address').value.trim();
+
+        // 기본 주소가 입력되지 않은 경우 경고 표시
+        if (!baseAddress) {
+            alert('주소를 입력해주세요.');
+            event.preventDefault(); // 폼 제출 중단
+            return;
+        }
+
+        // 상세 주소가 입력되지 않은 경우 경고 표시
+        if (!detailAddress) {
+            alert('상세 주소를 입력해주세요.');
+            event.preventDefault(); // 폼 제출 중단
+            return;
+        }
+
+        // 전체 주소 결합 (공백으로 구분)
+        var fullAddress = baseAddress + ' ' + detailAddress;
+
+        // 결합된 주소를 preStoAddress 필드에 설정
+        document.getElementById('preStoAddress').value = fullAddress;
+    });
+
+    $(document).ready(function () {
+        const preStoIdElement = document.getElementById("preSto-id");
+
+        const preStoId = preStoIdElement.value;
+
+        $.ajax({
+            url: `/api/stores/storeName/${preStoId}`,
+            method: 'POST',  // API에 맞게 설정 (POST 혹은 GET)
+            success: function (result) {
+                $(`#StoreName`).text(result);
+            },
+            error: function (xhr, status, error) {
+                console.error("리뷰 데이터를 가져오는 중 오류 발생:", error);
+            }
+        })
+    })
+</script>
+
+<!-- Daum Postcode API Script -->
+<script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+
+</body>
+</html>

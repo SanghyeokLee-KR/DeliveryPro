@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사장님 셀프서비스</title>
+    <link rel="stylesheet" href="/store/css/store-time.css">
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div th:fragment="store-time">
+    <div class="time-management-container">
+        <!-- 영업시간 -->
+        <div class="time-section">
+            <div class="time-header">
+                <span class="time-title">영업시간</span>
+                <a href="#" class="edit-link">수정</a>
+            </div>
+            <div class="time-content">
+                <span class="time-description">매일</span>
+                <span class="time-hours">오전 10시 ~ 오후 8시</span>
+            </div>
+        </div>
+
+        <!-- 임시 영업시간 -->
+        <div class="time-section-temporary">
+            <div class="time-header">
+                <span class="time-title">임시 영업시간</span>
+                <a href="#" class="edit-link">수정</a>
+            </div>
+            <div class="time-content">
+                <span class="no-temporary-time">등록한 임시 영업일이 없어요</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<!-- JS: 펼치기/접기 구현 -->
+<script src="/store/js/management.js"></script>
+</body>
+</html>

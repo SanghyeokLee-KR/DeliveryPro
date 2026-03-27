@@ -1,0 +1,61 @@
+  <div th:fragment="store-modify">
+  <section class="store-details-section-container">
+    <div class="store-details-container">
+      <div class="store-account-info">
+        <h2 class="store-account-text">가게정보</h2>
+      </div>
+      <!-- 개인정보 표 -->
+      <table class="store-info-table">
+        <tr>
+          <th>매장이름</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_name}"></span>
+            <button class="store-arrow-btn" onclick="openModal('storeName')">&gt;</button>
+          </td>
+        </tr>
+        <tr>
+          <th>음식 카테고리</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_category}"></span>
+            <button class="store-arrow-btn" onclick="openModal('category')">&gt;</button>
+          </td>
+        </tr>
+        <tr>
+          <th>매장 주소</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_addr}"></span>
+            <button class="store-arrow-btn" onclick="openModal('address')">&gt;</button>
+          </td>
+        </tr>
+        <tr>
+          <th>매장 전화번호</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_phone}"></span>
+            <button class="store-arrow-btn" onclick="openModal('phone')">&gt;</button>
+          </td>
+        </tr>
+        <tr>
+          <th>가게 소개글</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_intro}"></span>
+            <button class="store-arrow-btn" onclick="openModal('intro')">&gt;</button>
+          </td>
+        </tr>
+        <tr>
+          <th>최소 주문 금액</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_minOrder} + 원"></span>
+            <button class="store-arrow-btn" onclick="openModal('minOder')">&gt;</button>
+          </td>
+        </tr>
+        <tr>
+          <th>배달 팁</th>
+          <td class="store-action-cell">
+            <span th:text="${session.pre_store_deliFee} + 원"></span>
+            <button class="store-arrow-btn" onclick="openModal('deliFee')">&gt;</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>메인페이지</title>
+    <!-- 기존 CSS 링크들은 그대로 유지 -->
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link href="/store/css/storeview.css" rel="stylesheet">
+    <link href="/store/css/categorybar.css" rel="stylesheet">
+    <link href="/store/css/info.css" rel="stylesheet">
+
+</head>
+<body>
+
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<!-- 상단 검색영역 및 카테고리 바 (기존 코드) -->
+<div th:insert="~{layout/store/store/catergory-bar :: categoryContent}"></div>
+
+<input type="hidden" id="memId"
+       th:value="${session.mem_id != null ? 'true' : 'false'}" />
+
+<div class="store-all">
+    <div class="store-view">
+        <div class="store-view-main">
+            <div id="storelist"></div>
+        </div>
+        <div id="menu-container"></div>
+
+    </div>
+    <div class="store-right">
+        <div class="order-cart">
+            <h3>주문표</h3>
+            <div id="order-list"></div>
+            <div class="total-price"><p>총 주문 가격: 0원</p></div>
+            <button class="btn-order">주문하기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 모달 추가 -->
+<div class="modal hidden" id="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="title">메뉴상세</div>
+            <a class="close-button" href=""></a>
+        </div>
+        <div id="modal-menu-details"></div>
+    </div>
+</div>
+
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<!-- 기존 JS 코드 그대로 -->
+<script crossorigin="anonymous"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="/store/js/store-view.js"></script>
+<script src="/layout/member/js/header.js"></script>
+</body>
+</html>

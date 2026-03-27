@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo {
+    margin-top: 30px;
+    width: 180px;
+    height: auto;
+}
+
+.line {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 3px;
+    background-color: #BC0000;
+}
+
+h2 {
+    margin-bottom: 30px;
+}
+
+
+.container {
+    width: 80%; /* 전체 화면의 80%로 설정 */
+    max-width: 800px; /* 최대 너비 제한 */
+    margin: 0 auto; /* 가운데 정렬 */
+}
+
+/* 지도 이미지 스타일 */
+.map-container {
+    display: flex;
+    max-width: 850px; /* 최대 너비 제한 */
+    justify-content: center; /* 가로 가운데 정렬 */
+    margin: 20px; /* 지도와 제목 사이의 간격 */
+}
+
+.map-container img {
+    width: 100%; /* 지도 이미지의 너비를 화면에 맞춤 */
+    height: auto; /* 비율 유지 */
+    border-radius: 10px; /* 모서리 둥글게 */
+}
+
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px; /* 카드 사이의 간격 */
+    flex-wrap: wrap;
+}
+
+
+.card img {
+    margin-bottom: 30px;
+    width: 250px;
+}
+
+.welcome {
+    font-family: sans-serif;
+
+}
+
+.card:hover {
+    transform: scale(1.05); /* 호버 시 확대 효과 */
+    transition: transform 0.3s ease;
+}

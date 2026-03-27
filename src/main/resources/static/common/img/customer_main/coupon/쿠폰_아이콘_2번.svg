@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80.15 55.62">
+    <defs>
+        <style>
+            .cls-1 {
+            fill: #fff;
+            stroke: #404040;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 5px;
+            }
+
+            .cls-2 {
+            fill: #404040;
+            font-family: ConcertOne-Regular, 'Concert One';
+            font-size: 23.29px;
+            letter-spacing: .02em;
+            }
+        </style>
+    </defs>
+    <path class="cls-1"
+          d="M76.64,43.01c.34,0,.68.03,1.01.07V12.53c-.33.04-.67.07-1.01.07-4.73,0-8.57-4.23-8.57-9.46,0-.22.02-.43.03-.65H12.05c.01.21.03.43.03.65,0,5.22-3.84,9.46-8.57,9.46-.34,0-.68-.03-1.01-.07v30.55c.33-.04.67-.07,1.01-.07,4.73,0,8.57,4.24,8.57,9.46,0,.22-.02.43-.03.65h56.04c-.01-.21-.03-.43-.03-.65,0-5.22,3.84-9.46,8.57-9.46Z"/>
+    <rect class="cls-1" x="18.45" y="13.16" width="43.25" height="29.3" rx="4.51" ry="4.51"/>
+    <text class="cls-2" transform="translate(23.17 35.33)">
+        <tspan x="0" y="0">123</tspan>
+    </text>
+</svg>

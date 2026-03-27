@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사장님 사이트</title>
+  <link rel="stylesheet" href="/layout/store/css/store_main_header.css">
+  <link rel="stylesheet" href="/store/css/presidentguide/cooNotation.css">
+  <link rel="stylesheet" href="/layout/member/css/footer.css">
+  <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+
+<div class="container">
+  <div class="tag">원산지 표기</div>
+  <h1>원산지 표기 안내</h1>
+  <p class="date" id="current-date">오늘 날짜</p>
+
+  <div class="line"></div>
+
+  <p>식품 원산지 표기는 고객에게 신뢰를 주고, 법적 기준을 준수하기 위해 필수적으로 등록해야 합니다.<br>
+    정확한 원산지 정보를 입력하여 고객에게 투명한 정보를 제공하세요..</p>
+
+  <div class="card">
+    <h3>원산지 표기 대상</h3>
+    <p>국내산/수입산 식재료를 사용하는 모든 음식,주요 식재료(쌀, 고기, 해산물 등)
+      <br>혼합 원산지의 경우 비율을 함께 표기해주세요. (예: 국내산 70% + 수입산 30%)</p>
+  </div>
+
+  <div class="card">
+    <h3>고객 안내 및 법적 준수</h3>
+    <p>등록된 원산지는 고객이 메뉴 상세 페이지에서 확인 가능.<br>관련 법규에 따라 정확한 정보를 입력해야 하며, 허위 표기 시 불이익이 발생할 수 있습니다.
+    </p>
+  </div>
+
+  <p>정확한 원산지 표기로 고객의 신뢰를 높이고, 안전한 먹거리를 제공하세요!</p>
+
+  <div class="line"></div>
+
+</div>
+
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script>
+  // 현재 날짜 가져오기
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+  const day = String(today.getDate()).padStart(2, '0');
+
+  // 날짜 형식: YYYY. MM. DD
+  const formattedDate = `${year}. ${month}. ${day}`;
+
+  // HTML 요소에 날짜 삽입
+  document.getElementById('current-date').textContent = formattedDate;
+</script>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>소비자 페이지</title>
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+    <!-- 공통 CSS -->
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link href="/member/css/customer_main/customer_main.css" rel="stylesheet">
+    <link rel="stylesheet" href="/store/css/toast.css">
+</head>
+<body>
+<!-- 헤더 -->
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<div class="user-main-container">
+    <div class="user-main-banner-and-menu">
+
+        <!-- 광고 슬라이더 영역 -->
+        <div class="user-main-banner">
+            <div class="user-main-arrow left-arrow">&#10094;</div>
+
+            <!-- 여기엔 초기 <img>가 없음. JS가 DOMContentLoaded 후 AJAX로 생성 -->
+            <div class="user-main-slider" id="sliderWrapper">
+                <!-- JS에서 fetch('/api/advertisements') -> 이미지 appendChild(...) -->
+            </div>
+
+            <div class="user-main-arrow right-arrow">&#10095;</div>
+
+            <!-- 페이지네이션 점 (예시로 5개) -->
+            <div class="user-main-pagination">
+                <span class="pagination-dot active"></span>
+                <span class="pagination-dot"></span>
+                <span class="pagination-dot"></span>
+                <span class="pagination-dot"></span>
+                <span class="pagination-dot"></span>
+            </div>
+        </div>
+        <hr>
+
+        <div id="toastContainer" class="toast-container" style="display: none;"></div>
+
+
+        <!-- 메뉴 리스트 섹션 -->
+        <div class="user-main-menu-section">
+            <div class="user-main-menu-item">
+                <img alt="패스트푸드" data-category="패스트푸드"
+                     src="/common/img/customer_main/menu_images/음식_01_패스트푸드.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="치킨" data-category="치킨"
+                     src="/common/img/customer_main/menu_images/음식_02_치킨.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="피자" data-category="피자"
+                     src="/common/img/customer_main/menu_images/음식_03_피자.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="양식" data-category="양식"
+                     src="/common/img/customer_main/menu_images/음식_04_양식.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="중식" data-category="중식"
+                     src="/common/img/customer_main/menu_images/음식_05_중식.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="한식" data-category="한식"
+                     src="/common/img/customer_main/menu_images/음식_06_한식.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="일식" data-category="일식"
+                     src="/common/img/customer_main/menu_images/음식_07_도시락.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="족발·보쌈" data-category="족발·보쌈"
+                     src="/common/img/customer_main/menu_images/음식_08_카페_디저트.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="분식" data-category="분식"
+                     src="/common/img/customer_main/menu_images/음식_09_샐러드.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="샐러드" data-category="샐러드"
+                     src="/common/img/customer_main/menu_images/음식_10_분식.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="카페·디저트" data-category="카페·디저트"
+                     src="/common/img/customer_main/menu_images/음식_11_족발_보쌈.png">
+            </div>
+            <div class="user-main-menu-item">
+                <img alt="도시락" data-category="도시락"
+                     src="/common/img/customer_main/menu_images/음식_12_일식.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="user-all">
+        <!-- 오른쪽 섹션은 기존 코드 유지 -->
+        <div class="user-section">
+            <div class="user-group-section">
+                <div class="user-grouped-sections">
+                    <div class="user-main-delivery-section">
+                        <div class="user-main-delivery-option">
+                            <img alt="배달" src="/common/img/customer_main/icons/배달.png">
+                            <p>배달<br><span>DELIVERY</span></p>
+                        </div>
+                        <div class="user-main-packaging-option">
+                            <img alt="포장" src="/common/img/customer_main/icons/포장.png">
+                            <p>포장<br><span>PACKAGING</span></p>
+                        </div>
+                    </div>
+                    <div class="user-dropdown">
+                        <div class="user-dropdown-header">
+                            <img alt="Coupon Icon" class="user-dropdown-icon"
+                                 src="/common/img/customer_main/coupon/쿠폰_아이콘_1번.svg">
+                            <span><a id="couponRegistration"  href="/coupon">쿠폰등록</a></span>
+                            <span class="user-dropdown-arrow">▲</span>
+                        </div>
+                        <div class="user-dropdown-content">
+                            <div class="user-dropdown-item">
+                                <img alt="Input Icon" class="user-item-icon"
+                                     src="/common/img/customer_main/coupon/쿠폰_아이콘_2번.svg">
+                                <span>쿠폰번호 입력</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <div class="user-loginwithrecommend">
+            <div class="user-main-login-section">
+                <div class="user-main-login-box">
+                    <!-- 로그인/가입 영역 -->
+                    <span th:if="${session.mem_id eq null and loggedIn == null}">
+                        <p>味추홀의 회원이 되어 더 많은 혜택을 받아보세요!</p>
+                        <button class="user-main-login-button" id="login">
+                            <img src="/store/img/logo/logo_white.png" width="70">로그인
+                        </button>
+                        <div class="user-main-login-links">
+                            <a href="#">아이디</a> |
+                            <a href="#">비밀번호찾기</a> |
+                            <a href="/mJoinForm">회원가입</a>
+                        </div>
+                    </span>
+                    <span th:if="${session.mem_id ne null or loggedIn != null}">
+                        <span style="display: flex; align-items: center; justify-content: center;">
+                            <p th:text="${session.mem_username} + ' 회원님 안녕하세요!'"></p>
+                            <span class="user-main-logout" style="margin: 0 0 10px 8px;">
+                                | <a href="mLogout">로그아웃</a></span>
+                        </span>
+                        <div class="address">
+                            <div class="input-container">
+                                <svg class="svg-icon" viewBox="0 0 95.27 151.13"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path class="cls-1"
+                                          d="M5.08,66.34l40.87,82.01,43.63-80.58c12.94-29.57-7.48-63.46-39.72-64.94-.48-.02-.96-.04-1.44-.04-.48,0-.96,0-1.44,0C14.71,3.17-6.85,36.35,5.08,66.34ZM26.25,49.45c.2-11.81,9.93-21.21,21.74-21.01,11.8.2,21.21,9.93,21.01,21.74-.2,11.81-9.93,21.21-21.74,21.01-11.81-.2-21.21-9.93-21.01-21.74Z"/>
+                                </svg>
+                                <div class="scroll-container">
+                                    <span id="scroll-text" th:text="${session.mem_address}">기본 주소 없음</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center; margin-right: 4px;">
+                            <a class="user-main-button-uio" id="myProfile"
+                               th:href="@{/myPage/{mId}(mId=${session.mem_id})}">
+                                <img src="/member/img/join/user2.svg" width="25">마이페이지
+                            </a>
+                            <button class="user-main-button-uio" id="myCart"
+                                    th:onclick="|window.location.href='@{/alarm/{mid}(mid=${session.mem_id})}'|">
+                            <img src="/member/img/join/알람.svg" width="25">알림페이지
+                        </button>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="user-main-recommend-section">
+            <div class="user-header-with-buttons">
+                <h3 class="user-main-h3">새로 나왔어요!</h3>
+            </div>
+            <div class="user-main-recommend-slide" id="new-slide">
+                <div class="user-main-recommend-page" data-page="1">
+                    <div class="user-main-recommend-item">
+                        <img alt="맵소디"
+                             src="/common/img/customer_main/blurb/하단_광고_2번사진_치킨.jpg">
+                        <p>맵소디<br> 8,000원</p>
+                    </div>
+                    <div class="user-main-recommend-item">
+                        <img alt="BBQ 떡볶이"
+                             src="/common/img/customer_main/blurb/하단_광고_1번사진_떡볶이.jpg">
+                        <p>BBQ 떡볶이<br>7,000원</p>
+                    </div>
+                </div>
+                <!-- 추가 페이지 등등 ... -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 푸터 -->
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+</body>
+
+<!-- JS -->
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        crossorigin="anonymous"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=">
+</script>
+<script src="/layout/member/js/header.js"></script>
+<!-- 분리된 자바스크립트 파일 -->
+<script src="/common/js/customer_main/customer_main.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+<script src="/store/js/alarm.js"></script>
+<script th:inline="javascript">
+    // Thymeleaf 인라인 표현식을 사용할 수 있는 스크립트 블록
+    let isLoggedIn = /*[[${session.mem_id != null or loggedIn != null}]]*/ false;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const couponLink = document.getElementById('couponRegistration');
+        couponLink.addEventListener('click', function(e) {
+            if (!isLoggedIn) {
+                e.preventDefault();
+                alert("로그인 후 이용해주세요");
+                window.location.href = "/mLoginForm";
+            }
+        });
+    });
+</script>
+</html>

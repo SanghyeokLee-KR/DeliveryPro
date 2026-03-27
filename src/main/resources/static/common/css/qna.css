@@ -1,0 +1,209 @@
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.qna-header {
+    max-width: 1200px;
+    text-align: center;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.qna-header p {
+    font-weight: bold;
+    font-size: 60px;
+    margin-bottom: 50px;
+}
+
+.qna-header-line {
+    max-width: 100%;
+    margin-top: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.search-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 70px;
+}
+
+.search-bar select,
+.search-bar input {
+    padding: 15px;
+}
+
+.search-bar select {
+    padding: 5px 5px 7px 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 30px;
+    font-size: 19px;
+    width: 150px;
+    margin-right: 10px; /* 다른 요소와의 간격을 줄 수 있습니다 */
+}
+
+input::placeholder {
+    color: #c5c2c2; /* 원하는 색상으로 변경 */
+    font-size: 15px;
+}
+
+
+.search-bar select option {
+    padding: 5px;
+}
+
+.search-bar input {
+    width: 450px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    margin-left: 10px;
+    padding-left: 20px;
+    background-color: #f1f3f5;
+}
+
+.search-bar button {
+    padding: 3px 10px 8px 10px;
+    background-color: #b61414;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 30px;
+    width: 100px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.qna-body {
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.question-button {
+    background-color: #d32f2f;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+}
+
+.qna-filters {
+    display: flex; /* 수평 정렬 */
+    justify-content: space-between; /* 양쪽 끝에 요소 배치 */
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.qna-filters .left-section {
+    display: flex; /* 왼쪽 부분은 flex로 정렬 */
+    gap: 10px;
+}
+
+.qna-filters .right-section {
+    margin-top: 20px;
+    display: flex; /* 오른쪽 부분도 flex로 정렬 */
+    justify-content: flex-end; /* 오른쪽으로 배치 */
+    gap: 10px;
+    height: 40px;
+}
+
+.right-section select {
+    width: 300px;
+}
+
+.qna-filters select {
+    padding: 8px 20px 8px 10px; /* 오른쪽 여백을 늘려 화살표 위치 조정 */
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    width: 180px;
+    text-align: center;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+}
+
+.qna-table table {
+    border-radius: 12px;
+    padding: 30px;
+    margin: 15px auto;
+    align-items: center;
+    border: none;
+    border-collapse: collapse; /* 경계선 합치기 */
+    font-size: 16px;
+    width: 100%;
+    background-color: #fff;
+    overflow: hidden; /* 테두리 밖 내용 숨기기 */
+}
+
+.qna-table thead {
+    border-top: 3px solid rgba(0, 0, 0, 0.35); /* 위쪽 경계선 */
+    border-bottom: 3px solid rgba(0, 0, 0, 0.35); /* 아래쪽 경계선 */
+    padding: 16px 0; /* 위아래 패딩으로 높이 조절 */
+}
+
+.qna-table tbody {
+    background-color: white;
+}
+
+.qna-table th,
+.qna-table td {
+    text-align: center; /* 중앙 정렬 */
+    vertical-align: middle; /* 세로 중앙 정렬 */
+    padding: 12px 15px;
+    border-top: 2px solid #b0a7a7; /* 상단 경계선 */
+    border-bottom: 2px solid #b0a7a7; /* 하단 경계선 */
+}
+
+.status {
+    padding: 9px;
+    border-radius: 30px; /* 원 모양으로 만듦 */
+    font-size: 14px; /* 텍스트 크기 조정 */
+    line-height: 1.5; /* 줄 높이 조정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    height: 20px; /* 원의 높이를 설정 */
+    width: 70px;
+    overflow: hidden; /* 텍스트가 원 밖으로 나가지 않게 함 */
+}
+
+.status.complete, .status.pending {
+    margin-left: 5px;
+    background-color: lightgray;
+    color: black;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 3px 3px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    cursor: pointer;
+    width: 40px; /* 정사각형 모양을 위해 width와 height를 동일하게 설정 */
+    height: 40px; /* 정사각형 버튼으로 설정 */
+    font-weight: bold;
+    border-radius: 12px; /* 둥근 모서리 없애기 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.pagination button.active {
+    background-color: #d32f2f;
+    color: #fff;
+    border: none;
+}

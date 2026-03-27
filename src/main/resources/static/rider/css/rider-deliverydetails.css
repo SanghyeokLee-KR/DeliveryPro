@@ -1,0 +1,187 @@
+/* styles.css */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.rider-delivery-details-card {
+    width: 800px;
+    height: 650px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 20px auto;
+}
+
+.myprofile-header {
+    display: flex;
+    margin-left: 50px;
+    margin-top: 25px;
+}
+
+.myprof  ile-header-1 {
+    display: flex;
+    margin-top: 30px;
+    margin-left: 60px;
+}
+
+
+.rider-delivery-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.rider-delivery-details-header h1 {
+    font-size: 18px;
+    color: #333;
+    margin-left: 50px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* 정산내역 섹션 */
+.settlement-section {
+    background: #fff;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 8px;
+    max-width: 900px;
+}
+
+.settlement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.settlement-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.monthly-info {
+    text-align: right;
+    font-size: 1.2rem;
+}
+
+.monthly-amount {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.settlement-filter {
+    margin-bottom: 15px;
+    text-align: right;
+}
+
+.settlement-filter select {
+    padding: 5px 7px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* 정산 테이블 */
+.settlement-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+}
+
+.settlement-table th, .settlement-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.settlement-table th {
+    background: #f9f9f9;
+    font-weight: bold;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+/* 페이지네이션 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 40px;
+}
+
+.page-btn {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.page-btn:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+.page-btn.active{
+    background: #007bff;
+    color: #fff;
+}
+
+.rider-revenue {
+    font-weight: bold;
+    color: #212121;
+    margin: 0 10px;
+}
+
+.revenue-scheduled {
+    font-size: 17px;
+    color: #ccc;
+}
+
+.rider-delivery-body {
+    margin-left: 90px;
+    margin-top: 30px;
+}
+
+.rider-delivery-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #868686;
+}
+
+.rider-delivery-number {
+    display: flex;
+}
+
+.rider-delivery-number-count{
+    font-size: 50px;
+    font-weight: 600;
+    color: #333333;
+}
+
+.rider-delivery-number-enter {
+    margin-top: 18px;
+    margin-left: 1px;
+    font-weight: 600;
+    font-size: 23px;
+}

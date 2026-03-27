@@ -1,0 +1,10 @@
+<div th:fragment="customer-notification">
+  <div id="storeOwnerNotification" class="son_container"
+       th:data-user-type="'member'"
+       th:data-user-id="${session.mem_id}">
+    <div class="son_header">알림</div>
+    <ul class="son_notification_list" id="sonNotificationList">
+      <!-- 실시간 알림 <li>가 여기 prepend 됩니다 -->
+    </ul>
+  </div>
+</div>

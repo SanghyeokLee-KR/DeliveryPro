@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.47 52.46">
+    <defs>
+        <style>
+            .cls-1 {
+            clip-path: url(#clippath);
+            }
+
+            .cls-2 {
+            fill: none;
+            }
+
+            .cls-2, .cls-3, .cls-4, .cls-5 {
+            stroke-width: 0px;
+            }
+
+            .cls-3 {
+            fill: #ffe650;
+            }
+
+            .cls-4 {
+            fill: #ff7d7d;
+            }
+
+            .cls-5 {
+            fill: #22c1ff;
+            }
+        </style>
+        <clipPath id="clippath">
+            <rect class="cls-2" width="58.47" height="52.45"/>
+        </clipPath>
+    </defs>
+    <g id="_그룹_1167" data-name="그룹 1167">
+        <g class="cls-1">
+            <g id="_그룹_1166" data-name="그룹 1166">
+                <path id="_패스_4533" data-name="패스 4533" class="cls-5"
+                      d="M11.99,52.45H3.87c-1.99.13-3.72-1.36-3.87-3.35v-30.33c.15-1.99,1.88-3.49,3.87-3.35h8.12c1.99-.13,3.72,1.36,3.87,3.35v30.33c-.15,1.99-1.88,3.49-3.87,3.35"/>
+                <path id="_패스_4534" data-name="패스 4534" class="cls-4"
+                      d="M53.86,52.45h-6.65c-2.54,0-4.6-1.79-4.6-3.99V3.99c0-2.2,2.06-3.99,4.6-3.99h6.65c2.54,0,4.6,1.79,4.6,3.99v44.46c0,2.2-2.06,3.99-4.6,3.99"/>
+                <path id="_패스_4535" data-name="패스 4535" class="cls-3"
+                      d="M33.92,52.45h-9.38c-1.67.11-3.11-1.14-3.24-2.81v-20.36c.13-1.67,1.57-2.92,3.24-2.81h9.38c1.67-.11,3.11,1.14,3.24,2.81v20.36c-.13,1.67-1.57,2.92-3.24,2.81"/>
+            </g>
+        </g>
+    </g>
+</svg>

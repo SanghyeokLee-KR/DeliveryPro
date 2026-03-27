@@ -1,0 +1,88 @@
+
+<div th:fragment="store-timeview">
+    <div class="timeview-container">
+        <div class="section">
+            <div class="timeview-header">
+                <span class="timeview-title">영업시간</span>
+                <a id="store-operating-modify" class="edit-link">수정</a>
+            </div>
+            <div class="timeview-content">
+                <span class="timeview-description" th:text="${session.pre_store_operation_days}"></span>
+                <span class="timeview-hours" th:text="${session.pre_store_opening_hours}"></span>
+            </div>
+        </div>
+        <!-- 수정 가능한 요소 -->
+        <div id="store-operating-edit" class="edit-form" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <form action="/editStoreHours" method="POST">
+                    <input name="preStoId" th:value="${session.pre_store_id}" type="hidden"/>
+                    <label class="timeview-label" for="new-operation-days">영업일:</label>
+                    <input name="new-operation-days" class="new-operation-days" type="text" id="new-operation-days" placeholder="영업일 입력">
+
+                    <label class="timeview-label" for="new-opening-hours">영업시간:</label>
+                    <input name="new-opening-hours" class="new-operation-days" type="text" id="new-opening-hours" placeholder="영업시간 입력">
+
+                    <button id="save-operation" class="store-nop-save-btn">저장</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 정기 휴무일 섹션 -->
+    <div class="closed-container">
+        <div class="closed-section">
+            <div class="closed-header">
+                <h2 class="closed-title">정기 휴무일</h2>
+                <a id="store-holiday-modify" class="edit-link">수정</a>
+            </div>
+            <div class="closed-content">
+                <p>정기휴무</p>
+                <div style="display: flex;">
+                    <p th:text="${session.pre_store_holiday_week}" style="margin-right: 5px"></p>
+                    <p th:text="${session.pre_store_day_off}" style="margin-right: 5px"></p>
+                </div>
+            </div>
+        </div>
+        <!-- 수정 가능한 요소 -->
+        <div id="store-holiday-edit" class="edit-form" style="display: none;">
+            <form action="/editStoreHolidayCycle" method="POST">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <input name="preStoId" th:value="${session.pre_store_id}" type="hidden"/>
+                    <label class="timeview-label" for="new-holiday-week">휴무 주기:</label>
+                    <select class="new-holiday-week" id="new-holiday-week" name="preStoHolidayWeek" required style="margin: 5px 20px 5px 5px;">
+                        <option value="">선택하세요</option>
+                        <option value="매주">매주</option>
+                        <option value="매월 첫번째 주">매월 첫번째 주</option>
+                        <option value="매월 두번째 주">매월 두번째 주</option>
+                        <option value="매월 세번째 주">매월 세번째 주</option>
+                    </select>
+                    <label class="timeview-label" for="new-holiday-day">휴무일:</label>
+                    <input class="new-operation-days" type="text" id="new-holiday-day" placeholder="휴무일 입력" name="preStoDayOff" />
+                    <button id="save-holiday" class="store-nop-save-btn">저장</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 임시 휴무일 섹션 -->
+        <div class="closed-section-temporary">
+            <div class="closed-header">
+                <h2 class="closed-title">일시 정지 시간</h2>
+                <a id="temporary-holiday-modify" class="edit-link">수정</a>
+            </div>
+            <div class="closed-content">
+                <span th:if="${session.pre_store_break_time} == null">등록한 일시 정지 시간이 없어요</span>
+                <span th:if="${session.pre_store_break_time} != null">
+                    <span th:text="${session.pre_store_break_time}"></span>
+                </span>
+            </div>
+        </div>
+        <div id="temporary-holiday-edit" class="edit-form" style="display: none;">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <label class="timeview-label" for="new-temporary-holiday">임시 휴무일:</label>
+                <input class="new-operation-days" type="text" id="new-temporary-holiday" placeholder="임시 휴무일 입력">
+                <button id="save-temporary-holiday_modi" class="store-nop-save-btn">저장</button>
+                <button id="save-temporary-holiday_del" class="store-nop-save-btn">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>

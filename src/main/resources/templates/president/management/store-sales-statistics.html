@@ -1,0 +1,79 @@
+<div th:fragment="store-sales-statistics">
+    <div class="SSSdashboard">
+        <!-- 오늘 주문수 카드 -->
+        <div class="SSScard">
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <span class="sssCard-title">오늘 주문수</span>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="sssCard-p" th:text="${session.pre_store_orderCount ?: 0}"></p><span>건</span>
+
+                    </div>
+                </div>
+                <img src="/store/img/icons/1-01.svg" width="50">
+            </div>
+        </div>
+
+        <!-- 리뷰수 카드 -->
+        <div class="SSScard">
+            <div style="display: flex; justify-content: space-around;">
+                <div>
+                    <span class="sssCard-title">리뷰수</span>
+                    <div style="display: flex; align-items: flex-end;">
+                        <p class="sssCard-p" th:text="${session.pre_store_reviewCount ?: 0}"></p><span>건</span>
+
+                    </div>
+                </div>
+                <img src="/store/img/icons/1-02.svg" width="50">
+            </div>
+        </div>
+
+        <!-- 평균 별점 카드 -->
+        <div class="SSScard">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <div style="text-align: center;">
+                    <p>총 주문수</p>
+                    <span th:text="${session.pre_store_total_order ?: 0} + 건"></span>
+                </div>
+                <h3 style="margin: 0 10px;">/</h3>
+                <div style="text-align: center;">
+                    <p>총 리뷰수</p>
+                    <span th:text="${session.pre_store_total_review ?: 0} + 건"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오늘 매출액 -->
+        <div class="SSSsalesBox">
+            <p>오늘 매출액 :</p>
+            <span th:text="${session.pre_store_toDay_total_price} + 원"></span>
+        </div>
+
+        <!-- 총 매출액 -->
+        <div class="SSSsalesBox">
+            <p>총 매출액 :</p>
+            <span th:text="${session.pre_store_total_price} + 원"></span>
+        </div>
+
+        <!-- 평균 별점 카드 -->
+        <div class="SSSstarXard">
+            <span class="sssCard-title">평균 별점</span>
+            <p class="SSSstars">☆☆☆☆☆</p>
+            <p>0 / 5</p>
+        </div>
+
+        <!-- 요일별 주문수 차트 -->
+        <div class="SSSchart1">
+            <h3>일별 주문수</h3>
+            <canvas id="orderChart" width="400" height="200"></canvas>
+        </div>
+
+        <!-- 별점 그래프 -->
+        <div class="SSSchart2">
+            <div class="sssStarBox">
+                <h3>별점 그래프</h3>
+                <canvas id="starRatingChart" class="starRatingChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

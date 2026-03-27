@@ -1,0 +1,175 @@
+
+/* 전체 레이아웃 */
+.delivery-wrapper {
+    display: flex;
+    gap: 20px;        /* 컬럼 간 간격 */
+    padding: 20px;
+    background-color: #f9f9f9;
+    width: 1000px;
+    margin:auto;
+}
+
+.delivery-section {
+    flex: 1;                           /* 두 컬럼 동일 폭 */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 30px;
+    width: 500px; /* 카드의 너비 */
+    border-radius: 15px; /* 모서리를 둥글게 만듦 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 추가 */
+    justify-content: center; /* 내용 중앙 정렬 */
+    align-items: center; /* 내용 중앙 정렬 */
+}
+
+.delivery-section h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #368802; /* 초록색 제목 */
+    font-weight: bold;
+    font-size: 23px;
+}
+
+/* 주문 목록 영역 */
+.delivery-list {
+    max-height: 600px;   /* 필요 시 스크롤 */
+    overflow-y: auto;
+}
+
+.store-delivery-type {
+    background-color: #2b6c00;
+    color: white;
+    border-radius: 15px;
+    font-size: 12px;
+    padding-left: 12px;
+    padding-right: 9px;
+    width: 70px;
+}
+
+.store-delivery-status {
+    background-color: #c6c6c6;
+    color: white;
+    border-radius: 15px;
+    font-size: 12px;
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+.store-delivery-div {
+    display: flex;
+    gap: 30px;
+}
+
+.rider-call {
+    border: 2px solid green; /* 초록색 테두리 */
+    border-radius: 25px; /* 테두리를 둥글게 */
+    background-color: white; /* 내부 백그라운드 컬러를 하얀색 */
+    color: green; /* 글자 색을 초록색 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    display: inline-block; /* 인라인 블록으로 처리 */
+    cursor: pointer; /* 마우스 커서를 포인터로 */
+    font-weight: bold;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top:4px
+}
+
+.rider-call:hover {
+    background-color: #f0fff0; /* 마우스를 올렸을 때 약간 연한 초록색 배경 */
+    color: darkgreen; /* 글자 색을 더 어두운 초록색으로 */
+}
+
+.store-delivery-st {
+    display: flex;
+    height: 18px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    gap: 5px;
+}
+
+.store-delivery-num {
+    font-weight: bold;
+    font-size: 20px;
+    color: #6e6e6e;
+    width: 140px;
+}
+
+.store-delivery-nst {
+    display: flex;
+}
+
+.store-delivery-sa {
+    display: flex;
+    gap: 10px;
+}
+
+.rider-call {
+    border: 2px solid #4caf50;
+    border-radius: 25px;
+    background-color: #4caf50;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 1px;
+    font-size: 14px;
+    margin-top: 3px;
+    height: 24px;
+}
+
+.rider-call:hover {
+    background-color: darkgreen; /* 마우스를 올렸을 때 약간 연한 초록색 배경 */
+    color: white; /* 글자 색을 더 어두운 초록색으로 */
+}
+
+.delivery-order-history {
+    width: 960px;
+    margin: auto;
+    padding: 30px;
+
+    background-color: #fff;
+    border: 1px solid #ddd;
+
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 표 */
+.delivery-order-history-table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse; /* 셀 경계를 하나로 합침 */
+}
+
+.delivery-order-history-table th,
+.delivery-order-history-table td {
+    border: none; /* 기본 경계선 제거 */
+    padding: 8px; /* 셀 안의 여백 */
+}
+
+.delivery-order-history-table th {
+    background-color: #f4f4f4; /* 헤더 배경 색 */
+}
+
+/* 가로줄만 추가 */
+.delivery-order-history-table tr {
+    border-bottom: 1px solid #ddd; /* 가로줄 */
+}
+
+.delivery-order-history-table td {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.delivery-order-number,
+.delivery-order-time,
+.delivery-order-type,
+.delivery-order-status,
+.delivery-order-history-table td {
+    text-align: center; /* 가운데 정렬 */
+}
+

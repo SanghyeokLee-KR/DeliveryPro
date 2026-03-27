@@ -1,0 +1,77 @@
+<div class="header-container" th:fragment="pHeaderContent">
+    <!-- 로고 및 토글 -->
+    <div class="logo">
+        <a href="/president"><img alt="Logo" src="/store/img/logo/plogo.png"></a>
+    </div>
+    <!-- 로그인 및 주소 -->
+    <div class="president">
+        <div style="display: flex; flex-direction: column; width: 200px;">
+            <div style="margin: 5px; display: flex; width: 200px;">
+                <span th:if="${session.preMem_id eq null}" >
+                    <a class="president-jl" href="/pLoginForm">로그인</a>
+                    <span class="ilo">|</span>
+                    <a class="president-jl" href="/pJoinForm">회원가입</a>
+                </span>
+
+                <span class="main-ut" th:if="${session.preMem_id ne null}" style="width: 200px;">
+                    <a class="main-jl" href="/pLogout">로그아웃</a>
+                    <span class="ilo">|</span>
+                    <a class="main-jl main-nickname" th:text="${session.preMem_username}"></a>
+                </span>
+                <!--        <a th:href="@{/myPage/{mId}(mId=${session.preMem_id})}">-->
+                <!--          <svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132.83 135.96">-->
+                <!--            <defs>-->
+                <!--              <style>-->
+                <!--                .cls-1 {-->
+                <!--                  fill: #bc0000;-->
+                <!--                  stroke-width: 0px;-->
+                <!--                }-->
+                <!--              </style>-->
+                <!--            </defs>-->
+                <!--            <path class="cls-1"-->
+                <!--                  d="M66.42,13.38c11.07,0,20.04,8.97,20.04,20.04s-8.97,20.04-20.04,20.04-20.04-8.97-20.04-20.04,8.97-20.04,20.04-20.04M66.42,2.03c-17.31,0-31.39,14.08-31.39,31.39s14.08,31.39,31.39,31.39,31.39-14.08,31.39-31.39S83.72,2.03,66.42,2.03h0Z"/>-->
+                <!--            <path class="cls-1"-->
+                <!--                  d="M125.18,133.93c-3.13,0-5.67-2.54-5.67-5.67,0-22.82-18.56-41.38-41.38-41.38h-23.41c-22.82,0-41.38,18.56-41.38,41.38,0,3.13-2.54,5.67-5.67,5.67s-5.67-2.54-5.67-5.67c0-29.07,23.65-52.73,52.73-52.73h23.41c29.07,0,52.73,23.65,52.73,52.73,0,3.13-2.54,5.67-5.67,5.67Z"/>-->
+                <!--          </svg>-->
+                <!--&lt;!&ndash;        </a>&ndash;&gt;-->
+                <!--        <a href="#">-->
+                <!--          <svg id="_레이어_1" data-name="레이어 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 154.64 120.52">-->
+                <!--            <defs>-->
+                <!--              <style>-->
+                <!--                .cls-1 {-->
+                <!--                  fill: #bc0000;-->
+                <!--                  stroke-width: 0px;-->
+                <!--                }-->
+                <!--              </style>-->
+                <!--            </defs>-->
+                <!--            <path class="cls-1"-->
+                <!--                  d="M101.8,92.61H25.8c-2.48,0-4.68-1.59-5.45-3.95L1.72,32.03c-.58-1.76-.27-3.68.81-5.17,1.08-1.48,2.8-2.36,4.64-2.36h.04l103.88.7,4.86-19.72c.63-2.56,2.93-4.37,5.57-4.37h25.94c3.17,0,5.74,2.57,5.74,5.74s-2.57,5.74-5.74,5.74h-21.44l-18.65,75.65c-.63,2.56-2.93,4.37-5.57,4.37ZM29.96,81.13h67.34l10.96-44.47-93.15-.63,14.84,45.1Z"/>-->
+                <!--            <circle class="cls-1" cx="28.28" cy="108.61" r="10.8"/>-->
+                <!--            <circle class="cls-1" cx="98.75" cy="108.61" r="10.8"/>-->
+                <!--          </svg>-->
+                <!--        </a>-->
+            </div>
+            <!--      <div class="address">-->
+            <!--        <div class="input-container">-->
+            <!--          <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 95.27 151.13">-->
+            <!--            <defs>-->
+            <!--              <style>-->
+            <!--                .cls-1 {-->
+            <!--                  fill: #bc0000;-->
+            <!--                  stroke-width: 0px;-->
+            <!--                }-->
+            <!--              </style>-->
+            <!--            </defs>-->
+            <!--            <path class="cls-1"-->
+            <!--                  d="M5.08,66.34l40.87,82.01,43.63-80.58c12.94-29.57-7.48-63.46-39.72-64.94-.48-.02-.96-.04-1.44-.04-.48,0-.96,0-1.44,0C14.71,3.17-6.85,36.35,5.08,66.34ZM26.25,49.45c.2-11.81,9.93-21.21,21.74-21.01,11.8.2,21.21,9.93,21.01,21.74-.2,11.81-9.93,21.21-21.74,21.01-11.81-.2-21.21-9.93-21.01-21.74Z"/>-->
+            <!--          </svg>-->
+            <!--          <input-->
+            <!--                  class="main-addr"-->
+            <!--                  type="text"-->
+            <!--                  th:placeholder="${session.mem_address != null and session.mem_id != null} ? ${session.mem_address} : '(기본 주소 없음)'"-->
+            <!--                  style="padding-left: 35px;"/>-->
+            <!--        </div>-->
+            <!--      </div>-->
+        </div>
+    </div>
+</div>

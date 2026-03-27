@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>라이더 이유</title>
+  <link rel="stylesheet" href="/layout/rider/css/rider_main_header.css">
+  <link rel="stylesheet" href="/rider/css/rider-reason.css">
+  <link rel="stylesheet" href="/layout/rider/css/footer.css">
+  <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/rider/rider-header :: rHeaderContent}"></header>
+
+<div class="container">
+  <h1>味추홀 라이더에 지원해야 하는 이유</h1>
+
+  <div class="reason">
+    <img src="/rider/img/이미지/calendar.png" alt="캘린더 아이콘">
+    <div class="reason-content">
+      <h3>유연한 근무, 자유로운 라이프</h3>
+      <p>내가 원하는 시간에 일하고, 나만의 라이프스타일을 만들어 보세요. 라이더는 당신의 일정에 맞춰 일할 수 있습니다.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <img src="/rider/img/이미지/rider.png" alt="라이더"/>
+    <div class="reason-content">
+      <h3>운동도 하고 돈도 벌고</h3>
+      <p>건강을 챙기며 돈도 벌 수 있는 일석이조의 기회! 라이더로서 활동하며 자연스럽게 활동량을 늘릴 수 있습니다.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <img src="/rider/img/이미지/wallet.png" alt="지갑 아이콘">
+    <div class="reason-content">
+      <h3>노력한 만큼 버는 수익</h3>
+      <p>열심히 달린 만큼 정직하게 보상받는 일! 배달 수익과 다양한 인센티브로 안정적인 소득을 만들어 보세요.</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <img src="/rider/img/이미지/laptop.png" alt="노트북 아이콘">
+    <div class="reason-content">
+      <h3>쉽고 빠른 시작</h3>
+      <p>복잡한 절차는 이제 그만! 간단한 지원만으로 바로 시작할 수 있습니다. 지금 바로 라이더로 출발하세요!</p>
+    </div>
+  </div>
+
+  <div class="reason">
+    <img src="/rider/img/이미지/city.png" alt="도시 아이콘">
+    <div class="reason-content">
+      <h3>미추홀구를 탐험하는 즐거움</h3>
+      <p>미추홀구의 매력을 발견하는 기회! 일하면서 새로운 동네와 맛집도 만나보세요.</p>
+    </div>
+  </div>
+</div>
+
+<footer th:insert="~{layout/rider/rider-footer :: footerContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+<script src="/layout/member/js/header.js"></script>
+<script>
+  $('#rlogin').click(() => {
+    location.href = "/rLoginForm";
+  });
+
+  $('#rLogout').click(() => {
+    location.href = "/rLogout";
+  });
+</script>
+<!--<script src="/layout/member/js/header.js"></script>-->
+</html>

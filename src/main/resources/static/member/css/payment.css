@@ -1,0 +1,159 @@
+/* Reset 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+/* 메인 섹션 */
+.payment-section {
+    width: 700px; /* 가로 너비를 500px로 설정 */
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+h2, h3 {
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+p {
+    margin: 10px 0;
+}
+
+textarea, select {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 12px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    resize: none;
+    background-color: #fff;
+}
+
+textarea {
+    height: 80px;
+}
+
+/* 글자 수 카운트 */
+.char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #888;
+}
+
+/* 결제 수단 선택 */
+.payment-method {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.payment-method select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+}
+
+/* 주문 내역 */
+.order-summary {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    /* 높이를 130px로 설정 */
+    width: 300px;
+    height: 270px;
+}
+
+.order-summary p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total {
+    font-weight: bold;
+    font-size: 16px;
+    color: #e60012;
+}
+
+.pay-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #e60012;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.pay-button:hover {
+    background-color: #b3000e;
+}
+
+.section {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.customer_message {
+    width: 90%;
+}
+
+.delivery_message {
+    width: 90%;
+}
+
+.payment-method {
+    width: 87.7%;
+}
+
+.coupon-select {
+    width: 93.7%;
+}
+
+.request-1 {
+    font-size: 14px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+}
+
+.delivery-title {
+    margin-bottom: 8px;
+}
+
+.delivery-content {
+    margin-bottom: 30px;
+    margin-left: 8px;
+}
+
+.payment-margin{
+    margin-left: 20px;
+}
+
+.payment-title {
+    margin-bottom: 30px;
+}
+.delivery-type{
+    width: 93.7%;
+}

@@ -1,0 +1,49 @@
+<div th:fragment="managementsidebarContent">
+    <!-- 프로필 영역 -->
+    <div class="profile-area">
+        <div class="thumb">
+
+            <!-- 매장 이름이 null일 경우 기본 이미지 사용 -->
+            <img alt="매장 메인 사진"
+                 th:if="${session.pre_store_name == null}"
+                 th:src="@{/admin/img/icons/회원.svg}" /></div>
+        <div class="profile-info">
+            <!-- 관리자 아이디 -->
+            <div class="admin-username"
+                 th:text="${session.rider_id != null} ? ${session.rider_id} : '사장님'">
+                admin
+            </div>
+            <!-- 관리자 역할 (슈퍼관리자 등) -->
+            <div class="admin-role"
+                 th:text="${session.rider_name != null} ? ${session.rider_name} : 'null'">
+                운영자
+            </div>
+        </div>
+    </div>
+
+    <!-- 예: 가게관리 -->
+    <div class="main-section">
+        <div class="section-title">
+            <!-- 아이콘 -->
+            <img src="/store/img/icons/가게관리.svg">
+            <span>내 정보</span>
+        </div>
+        <ul>
+            <a href="/riderProfile" class="rider-sidebar-a"><li>프로필</li></a>
+            <a href="/riderAccount" class="rider-sidebar-a"><li>내 계좌 관리</li></a>
+            <a href="/riderAdjustment" class="rider-sidebar-a"><li>정산 내역</li></a>
+        </ul>
+    </div>
+
+    <div class="main-section">
+        <div class="section-title">
+            <img src="/store/img/icons/가게관리.svg">
+            <span>업무관리</span>
+        </div>
+        <ul>
+            <li>배달 내역</li>
+        </ul>
+    </div>
+
+
+</div>

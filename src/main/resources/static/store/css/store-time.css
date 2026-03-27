@@ -1,0 +1,76 @@
+/* 컨테이너 스타일 */
+.time-management-container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+/* 각 섹션 스타일 */
+.time-section {
+    background-color: #fff;
+    height: 100px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.time-section-temporary {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+/* 섹션 헤더 스타일 */
+.time-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.time-title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.edit-link {
+    font-size: 14px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.edit-link:hover {
+    text-decoration: underline;
+}
+
+/* 섹션 내용 스타일 */
+.time-content {
+    display: flex; /* 매일과 시간 한 줄로 정렬 */
+    gap: 8px; /* 두 요소 간의 간격 */
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+}
+
+.time-description {
+    font-weight: bold;
+    color: #444;
+}
+
+.time-hours {
+    color: #333;
+}
+
+.no-temporary-time {
+    font-style: italic;
+    color: #999;
+}

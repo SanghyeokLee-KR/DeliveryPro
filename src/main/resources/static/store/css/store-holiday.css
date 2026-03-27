@@ -1,0 +1,112 @@
+
+.holiday-container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.holiday-section {
+    border-radius: 8px;
+    padding: 16px;
+    font-weight: bold;
+}
+
+.holiday-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+h1 {
+    font-size: 18px;
+    color: #333333;
+    margin-bottom: 20px;
+    padding-bottom: 12px; /* 선과의 간격 추가 */
+    border-bottom: 1px solid #e0e0e0; /* 헤더 아래 옅은 회색 선 */
+}
+
+.holiday-form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 10px;
+}
+
+.holiday-select-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+select {
+    width: 130px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+}
+
+.holiday-delete-button {
+    background-color: #e5e5e5;
+    color: #666666;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 10px;
+    cursor: pointer;
+    align-items: center; /* 자식 요소들을 수직 가운데 정렬 */
+    margin-bottom: 10px;
+}
+
+.holiday-delete-button:hover {
+    background-color: #cccccc;
+}
+
+.holiday-add-button {
+    background: none;
+    border: none;
+    color: #008000;
+    font-size: 14px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.holiday-confirm-button {
+    background-color: #3a8c3a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px; /* 기존 패딩 */
+    font-size: 14px; /* 기존 글자 크기 */
+    cursor: pointer;
+    width: 20%
+}
+
+.holiday-confirm-button:hover {
+    background-color: #006400;
+}
+
+.holiday-footer1 {
+
+}
+
+.holiday-footer2 {
+    display: flex;
+    justify-content: center; /* 수평 가운데 정렬 */
+    text-align: center; /* 텍스트를 수평 가운데 정렬 */
+}

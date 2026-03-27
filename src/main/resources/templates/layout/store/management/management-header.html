@@ -1,0 +1,48 @@
+<div class="header-container" th:fragment="managementheaderContent">
+    <!-- 왼쪽: 로고 + 운영자 페이지 텍스트 -->
+    <div class="header-left">
+        <a class="logo-link" href="/">
+            <img alt="미추룰 로고" class="logo" src="/store/img/logo/plogo.png">
+        </a>
+        <span class="admin-page-text">| 사장님 페이지</span>
+    </div>
+
+    <!-- 오른쪽: 관리자명 / 내 정보 / 알림 / 다크모드 아이콘 -->
+    <div class="header-right">
+        <!-- (모바일에서만 보이게 할) 햄버거 메뉴 -->
+        <div aria-label="메뉴 열기" class="hamburger" role="button" tabindex="0">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <!-- 로그인 안 된 경우 -->
+        <span th:if="${session.preMem_id eq null}">
+            <a class="login-link" href="/pLoginForm">로그인</a>
+            <span class="ilo">|</span>
+            <a class="join-link" href="/pJoinForm">회원가입</a>
+        </span>
+
+        <!-- 로그인 된 경우 -->
+        <span class="main-ut" th:if="${session.preMem_username ne null}">
+            <!-- 사장님 성명 -->
+            <span class="admin-name" th:text="${session.preMem_username}">admin</span>
+
+            <!-- 내 정보 버튼 -->
+            <button class="btn-text" title="내 정보">
+                내 정보
+            </button>
+
+            <!-- 알림 아이콘 버튼 -->
+            <button class="btn-icon" title="알림">
+                <img alt="알림 아이콘" src="/admin/img/icons/알람.svg">
+            </button>
+
+            <!-- 다크모드 아이콘 버튼 -->
+            <button class="btn-icon" id="darkModeBtn" title="다크모드">
+                <!-- 기본적으로 라이트 모드 아이콘(태양) 표시 -->
+                <img alt="라이트 모드 아이콘" id="darkModeIcon" src="/admin/img/icons/sun.svg">
+            </button>
+        </span>
+    </div>
+</div>

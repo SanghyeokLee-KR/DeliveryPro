@@ -1,0 +1,80 @@
+<div th:fragment="store-add-menu-modal" class="menu-add-modal-content">
+  <h3 class="menu-add-form-title">메뉴 추가하기</h3>
+  <form action="/addMenu" method="POST" enctype="multipart/form-data" class="menu-add-form">
+    <input type="hidden" name="preStoId" th:value="${session.pre_store_id}" />
+    <div style="width: 35%">
+      <label for="menuCategory" class="menu-add-label menu-margin-haha1">카테고리</label>
+      <label for="menuName" class="menu-add-label menu-margin-haha2">메뉴명</label>
+      <label for="menuDescription" class="menu-add-label menu-margin-haha3">메뉴설명<span class="menu-add-choice">(선택)</span></label>
+      <label for="menuPrice" class="menu-add-label menu-margin-haha4">가격</label>
+      <label class="menu-add-label menu-margin-haha5">노출상태</label>
+      <label class="menu-add-label menu-margin-haha6">메뉴사진<span class="menu-add-choice">(선택)</span></label>
+    </div>
+    <div style="width: 100%; margin-left: 50px;">
+      <div class="menu-add-input-group">
+        <select id="menuCategory" name="menuCategory" class="menu-add-select" required>
+          <option value="" disabled selected>선택하기</option>
+          <option value="메인메뉴">메인메뉴</option>
+          <option value="사이드메뉴">사이드메뉴</option>
+          <option value="소스">소스</option>
+          <option value="음료">음료</option>
+        </select>
+      </div>
+
+      <div class="menu-add-input-group">
+
+        <input type="text" id="menuName" name="menuName" class="menu-add-input" required>
+      </div>
+
+      <div class="menu-add-input-group">
+
+        <textarea id="menuDescription" name="menuDescription" class="menu-add-text" rows="3"></textarea>
+      </div>
+
+      <div class="menu-add-input-group">
+
+        <div class="menu-add-price-group">
+          <input type="number" id="menuPrice" name="menuPrice" class="menu-add-input" placeholder="₩" required min="0">
+        </div>
+      </div>
+
+      <div class="menu-add-input-group">
+
+        <div class="mydict">
+          <div>
+            <label class="label-menu-add">
+              <input type="radio" name="menuStatus" value="판매중">
+              <span>판매중</span>
+            </label>
+            <label class="label-menu-add">
+              <input type="radio" name="menuStatus" value="품절">
+              <span>품절</span>
+            </label>
+            <label class="label-menu-add">
+              <input type="radio" name="menuStatus" value="보류">
+              <span>보류</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="menu-add-input-group">
+        <!-- 실제 파일 입력 -->
+        <input type="file" id="menu-add-photo" name="mpFile" onchange="previewImage(event)" style="display: none;">
+
+        <!-- 파일 업로드 버튼 -->
+        <label for="menu-add-photo" class="menu-add-file-input">사진첨부하기</label>
+      </div>
+
+      <!-- 파일 이름 및 이미지 미리보기 영역 -->
+      <div class="menu-add-preview-container">
+        <span id="file-name" class="menu-add-file-name">선택된 파일이 없습니다</span>
+        <div class="file-upload">
+          <img id="image-preview" src="" alt="미리보기 이미지" style="display: none; max-width: 200px;">
+        </div>
+      </div>
+
+      <button type="submit" class="menu-add-submit-button">확인</button>
+    </div>
+  </form>
+</div>

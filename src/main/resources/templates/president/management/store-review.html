@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>사장님 셀프서비스</title>
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+
+<div th:fragment="store-review">
+    <div class="review-entire">
+        <div class="reivew-scoreboard">
+            <div class="scoreboard-review-container">
+                <div class="scoreboard-review-header">리뷰관리</div>
+                <div class="scoreboard-average-score">
+                    <span id="average-score">0.0</span>
+                    <div class="scoreboard-stars" id="average-stars">☆☆☆☆☆</div>
+                </div>
+                <div class="scoreboard-rating-bar" data-rating="1">
+                    <span>1점</span>
+                    <div class="scoreboard-progress-bar">
+                        <div class="scoreboard-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="rating-count">0</span>
+                </div>
+                <div class="scoreboard-rating-bar" data-rating="2">
+                    <span>2점</span>
+                    <div class="scoreboard-progress-bar">
+                        <div class="scoreboard-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="rating-count">0</span>
+                </div>
+                <div class="scoreboard-rating-bar" data-rating="3">
+                    <span>3점</span>
+                    <div class="scoreboard-progress-bar">
+                        <div class="scoreboard-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="rating-count">0</span>
+                </div>
+                <div class="scoreboard-rating-bar" data-rating="4">
+                    <span>4점</span>
+                    <div class="scoreboard-progress-bar">
+                        <div class="scoreboard-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="rating-count">0</span>
+                </div>
+                <div class="scoreboard-rating-bar" data-rating="5">
+                    <span>5점</span>
+                    <div class="scoreboard-progress-bar">
+                        <div class="scoreboard-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="rating-count">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="review-container">
+            <!-- 상단 필터 -->
+            <div class="review-filter-section">
+                <div class="review-date-filter">
+                    <div class="review-label">
+                        <label for="start-date">기간설정</label></div>
+                    <input type="date" id="start-date">
+                    <div class="review-label1">
+                        ~
+                    </div>
+                    <input type="date" id="end-date">
+                </div>
+                <div class="review-sort">
+                    <select>
+                        <option value="recent">최신순</option>
+                        <option value="views">조회순</option>
+                        <option value="recommend">추천순</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 탭 버튼 -->
+            <div class="review-tabs">
+                <button class="review-tab active">전체</button>
+                <button class="review-tab">미답변</button>
+            </div>
+
+            <!-- 리뷰 카드 -->
+            <div class="review-reviews" id="reviews"></div>
+
+        </div>
+    </div>
+    <!-- 추가 리뷰 카드 복사 가능 -->
+
+    <!-- 페이지네이션 -->
+    <div class="review-pagination">
+        <div id="numbering"></div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<!-- JS: 펼치기/접기 구현 -->
+<script src="/store/js/management.js"></script>
+
+</body>
+</html>

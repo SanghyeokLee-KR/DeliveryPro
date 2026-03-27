@@ -1,0 +1,58 @@
+<div class="admin-sales-container" th:fragment="sales-editContent">
+    <!-- 매출 현황 -->
+    <div class="admin-sales-summary">
+        <div class="admin-sales-map-title">
+            <h2 class="admin-sales-title">매출현황</h2>
+            <span class="admin-sales-subtitle">(운영수익 5%)</span>
+        </div>
+        <div class="admin-sales-cards">
+            <div class="admin-sales-card">
+                <span class="admin-sales-label admin-sales-today">오늘</span>
+                <span class="admin-sales-amount"
+                      th:attr="data-amount=${sales['totalOrderAmount']}"
+                      th:text="${#numbers.formatInteger(sales['totalOrderAmount'], 0, 'COMMA')} + ' 원'">
+                </span>
+            </div>
+            <div class="admin-sales-card">
+                <span class="admin-sales-label admin-sales-month">이번주</span>
+                <span class="admin-sales-amount"
+                      th:attr="data-amount=${sales['totalOrderAmountThisWeek']}"
+                      th:text="${#numbers.formatInteger(sales['totalOrderAmountThisWeek'], 0, 'COMMA')} + ' 원'">
+                </span>
+            </div>
+            <div class="admin-sales-card">
+                <span class="admin-sales-label admin-sales-week">이번달</span>
+                <span class="admin-sales-amount"
+                      th:attr="data-amount=${sales['totalOrderAmountThisMonth']}"
+                      th:text="${#numbers.formatInteger(sales['totalOrderAmountThisMonth'], 0, 'COMMA')} + ' 원'">
+                </span>
+            </div>
+            <div class="admin-sales-card">
+                <span class="admin-sales-label admin-sales-total">전체</span>
+                <span class="admin-sales-amount"
+                      th:attr="data-amount=${sales['totalOrderAmountAllTime']}"
+                      th:text="${#numbers.formatInteger(sales['totalOrderAmountAllTime'], 0, 'COMMA')} + ' 원'">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between;">
+        <!-- 일자별 매출현황 -->
+        <div class="admin-sales-daily">
+            <div class="admin-sales-map-title">
+                <h2 class="admin-sales-title">일자별 매출현황</h2>
+                <span class="admin-sales-subtitle">(최근 7일)</span>
+            </div>
+            <div class="admin-sales-chart">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 많이 팔린 가게 -->
+        <div class="admin-sales-top-stores">
+            <h2 class="admin-sales-title">많이 팔린 가게</h2>
+            <div id="best-store-list"></div> <!-- 매장 리스트를 여기 표시 -->
+        </div>
+    </div>
+</div>

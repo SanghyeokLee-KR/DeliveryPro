@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+}
+
+h1 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.text-section {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.text-section p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.text-section p strong {
+    font-weight: bold;
+}
+
+.image-section {
+    flex: 1;
+    text-align: center;
+}
+
+.image-section img {
+    padding: 20px;
+    max-width: 100%;
+    height: auto;
+}

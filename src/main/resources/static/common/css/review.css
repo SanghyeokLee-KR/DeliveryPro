@@ -1,0 +1,153 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.review-container {
+    width: 600px;
+    margin: 70px auto;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.review-subheader {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.product-info img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.product-details {
+    flex-grow: 1;
+}
+
+.product-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+}
+
+.stars {
+    color: #ffa500;
+    margin-right: 10px;
+}
+
+.rating-label {
+    color: #555;
+}
+
+.review-textarea {
+    width: 100%;
+    height: 100px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: none;
+}
+
+.photo-upload {
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.photo-upload button {
+    display: inline-block;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+}
+
+.photo-upload button:hover {
+    background: #f1f1f1;
+}
+
+.photo-upload img {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.photo-upload span {
+    font-size: 14px;
+    color: #555;
+}
+
+.photo-limit {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.action-buttons button {
+    width: 48%;
+    padding: 10px 0;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.action-buttons .cancel-btn {
+    font-weight: bold;
+    background: #ddd;
+    color: #555;
+}
+
+.action-buttons .submit-btn {
+    font-weight: bold;
+    background: #d30000;
+    color: white;
+}
+
+.action-buttons .cancel-btn:hover {
+    background: #bbb;
+}
+
+.action-buttons .submit-btn:hover {
+    background: #A30000;
+}

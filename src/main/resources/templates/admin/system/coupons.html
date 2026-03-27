@@ -1,0 +1,204 @@
+<!-- src/main/resources/templates/admin/fragments/couponsContent.html -->
+<div class="coupon-container" th:fragment="couponsContent">
+
+    <!-- 헤더 섹션: 제목과 검색 바 -->
+    <div class="coupon-header">
+        <h2 class="coupon-title" id="couponHeaderTitle">
+            쿠폰 관리
+        </h2>
+        <div class="coupon-search">
+            <form class="coupon-search-form" method="get" th:action="@{/admin/coupons}">
+                <input name="searchQuery" placeholder="쿠폰 이름 또는 코드 검색" th:value="${searchQuery}" type="text">
+
+                <select class="coupon-filter-select" name="status">
+                    <option value="">모든 상태</option>
+                    <option th:selected="${status == 'Y'}" value="Y">사용 가능</option>
+                    <option th:selected="${status == 'N'}" value="N">사용 중지</option>
+                    <option th:selected="${status == 'E'}" value="E">만료</option>
+                </select>
+
+                <button class="coupon-search-button" type="submit">검색</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 쿠폰 리스트 테이블 -->
+    <div class="coupon-list">
+        <!-- 버튼을 별도의 컨테이너로 감싸기 -->
+        <div class="coupon-register-container">
+            <button class="coupon-register-button" onclick="openCouponModal()">쿠폰 등록하기</button>
+        </div>
+
+        <!-- 쿠폰 데이터 존재 여부 확인 -->
+        <div th:if="${coupons != null and coupons.empty}">
+            <p>등록된 쿠폰이 없습니다.</p>
+        </div>
+        <div th:unless="${coupons == null or coupons.empty}">
+            <table class="coupon-table">
+                <thead>
+                <tr>
+                    <th>쿠폰 ID</th>
+                    <th>쿠폰 코드</th>
+                    <th>쿠폰 이름</th>
+                    <th>쿠폰 내용</th>
+                    <th>할인 금액</th>
+                    <th>최소 주문 금액</th>
+                    <th>주문 유형</th>
+                    <th>생성일</th>
+                    <th>만료일</th>
+                    <th>수정일</th>
+                    <th>상태</th>
+                    <th>작업</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="coupon : ${coupons}">
+                    <td th:text="${coupon.id}">1</td>
+                    <td th:text="${coupon.code}">WELCOME</td>
+                    <td th:text="${coupon.name}">환영 쿠폰</td>
+                    <td th:text="${coupon.content}">첫 가입 축하 쿠폰</td>
+                    <td th:text="${coupon.deductPrice}">2000</td>
+                    <td th:text="${coupon.minPrice}">5000</td>
+                    <td th:text="${coupon.orderType}">배달</td>
+                    <td th:text="${#temporals.format(coupon.createdDate, 'yyyy-MM-dd')}">2025-01-01</td>
+                    <td th:text="${#temporals.format(coupon.expiredDate, 'yyyy-MM-dd')}">2025-12-31</td>
+                    <td th:text="${coupon.modifiedDate != null ? #temporals.format(coupon.modifiedDate, 'yyyy-MM-dd') : ''}">2025-01-10</td>
+                    <td th:text="${(coupon.status == 'Y') ? '사용 가능' : ((coupon.status == 'N') ? '사용 중지' : '만료')}">
+                        사용 가능
+                    </td>
+                    <td>
+                        <a href="#" th:attr="data-id=${coupon.id}" class="coupon-edit-button">수정</a>
+                        <a th:href="@{/admin/coupons/{id}/delete(id=${coupon.id})}"
+                           class="coupon-delete-button"
+                           onclick="return confirm('정말 삭제하시겠습니까?');">
+                            삭제
+                        </a>
+                        <!-- 쿠폰 사용 버튼 제거 -->
+                        <!-- <button type="button" class="coupon-use-button" th:attr="data-id=${coupon.id}">사용</button> -->
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- 페이징 네비게이션 -->
+            <div class="coupon-pagination">
+                <!-- 이전 페이지 링크 -->
+                <a class="pagination-item"
+                   th:href="@{/admin/coupons(page=${currentPage - 1}, size=${size}, searchQuery=${searchQuery}, status=${status})}"
+                   th:if="${currentPage > 0}">
+                    이전
+                </a>
+
+                <!-- 페이지 번호 링크 -->
+                <span th:each="i : ${#numbers.sequence(0, (coupons.size() / size))}">
+                    <a class="pagination-item"
+                       th:href="@{/admin/coupons(page=${i}, size=${size}, searchQuery=${searchQuery}, status=${status})}"
+                       th:if="${i != currentPage}"
+                       th:text="${i + 1}">
+                    </a>
+                    <span aria-current="page"
+                          class="pagination-current"
+                          th:if="${i == currentPage}"
+                          th:text="${i + 1}">
+                    </span>
+                </span>
+
+                <!-- 다음 페이지 링크 -->
+                <a class="pagination-item"
+                   th:href="@{/admin/coupons(page=${currentPage + 1}, size=${size}, searchQuery=${searchQuery}, status=${status})}"
+                   th:if="${(currentPage + 1) * size < coupons.size()}">
+                    다음
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 쿠폰 등록/수정 모달 -->
+    <div class="coupon-modal" id="couponModal">
+        <div class="coupon-modal-content">
+            <div class="coupon-modal-top">
+                <span class="coupon-modal-close" onclick="closeCouponModal()">&times;</span>
+                <p class="coupon-title" id="couponModalTitle">
+                    쿠폰 등록/수정
+                </p>
+            </div>
+            <form id="couponForm"
+                  th:action="@{/admin/coupons}"
+                  method="post"
+                  th:object="${coupon}">
+
+                <!-- 쿠폰 ID (항상 렌더링) -->
+                <input type="hidden" th:field="*{id}" />
+
+                <br>
+                <hr class="modal-hr">
+                <br>
+
+                <!-- 유효성 검증 오류 메시지 표시 -->
+                <div th:if="${#fields.hasErrors('code')}" class="error-message" th:errors="*{code}">쿠폰 코드 오류</div>
+                <div th:if="${#fields.hasErrors('name')}" class="error-message" th:errors="*{name}">쿠폰 이름 오류</div>
+                <div th:if="${#fields.hasErrors('content')}" class="error-message" th:errors="*{content}">쿠폰 내용 오류</div>
+                <div th:if="${#fields.hasErrors('deductPrice')}" class="error-message" th:errors="*{deductPrice}">할인 금액 오류</div>
+                <div th:if="${#fields.hasErrors('minPrice')}" class="error-message" th:errors="*{minPrice}">최소 주문 금액 오류</div>
+                <div th:if="${#fields.hasErrors('expiredDate')}" class="error-message" th:errors="*{expiredDate}">만료일 오류</div>
+                <div th:if="${#fields.hasErrors('orderType')}" class="error-message" th:errors="*{orderType}">주문 유형 오류</div>
+                <div th:if="${#fields.hasErrors('status')}" class="error-message" th:errors="*{status}">상태 오류</div>
+
+                <div class="modal-coupon-code">
+                    <label for="code">쿠폰 코드</label>
+                    <input type="text" id="code" th:field="*{code}" required/>
+                </div>
+
+                <div class="modal-coupon-name">
+                    <label for="name">쿠폰 이름</label>
+                    <input type="text" id="name" th:field="*{name}" required/>
+                </div>
+
+                <div class="modal-coupon-content">
+                    <label for="content">쿠폰 내용</label>
+                    <textarea id="content" th:field="*{content}" rows="3" required></textarea>
+                </div>
+
+                <div class="modal-sale">
+                    <label for="deductPrice">할인 금액</label>
+                    <input type="number" id="deductPrice" th:field="*{deductPrice}" required/>
+                </div>
+
+                <div class="modal-min-order">
+                    <label for="minPrice">최소 주문 금액</label>
+                    <input type="number" id="minPrice" th:field="*{minPrice}" required/>
+                </div>
+
+                <div class="modal-order-type">
+                    <label for="orderType">주문 유형</label>
+                    <select id="orderType" th:field="*{orderType}" required>
+                        <option value="">선택하세요</option>
+                        <option value="배달">배달</option>
+                        <option value="포장">포장</option>
+                        <!-- 다른 옵션들 -->
+                    </select>
+                </div>
+
+                <div class="modal-end-day">
+                    <label for="expiredDate">만료일</label>
+                    <input type="date" id="expiredDate" th:field="*{expiredDate}" required/>
+                </div>
+
+                <!-- 수정일 필드를 hidden으로 설정 (항상 렌더링) -->
+                <input type="hidden" th:field="*{modifiedDate}" />
+
+                <div class="modal-status">
+                    <label for="status">상태</label>
+                    <select id="status" th:field="*{status}" required>
+                        <option value="Y">사용 가능</option>
+                        <option value="N">사용 중지</option>
+                        <option value="E">만료</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="coupon-submit-button">저장</button>
+
+            </form>
+        </div>
+    </div>
+</div>

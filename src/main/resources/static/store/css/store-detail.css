@@ -1,0 +1,737 @@
+/* ===== [1] 메뉴 추가 모달 창 ===== */
+/* 모달 창 내부 콘텐츠 스타일 */
+/* 모달 창 기본 스타일 */
+.menu-add-modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    z-index: 1000; /* 모달을 다른 요소들 위에 보이게 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경을 반투명 검정으로 */
+}
+
+.menu-add-modal-content {
+    position: relative;
+    background-color: white;
+    margin: 10% auto; /* 중앙에 위치 */
+    padding: 20px;
+    width: 30%;
+    border-radius: 10px;
+}
+
+.menu-add-form {
+    display: flex;
+    padding-left: 50px;
+}
+
+/* 제목 스타일 */
+.menu-add-form-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    padding: 20px 0;
+    color: #1F1F1F;
+    border-bottom: 2px solid #ddd;
+}
+
+.menu-add-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #212121;
+}
+
+.menu-margin-haha1 {
+    margin: 10px 0;
+}
+
+.menu-margin-haha2 {
+    margin: 40px 0;
+}
+
+.menu-margin-haha3 {
+    margin-bottom: 65px;
+}
+
+.menu-margin-haha4 {
+    margin-bottom: 42px;
+}
+
+.menu-margin-haha5 {
+    margin-bottom: 38px;
+}
+
+/* 입력 그룹 */
+.menu-add-input-group {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.menu-add-input {
+    width: 75%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.menu-add-select {
+    width: 40%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.menu-add-text {
+    width: 75%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    resize: none;
+}
+
+/* 파일 입력 스타일 */
+.menu-add-file-input {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #333; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색 */
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 5px 0;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.menu-add-preview-container {
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.menu-add-file-name {
+    font-weight: bold;
+    color: #212121;
+    margin-bottom: 10px;
+}
+
+.menu-add-file-input::file-selector-button {
+    display: none; /* 기본 버튼 숨김 */
+}
+
+/* 초기 상태 - 파일 선택 전 */
+.menu-add-file-placeholder {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #999;
+}
+
+/* 파일 선택 시 스타일 */
+.menu-add-file-input:valid {
+    color: #333;
+}
+
+.menu-add-file-button:hover {
+    background-color: #45a049;
+}
+
+/* 가격 입력 */
+.menu-add-price-group input {
+    text-align: right;
+}
+
+/* 상태 버튼 */
+.menu-add-status-group {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-add-status-group label {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.menu-add-status-group input[type="radio"] {
+    margin-right: 5px;
+    accent-color: #4CAF50;
+}
+
+/* 제출 버튼 */
+.menu-add-submit-button {
+    width: 40%;
+    padding: 12px;
+    font-size: 18px;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+
+}
+
+.menu-add-submit-button:hover {
+    background-color: #45a049;
+}
+
+
+/* From Uiverse.io by Pradeepsaranbishnoi */
+:focus {
+    outline: 0;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 4px #B7F0B1;
+}
+
+.mydict div {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    justify-content: center;
+}
+
+.mydict input[type="radio"] {
+    clip: rect(0 0 0 0);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.mydict input[type="radio"]:checked + span {
+    box-shadow: 0 0 0 0.0625em #2F9D27;
+    background-color: #E4F7BA;
+    z-index: 1;
+    color: #45a049;
+    font-weight: bold;
+}
+
+.label-menu-add span {
+    display: block;
+    cursor: pointer;
+    background-color: #fff;
+    padding: 0.375em .75em;
+    position: relative;
+    margin-left: .0625em;
+    box-shadow: 0 0 0 0.0625em #b5bfd9;
+    letter-spacing: .05em;
+    color: #3e4963;
+    text-align: center;
+    transition: background-color .5s ease;
+}
+
+.label-menu-add:first-child span {
+    border-radius: .375em 0 0 .375em;
+}
+
+.label-menu-add:last-child span {
+    border-radius: 0 .375em .375em 0;
+}
+
+/* ===== 여기까지 메뉴 추가 모달 영역 ===== */
+
+/* ===== [2] 메뉴 디테일 리스트 영역 ===== */
+.store-detail-menu-view {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+
+.menu-list-search-add {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    width: 80%;
+    margin: 20px auto;
+    padding: 10px 30px;
+    border-radius: 8px;
+}
+
+.menu-list-search {
+    width: 300px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+}
+
+.menu-list-search-bt {
+    border-radius: 20px;
+    background-color: #aaa;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    width: 80px;
+    height: 40px;
+    padding: 3px 7px;
+    border: none; /* 버튼에 기본 테두리가 없도록 설정 */
+    outline: none; /* 포커스 시 테두리 없애기 */
+    cursor: pointer; /* 마우스를 올렸을 때 포인터 커서 */
+    margin: 0 10px;
+}
+
+.menu-list-search-bt:active {
+    background-color: #888;
+}
+
+.menu-list-add-bt {
+    background-color: #398900;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 8px 20px;
+    cursor: pointer; /* 마우스를 올렸을 때 포인터 커서 */
+}
+
+.menu-list-add-bt:active {
+    background-color: #3C7D00;
+}
+
+/* 개별 메뉴 항목 스타일 */
+.menu-list-item {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+}
+
+.menu-list-info {
+    padding: 10px;
+    margin-left: 10px;
+}
+
+/* 메뉴 이미지 스타일 */
+.menu-list-img {
+    width: 100px;
+    height: 100px;
+    border-bottom: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* 메뉴 이름 */
+.menu-list-name {
+    font-size: 24px;
+    color: #333;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.menu-list-description {
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #cccccc;
+    font-weight: bold;
+}
+
+/* 메뉴 가격 */
+.menu-list-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #777777;
+    margin-bottom: 10px;
+}
+
+/* 메뉴 상태 (일반/인기) */
+.menu-list-status {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* 메뉴 인기 여부 */
+.menu-list-popularity {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 10px;
+}
+
+.menu-list-mainMenu {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 10px;
+    color: #03a9f4;
+}
+
+.menu-list-sales-status {
+    border: 1px solid #aaaaaa;
+    border-radius: 5px;
+    padding: 2px 5px; /* 내부 여백 추가 */
+    display: inline-block; /* select와 div가 일관되게 보이도록 설정 */
+    background-color: #f9f9f9; /* 배경색을 살짝 추가하여 구분 */
+    width: 100px; /* 적당한 너비 설정 */
+    margin-top: 50px;
+}
+
+.menu-list-sales-status select {
+    width: 100%; /* select가 div의 너비를 채우도록 */
+    padding: 8px 10px; /* 내부 여백을 주어 더 보기 좋은 디자인 */
+    border: none; /* select의 기본 테두리 제거 */
+    border-radius: 3px; /* select의 테두리도 둥글게 처리 */
+    background-color: #f9f9f9; /* 배경색 */
+    font-size: 14px; /* 글자 크기 조정 */
+    color: #333; /* 텍스트 색상 */
+    cursor: pointer; /* 마우스를 올렸을 때 포인터 커서 */
+    appearance: none; /* 브라우저 기본 스타일 제거 (필요에 따라) */
+}
+
+/* select의 옵션 스타일 */
+.menu-list-sales-status select option {
+    padding: 8px;
+    font-size: 14px;
+}
+
+/* 호버시 배경색 변경 */
+.menu-list-sales-status select:hover {
+    background-color: #f0f0f0;
+    border: none;
+}
+
+.menu-list-modi-del {
+    font-size: 16px;
+    font-weight: bold;
+    color: #cccccc;
+    margin: 0 10px;
+}
+
+.menu-Modi-del {
+    cursor: pointer;
+}
+
+.menu-list-modi-del:hover {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1F1F1F;
+    margin: 0 10px;
+}
+
+/* ===== 여기까기 메뉴 디테일 영역 ===== */
+
+
+/* ===== [3] 메뉴 수정 모달 영역 ===== */
+.menu-modify-modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    z-index: 1; /* 최상위 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* 배경 흐림 효과 */
+    overflow: auto; /* 내용이 넘칠 경우 스크롤 */
+}
+
+/* 모달 내용 */
+.menu-modify-modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+}
+
+/* 모달 닫기 버튼 */
+.menu-modify-close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 720px;
+}
+
+/* 모달 닫기 버튼 호버 */
+.menu-modify-close:hover,
+.menu-modify-close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 입력 필드 */
+.menu-modify-modal input,
+.menu-modify-modal textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* 수정 저장 버튼 */
+.menu-modify-modal button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 0 180px;
+    width: 100px;
+}
+
+.menu-modify-modal button:hover {
+    background-color: #45a049;
+}
+
+
+/* 모달 창 기본 스타일 */
+.menu-add-modal {
+    display: none; /* 기본적으로 숨김 */
+    position: fixed;
+    z-index: 1000; /* 모달을 다른 요소들 위에 보이게 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 배경을 반투명 검정으로 */
+}
+
+/* 모달 닫기 버튼 */
+.menu-add-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.menu-add-modal-close:hover,
+.menu-add-modal-close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+
+/* 모달 창 기본 스타일 */
+.menu-add-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+/* 닫기 버튼 */
+.menu-add-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.menu-modi-img-title {
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.menu-modi-img-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.menu-modify-btmar {
+    margin: 10px 0;
+}
+
+/* ===== 여기까지 메뉴 수정 모달 영역 ===== */
+
+
+/* ===== [4] 가게 상세 정보 영역 ===== */
+#storeList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10% 0;
+}
+
+.store-list-container {
+    display: flex;
+    justify-content: space-between; /* 요소 간의 간격을 균등하게 분배 */
+    margin: 0 2.5%; /* 좌우 마진을 각각 5%로 설정 */
+    gap: 50px; /* 요소 간의 가로 간격을 100px로 설정 */
+    padding: 20px 0;
+}
+
+.store-list-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 330px;
+    height: 500px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    text-align: center;
+}
+
+.store-list-img img {
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    margin-top: 35px;
+    margin-bottom: 15px;
+}
+
+.store-list-info {
+    margin: 10px 0;
+}
+
+.store-list-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #6e6e6f;
+}
+
+.store-list-category {
+    font-size: 16px;
+    color: #777;
+    margin: 5px 0;
+}
+
+.store-list-status-div {
+    background-color: #D5D5D5;
+    border-radius: 20px;
+    width: 70px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.store-list-button {
+    width: 100%; /* 버튼 너비를 카드와 동일하게 설정 */
+    padding: 20px 10px;
+    border: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: #358900;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.store-list-button:hover {
+    background-color: #22741C; /* 버튼에 호버 시 색상 변화 */
+}
+
+.store-list-text {
+    margin-bottom: 20px;
+}
+
+.store-list-add-container-div {
+    width: 330px;
+    height: 500px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin: 0 2.5%;
+}
+
+.store-list-add-container-div:hover {
+    background-color: #F6F6F6;
+}
+
+
+.store-list-plus {
+    border: 5px dashed #CCCCCC;
+    border-radius: 50%;
+    color: #CCCCCC;
+    font-size: 60px;
+    font-weight: bold;
+    width: 120px;
+    height: 120px;
+    line-height: 100px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.store-list-add-container-div h3 {
+    color : #6e6e6f;
+    margin: 10px 0;
+    font-size: 24px;
+}
+
+.store-list-add-container-div p {
+    color : #777;
+    margin: 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* [4] 영업 준비 중을 위한 css */
+.store-breaktime {
+    position: relative;
+}
+
+.store-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* 검은색 반투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* 위로 올라오도록 설정 */
+}
+
+.store-overlay-text {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+}

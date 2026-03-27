@@ -1,0 +1,662 @@
+<div th:fragment="store-setting">
+    <div class="setting-container">
+        <div class="setting-section">
+            <div class="setting-row">
+                <div class="setting-title"><label>일요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-sunday" checked/>
+                    <label for="operating-toggle-sunday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <!-- Start & End Times -->
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-sunday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 월요일 -->
+            <div class="setting-row">
+                <div class="setting-title"><label>월요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-monday" checked/>
+                    <label for="operating-toggle-monday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-monday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 화요일 -->
+            <div class="setting-row">
+                <div class="setting-title"><label>화요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-tuesday" checked/>
+                    <label for="operating-toggle-tuesday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-tuesday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 수요일 -->
+            <div class="setting-row">
+                <div class="setting-title"><label>수요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-wednesday" checked/>
+                    <label for="operating-toggle-wednesday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-wednesday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 목요일 -->
+            <div class="setting-row">
+                <div class="setting-title"><label>목요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-thursday" checked/>
+                    <label for="operating-toggle-thursday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-thursday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 금요일 -->
+            <div class="setting-row">
+                <div class="setting-title"><label>금요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-friday" checked/>
+                    <label for="operating-toggle-friday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-friday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 토요일 -->
+            <div class="setting-row">
+                <div class="setting-title"><label>토요일</label></div>
+                <div class="setting-toggle">
+                    <input type="checkbox" id="operating-toggle-saturday" checked/>
+                    <label for="operating-toggle-friday">영업일</label>
+                </div>
+                <div class="setting-hour24"><label><input type="checkbox" checked> 24시간</label></div>
+            </div>
+
+            <div class="setting-row setting-time-range">
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+                <span>~</span>
+                <div class="setting-time-inputs">
+                    <select>
+                        <option>오전 12시</option>
+                        <option>오전 1시</option>
+                        <option>오전 2시</option>
+                        <option>오전 3시</option>
+                        <option>오전 4시</option>
+                        <option>오전 5시</option>
+                        <option>오전 6시</option>
+                        <option>오전 7시</option>
+                        <option>오전 8시</option>
+                        <option>오전 9시</option>
+                        <option>오전 10시</option>
+                        <option>오전 11시</option>
+                        <option>오후 12시</option>
+                        <option>오후 1시</option>
+                        <option>오후 2시</option>
+                        <option>오후 3시</option>
+                        <option>오후 4시</option>
+                        <option>오후 5시</option>
+                        <option>오후 6시</option>
+                        <option>오후 7시</option>
+                        <option>오후 8시</option>
+                        <option>오후 9시</option>
+                        <option>오후 10시</option>
+                        <option>오후 11시</option>
+                    </select>
+                    <select>
+                        <option>00분</option>
+                        <option>30분</option>
+                    </select>
+                </div>
+            </div>
+            <div class="setting-add-break-time">
+                <a href="#" id="add-break-time-text-saturday" class="add-break-time">+ 휴게시간 추가</a>
+            </div>
+
+            <div class="setting-enter"></div>
+
+            <!-- 쉬는 시간 추가 -->
+            <div class="setting-break-time">
+                <!-- Break Time -->
+                <div class="setting-row1">
+                    <div class="setting-title1"><label>휴게시간</label></div>
+                    <button class="setting-remove-btn">✖</button>
+                </div>
+                <div class="setting-row setting-time-range">
+                    <div class="setting-time-inputs">
+                        <select>
+                            <option>오전 12시</option>
+                            <option>오전 1시</option>
+                            <option>오전 2시</option>
+                            <option>오전 3시</option>
+                            <option>오전 4시</option>
+                            <option>오전 5시</option>
+                            <option>오전 6시</option>
+                            <option>오전 7시</option>
+                            <option>오전 8시</option>
+                            <option>오전 9시</option>
+                            <option>오전 10시</option>
+                            <option>오전 11시</option>
+                            <option>오후 12시</option>
+                            <option>오후 1시</option>
+                            <option>오후 2시</option>
+                            <option>오후 3시</option>
+                            <option>오후 4시</option>
+                            <option>오후 5시</option>
+                            <option>오후 6시</option>
+                            <option>오후 7시</option>
+                            <option>오후 8시</option>
+                            <option>오후 9시</option>
+                            <option>오후 10시</option>
+                            <option>오후 11시</option>
+                        </select>
+                        <select>
+                            <option>00분</option>
+                            <option>30분</option>
+                        </select>
+                    </div>
+                    <span>~</span>
+                    <div class="setting-time-inputs">
+                        <select>
+                            <option>오전 12시</option>
+                            <option>오전 1시</option>
+                            <option>오전 2시</option>
+                            <option>오전 3시</option>
+                            <option>오전 4시</option>
+                            <option>오전 5시</option>
+                            <option>오전 6시</option>
+                            <option>오전 7시</option>
+                            <option>오전 8시</option>
+                            <option>오전 9시</option>
+                            <option>오전 10시</option>
+                            <option>오전 11시</option>
+                            <option>오후 12시</option>
+                            <option>오후 1시</option>
+                            <option>오후 2시</option>
+                            <option>오후 3시</option>
+                            <option>오후 4시</option>
+                            <option>오후 5시</option>
+                            <option>오후 6시</option>
+                            <option>오후 7시</option>
+                            <option>오후 8시</option>
+                            <option>오후 9시</option>
+                            <option>오후 10시</option>
+                            <option>오후 11시</option>
+                        </select>
+                        <select>
+                            <option>00분</option>
+                            <option>30분</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

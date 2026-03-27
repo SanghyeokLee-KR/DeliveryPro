@@ -1,0 +1,129 @@
+<!-- adminsidebarContent (운영자 페이지 전용) -->
+<div th:fragment="adminsidebarContent">
+    <!-- 프로필 영역 -->
+    <div class="profile-area">
+        <div class="thumb">
+            <!-- 운영자 아이콘 (원하시는 SVG or PNG) -->
+            <img alt="운영자 아이콘" src="/admin/img/icons/회원.svg">
+        </div>
+        <div class="profile-info">
+            <!-- 관리자 아이디 -->
+            <div class="admin-username"
+                 th:text="${session.admin_username != null} ? ${session.admin_username} : 'admin'">
+                admin
+            </div>
+            <!-- 관리자 역할 (슈퍼관리자 등) -->
+            <div class="admin-role"
+                 th:text="${session.admin_role != null} ? ${session.admin_role} : '운영자'">
+                운영자
+            </div>
+        </div>
+    </div>
+
+    <!-- 빠른메뉴 아이콘 3개 -->
+    <div class="quick-menu">
+        <a th:href="@{/admin/sss/marketing}" class="quick-item">
+            <div aria-label="주문서 확인" tabindex="0">
+                <img alt="주문서 아이콘" src="/admin/img/dashboard/회원.png">
+                <span class="white">회원</span>
+            </div>
+        </a>
+        <a th:href="@{/admin/sss/statistics}" class="quick-item">
+            <div aria-label="통계" tabindex="0">
+                <img alt="통계 아이콘" src="/store/img/icons/통계아이콘.svg">
+                <span class="white">통계</span>
+            </div>
+        </a>
+        <a th:href="@{/admin/sss/sales}" class="quick-item">
+            <div aria-label="매출" tabindex="0">
+                <img alt="매출 아이콘" src="/store/img/icons/매출아이콘.svg">
+                <span class="white">매출</span>
+            </div>
+        </a>
+    </div>
+
+
+    <!-- 회원 관리 -->
+    <div class="main-section">
+        <div aria-expanded="false" class="section-title" tabindex="0">
+            <img alt="회원 아이콘" class="section-icon" src="/admin/img/icons/회원.svg">
+            <span>회원 관리</span>
+            <img alt="화살표 아이콘" class="arrow-toggle" src="/admin/img/icons/화살표.svg">
+        </div>
+        <ul aria-hidden="true" class="sub-menu collapsed">
+            <li tabindex="0"><a th:href="@{/admin/members}">회원 리스트</a></li>
+            <li tabindex="0"><a th:href="@{/admin/members/logs}">회원 로그 조회</a></li>
+        </ul>
+    </div>
+
+    <!-- 매장 관리 -->
+    <div class="main-section">
+        <div aria-expanded="false" class="section-title" tabindex="0">
+            <img alt="매장 아이콘" class="section-icon" src="/admin/img/icons/매장관리.svg">
+            <span>매장 관리</span>
+            <img alt="화살표 아이콘" class="arrow-toggle" src="/admin/img/icons/화살표.svg">
+        </div>
+        <ul aria-hidden="true" class="sub-menu collapsed">
+            <li tabindex="0"><a th:href="@{/admin/stores}">가게 등록 요청</a></li>
+            <li tabindex="0"><a th:href="@{/admin/storesList}">가게 리스트</a></li>
+        </ul>
+
+
+    </div>
+
+    <!-- 라이더 관리 -->
+    <div class="main-section">
+        <div aria-expanded="false" class="section-title" tabindex="0">
+            <img alt="라이더 아이콘" class="section-icon" src="/admin/img/icons/라이더.svg">
+            <span>라이더 관리</span>
+            <img alt="화살표 아이콘" class="arrow-toggle" src="/admin/img/icons/화살표.svg">
+        </div>
+        <ul aria-hidden="true" class="sub-menu collapsed">
+            <li tabindex="0"><a th:href="@{/admin/rider/riderReg}">라이더 등록 요청</a></li>
+            <li tabindex="0"><a th:href="@{/admin/rider/riderList}">라이더 리스트</a></li>
+        </ul>
+    </div>
+
+    <!-- 알림 관리 -->
+    <div class="main-section">
+        <div aria-expanded="false" class="section-title" tabindex="0">
+            <img alt="알림 아이콘" class="section-icon" src="/admin/img/icons/알림.svg">
+            <span>알림 관리</span>
+            <img alt="화살표 아이콘" class="arrow-toggle" src="/admin/img/icons/화살표.svg">
+        </div>
+        <ul aria-hidden="true" class="sub-menu collapsed">
+            <li tabindex="0">회원 알림</li>
+            <li tabindex="0">사장님 알림</li>
+            <li tabindex="0">라이더 알림</li>
+        </ul>
+    </div>
+
+    <!-- 통계 및 보고서 -->
+    <div class="main-section">
+        <div aria-expanded="false" class="section-title" tabindex="0">
+            <img alt="통계 및 보고서 아이콘" class="section-icon" src="/admin/img/icons/통계_및_보고서.svg">
+            <span>통계 및 보고서</span>
+            <img alt="화살표 아이콘" class="arrow-toggle" src="/admin/img/icons/화살표.svg">
+        </div>
+        <ul aria-hidden="true" class="sub-menu collapsed">
+            <li tabindex="0">주문 통계</li>
+            <li tabindex="0">매출 통계</li>
+            <li tabindex="0">리뷰 통계</li>
+        </ul>
+    </div>
+
+    <!-- 시스템 관리 -->
+    <div class="main-section">
+        <div aria-expanded="false" class="section-title" tabindex="0">
+            <img alt="시스템 아이콘" class="section-icon" src="/admin/img/icons/시스템.svg">
+            <span>시스템 관리</span>
+            <img alt="화살표 아이콘" class="arrow-toggle" src="/admin/img/icons/화살표.svg">
+        </div>
+        <ul aria-hidden="true" class="sub-menu collapsed">
+            <li tabindex="0">운영자 계정 관리</li>
+            <li tabindex="0"><a th:href="@{/admin/coupons}">쿠폰 관리</a></li>
+            <li tabindex="0"><a th:href="@{/admin/boardsList}">FAQ 관리</a></li>
+            <li tabindex="0"><a th:href="@{/admin/advertisements}">광고 관리</a></li>
+        </ul>
+    </div>
+</div>

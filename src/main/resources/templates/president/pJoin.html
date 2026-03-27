@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>사장님 사이트</title>
+    <link href="/layout/store/css/store_main_header.css" rel="stylesheet">
+    <link href="/store/css/pJoin.css" rel="stylesheet">
+    <link href="/store/css/store.css" rel="stylesheet">
+    <link href="/store/css/president.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+<form action="/storeForm" enctype="multipart/form-data" method="POST">
+    <br><br>
+    <div class="store-section" id="storeSection"> <!-- id="storeSection" 추가 -->
+        <h2>입점 신청하기</h2>
+        <label class="brm-label" for="business-number">사업자 등록 번호<span class="brn">(필수)</span></label>
+        <input class="input-store" id="business-number" name="preMemBizRegNo" placeholder="사업자 등록 번호를 입력해 주세요."
+               type="text">
+
+        <label class="brm-label" for="representative-name">대표자명<span class="brn">(필수)</span></label>
+        <input class="input-store" id="representative-name" name="preMemCeoName" placeholder="대표자명을 입력해 주세요."
+               type="text">
+
+        <label class="brm-label" for="phone-number">대표자 휴대폰 번호<span class="brn">(필수)</span></label>
+        <input class="input-store" id="phone-number" name="preMemPhone" placeholder="대표자 휴대폰 번호를 입력해 주세요." type="text">
+
+        <hr>
+        <div class="agreement">
+            <label class="brm-label">개인정보 수집 및 이용 동의</label>
+            <ol>
+                <li>수집 목적: 입점신청자 연락 및 상담</li>
+                <li>수집 항목: 성명, 휴대폰번호, 제출서류(사업자등록증,영업신고증 등)에 포함된 개인정보</li>
+                <li>보유 및 이용기간: 6개월</li>
+                <li>개인정보 수집 및 이용 동의를 거부할 권리가 있으며, 거부할 경우 입점신청이 불가합니다.</li>
+            </ol>
+            <div class="check-box-agreement">
+                <!-- 체크에 관련된 DB 컬럼이 있으면 좋을듯 12.26(2:37) -->
+                <input id="agreement" name="agreement" type="checkbox">개인정보 수집 및 이용에 동의합니다 (필수)
+            </div>
+        </div>
+
+        <!-- 입점 신청하기 버튼에 id="move-pJoin" 추가 -->
+        <button class="move-pJoin" id="move-pJoin" onclick="checkAgreement()">입점 신청하기</button>
+        <!-- 버튼 클릭 시 checkAgreement() 호출 -->
+    </div>
+    <!-- 회원가입 폼 -->
+    <div class="signup-container" id="signupSection" style="display: none;">
+        <h2>입점 신청하기</h2>
+        <!-- 아이디 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="idWrapper">
+                <img alt="아이디 아이콘" class="icon" src="/member/img/join/user.svg">
+                <input id="preMemUserId" name="preMemUserId" placeholder="아이디를 입력하세요" required type="text">
+                <button class="small-button" id="checkIdBtn" type="button">중복확인</button>
+            </div>
+        </div>
+
+        <!-- 비밀번호 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="passwordWrapper">
+                <img alt="비밀번호 아이콘" class="icon" src="/member/img/join/lock.svg">
+                <input id="preMemPassword" name="preMemPassword" placeholder="비밀번호" required type="password">
+            </div>
+            <small>영문 대소문자, 숫자, 특수문자 포함 8자리 이상</small>
+        </div>
+
+        <!-- 비밀번호 재입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="passwordCheckWrapper">
+                <img alt="비밀번호 재입력 아이콘" class="icon" src="/member/img/join/lock.svg">
+                <input id="passwordCheck" name="passwordCheck" placeholder="비밀번호 재입력" required type="password">
+            </div>
+        </div>
+
+        <!-- 이메일 입력 영역 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="emailInputWrapper">
+                <img alt="이메일 아이콘" class="icon" src="/member/img/join/email.svg">
+                <input id="preMemEmail" name="preMemEmail" placeholder="이메일 주소 입력" required type="email">
+            </div>
+        </div>
+
+        <!-- 파일 다운로드 링크 추가 -->
+        <!--        <div class="file-download">-->
+        <!--            <label for="downloadFile">파일 다운로드</label>-->
+        <!--            <a href="/path/to/your/file" download="fileName">파일 다운로드</a>-->
+        <!--        </div>-->
+
+        <!-- 파일 업로드 필드 추가 -->
+        <div class="file-upload">
+            <div class="input-wrapper" id="imgWrapper">
+                <input id="preMemBizLicensePhoto" name="pFile" onchange="previewImage(event)" style="display: none;"
+                       type="file">
+                <label class="custom-upload-btn" for="preMemBizLicensePhoto">파일 선택</label>
+                <span id="file-name" style="margin-left: 10px; color: #555;">사업자등록증을 업로드 해주세요</span>
+            </div>
+        </div>
+
+        <!-- 확인 버튼 -->
+        <div class="signup-button">
+            <button id="submitBtn" type="submit">가입하기</button>
+        </div>
+    </div>
+</form>
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+<script>
+    function checkAgreement() {
+        const checkbox = document.getElementById('agreement');
+        const businessNumber = document.getElementById('business-number');
+        const representativeName = document.getElementById('representative-name');
+        const phoneNumber = document.getElementById('phone-number');
+
+        let valid = true; // 모든 입력이 유효한지 체크하는 변수
+
+        // 입력되지 않은 필드에 붉은 외곽선 추가
+        if (businessNumber.value === "") {
+            businessNumber.style.border = "1px solid #d30000";
+            valid = false;
+        } else {
+            businessNumber.style.border = "";
+        }
+
+        if (representativeName.value === "") {
+            representativeName.style.border = "1px solid #d30000";
+            valid = false;
+        } else {
+            representativeName.style.border = "";
+        }
+
+        if (phoneNumber.value === "") {
+            phoneNumber.style.border = "1px solid #d30000";
+            valid = false;
+        } else {
+            phoneNumber.style.border = "";
+        }
+
+
+        // 개인정보 동의 체크
+        if (!checkbox.checked) {
+            alert('개인정보 수집 및 이용에 동의하셔야 신청이 가능합니다.');
+            valid = false;
+        }
+
+        if (valid) {
+            // 모든 필드가 유효하면 폼을 숨기고 회원가입 폼을 보이게 한다
+            document.getElementById("storeSection").style.display = "none";
+            document.getElementById("signupSection").style.display = "block";
+        } else {
+            alert('모든 필드를 올바르게 작성해 주세요.');
+        }
+    }
+
+    // 이미지 미리보기 함수
+    function previewImage(event) {
+        const file = event.target.files[0];  // 업로드된 파일을 가져옵니다.
+        const reader = new FileReader();  // FileReader 객체 생성
+
+        const fileInput = event.target;
+        const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : ""; // 첫 번째 파일의 이름을 가져옵니다.
+        const fileNameDisplay = document.getElementById("file-name");
+
+        if (fileName) {
+            fileNameDisplay.textContent = `선택된 파일: ${fileName}`; // 파일 이름을 표시
+        } else {
+            fileNameDisplay.textContent = "사업자등록증을 업로드 해주세요"; // 파일이 선택되지 않았을 경우 텍스트 지우기
+        }
+
+        reader.onload = function (e) {
+            const imagePreview = document.getElementById('imagePreview');
+            if (!imagePreview) {
+                // 미리보기 이미지를 추가합니다.
+                const img = document.createElement('img');
+                img.id = 'imagePreview';
+                img.src = e.target.result;
+                img.alt = 'Uploaded Image';
+                img.style.maxWidth = '300px';  // 미리보기 이미지 크기 설정
+                img.style.maxHeight = '300px'; // 미리보기 이미지 크기 설정
+                document.querySelector('.file-upload').appendChild(img);  // 파일 업로드 div에 이미지 추가
+            } else {
+                // 이미 미리보기가 있으면 이미지를 업데이트
+                imagePreview.src = e.target.result;
+            }
+        };
+
+        // 파일을 읽어들입니다.
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+</script>
+
+</body>
+</html>

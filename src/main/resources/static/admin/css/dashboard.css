@@ -1,0 +1,150 @@
+.admin-dashboard-container {
+    max-width: 1500px;
+    margin: 2% auto;
+    padding: 20px 50px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.admin-dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 50px;
+}
+
+.admin-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.admin-dashboard-title-con {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #1F1F1F;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.admin-dashboard-title-con img {
+    width: 80px;
+    height: 80px;
+}
+
+.admin-card-mini {
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    justify-content: space-around;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    padding: 10px;
+}
+
+.red-bg {background-color: #bb0000;}
+.blue-bg {background-color: #007fdd;}
+.green-bg {background-color: #358800;}
+.gray-bg {background-color: #3f3f3f;}
+
+.admin-dashboard-etr {
+    font-size: 22px;
+}
+
+.admin-card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #1F1F1F;
+}
+
+.admin-card-number {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.admin-myeong {
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.admin-card-subtext {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.admin-date-picker {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#datePicker {
+    width: 120px;
+    height: 30px;
+    border-radius: 4px;
+    margin-right: 5px;
+    opacity: 0.1; /* 요소 전체에 50% 투명도 적용 */
+}
+
+#fetchStatistics {
+    width: 50px;
+    height: 30px;
+    line-height: 15px;
+    background-color: #7a1111; /* 불투명한 빨간색 배경 */
+    opacity: 0.1; /* 요소 전체에 70% 투명도 적용 */
+}
+
+
+
+.admin-chart-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.admin-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    margin-top: 20px;
+}
+
+.admin-bar {
+    width: 50px;
+    background-color: #b0bec5;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 5px;
+    position: relative;
+}
+
+.admin-bar::after {
+    content: attr(data-label);
+    display: block;
+    font-size: 12px;
+    color: #333;
+    margin-top: 5px;
+}
+
+.admin-highlight {
+    background-color: #fbc02d;
+}

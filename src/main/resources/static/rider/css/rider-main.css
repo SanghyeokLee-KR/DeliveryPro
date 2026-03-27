@@ -1,0 +1,358 @@
+/* 기본 스타일 설정 */
+body {
+    margin: 0; /* 기본 여백 제거 */
+    font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+}
+
+/* 전체 레이아웃 컨테이너 */
+.rider-container {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    align-items: flex-start; /* 상단 정렬 */
+    max-width: 1200px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 수평 중앙 정렬 */
+    /* 내부 여백 추가 */
+    padding: 10px 20px 100px 20px;
+    gap: 20px;
+}
+
+.rider-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #404040;
+}
+
+.rider-icon {
+    margin-bottom: 30px;
+}
+
+.rider-icon img {
+    width: 800px;
+    margin-bottom: 10px;
+}
+
+.rider-login-section {
+    margin-bottom: 40px;
+}
+
+.rider-login-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.rider-login-button:hover {
+    background-color: #0056b3;
+}
+
+.rider-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.rider-content-box {
+    flex: 1;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.rider-content-box img {
+    width: 100%;
+    height: auto;
+    opacity: 0.8;
+}
+
+.rider-left {
+    width: 800px;
+    margin-right: 10px;
+}
+
+/* 로그인 창 부분 */
+
+.rider-right {
+}
+
+.rider-login-container {
+    width: 250px;
+    margin-top: 80px;
+    margin-left: 20px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.rider-login-title {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.rider-login-button {
+    display: inline-block;
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.rider-login-button:hover {
+    background-color: #0056b3;
+}
+
+.rider-login-links {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+.rider-login-links a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+.rider-login-links a:hover {
+    text-decoration: underline;
+}
+
+/* 로그인 박스 테스트 */
+/* 오른쪽 영역 컨테이너 */
+.president-all {
+    flex: 0 0 25%; /* 전체 너비의 25% 차지 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+    margin-top: 63px;
+}
+
+/* 로그인 섹션 하단 여백 */
+.president-login-section {
+    margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+
+/*바뀜*/
+.login-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.login-top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: -12px; /* 위아래 간격 */
+}
+
+.top-left-section {
+    flex: 7; /* 7:3 비율에서 왼쪽 */
+    text-align: left;
+
+}
+.top-left-section p{
+    font-weight: bold;
+    font-size: 18px;
+}
+.top-left-section b{
+    border-radius: 10px;
+    font-weight: normal;
+    background-color: #e0eefd;
+    color: #000;
+    width: 60px;
+    padding: 5px;
+}
+.top-left-section p,
+.top-left-section b{
+    display: inline; /* 두 요소를 한 줄에 배치 */
+    margin: 0;       /* 기본 여백 제거 */
+    vertical-align: middle; /* 텍스트 수직 정렬 */
+
+}
+
+
+
+.login-bottom-section {
+    text-align: left;
+    margin-top: 4px; /* 위아래 간격 */
+    color: #7e7e7e;
+    font-size: 14px;
+}
+
+.president-login-box {
+    background-color: #fff; /* 배경색 설정 */  /*바뀜*/
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 20px 20px 20px;
+    text-align: center; /* 텍스트 중앙 정렬 */
+    width : 300px;
+    height: 140px;
+    border:2px solid #eff0f4; /*바뀜*/
+    position: relative;  /* 내부의 절대 위치 요소를 기준으로 배치할 수 있게 설정 */
+}
+
+
+/* 로그아웃 버튼*/
+.top-right-section {
+    flex: 3; /* 7:3 비율에서 오른쪽 */
+    text-align: center;
+    font-size: 15px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    border-radius: 10px;
+    border:1px solid#007bff;
+    width: 30px;
+    padding: 3px;
+    background-color: #fff;
+}
+
+/* 로그인 버튼 스타일 */
+.president-login-button {
+    display: inline-flex; /* 인라인 플렉스 박스 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    justify-content: center; /* 아이템 가로 정렬 */
+    background-color: #007bff; /* 배경색 설정 */
+    color: #fff; /* 글자색 흰색 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    padding: 10px 30px; /* 내부 여백 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin-bottom: 10px; /* 아래 여백 추가 */
+    width: 280px;
+}
+
+.president-button-uio {
+    display: inline-flex; /* 인라인 플렉스 박스 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    justify-content: center; /* 아이템 가로 정렬 */
+    background-color: #007bff; /* 배경색 설정 */
+    color: #fff; /* 글자색 흰색 */
+    font-size: 12px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    padding: 5px 10px; /* 내부 여백 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 20px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin: 10px 5px 10px 5px; /* 아래 여백 추가 */
+    gap: 5px;
+}
+
+.president-button-uio button img {
+    color: #fff;
+}
+
+
+/* 로그인 링크 스타일 */
+.president-login-links a {
+    color: #333; /* 글자색 설정 */
+    text-decoration: none; /* 텍스트 장식 제거 */
+    font-size: 12px; /* 폰트 크기 설정 */
+    margin: 0 5px; /* 좌우 여백 추가 */
+}
+
+
+.tips {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.tip {
+    flex: 1;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0 10px;
+    font-size: 14px;
+
+}
+.tipTitle {
+    font-weight: bold;
+    font-size: 30px;
+    margin-left : 10px;
+}
+.tip img {
+    width: 50px; /* 이미지 크기 */
+    height: 50px;
+    margin-bottom: 10px; /* 이미지와 텍스트 간 간격 */
+}
+
+.tip-button {
+    background-color: #ffffff;
+    color: #ddd;
+    font-size: 14px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: 200px;
+}
+
+.tip-button:hover {
+    background-color: #0056b3;
+}
+
+.president-loginwithtips {
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+    height: 184px;
+}
+
+.popular-menu {
+    background-color: #edf5eb;
+}
+
+.store-coupon {
+    background-color: #fefbec;
+}
+
+.delivery-fee {
+    background-color: #f1f8fe;
+}
+
+/*바뀜*/
+/* 2024-12-30(2:24) 추가된 css */
+.rider-service-con {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;/*바뀜*/
+    border-radius: 12px;/*바뀜*/
+    border: 2px solid #007bff;/*바뀜*/
+    width: 95%;/*바뀜*/
+    height: 40px;
+    color: #007bff;
+    font-weight: bold;
+    margin: 20px auto 10px;
+}
+
+.president-button-u {
+    display: flex;  /* Flexbox를 사용 */
+    align-items: center;  /* 세로 중앙 정렬 */
+    justify-content: center;  /* 가로 중앙 정렬 */
+    text-decoration: none;  /* 링크 밑줄 제거 */
+}
+
+.president-button-u img {
+    margin-right: 8px;  /* 이미지와 텍스트 간 간격 조정 */
+}
+.president-login-box hr{
+    border:1px solid rgb(245, 245, 245);
+
+}

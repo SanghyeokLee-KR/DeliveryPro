@@ -1,0 +1,379 @@
+/* 전체 페이지 스타일 */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans KR", sans-serif;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 상단 메뉴 스타일 */
+header {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.cart-icon {
+    text-align: center;
+}
+
+/*헤더 태그*/
+.class {
+    margin-top: 45px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    padding: 0 20px; /* 양쪽에 약간의 여백 추가 */
+}
+
+.class h1, .class p {
+    margin: 0;
+}
+.class p{
+    padding-right: 20px;
+}
+
+.breadcrumb {
+    font-size: 20px;
+    color: #888;
+    text-align: right;
+}
+
+/*-------*/
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.bold {
+    font-weight: bold;
+    color: black;
+}
+
+.menu li a {
+    font-weight: bold;
+    color: black;
+}
+
+/* 장바구니 컨테이너 스타일 */
+.cart-payment-container h1 {
+    font-size: 28px;
+    text-align: left;
+    margin-top: 3px;
+    margin-bottom: 30px;
+    margin-left: 80px;
+}
+
+.line {
+    margin-top: 10px;
+    width: 100%;
+    height: 1px;
+    background-color: #7e7e7e;
+}
+
+/* 장바구니 비어있는 상태 */
+.empty-cart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.empty-cart img {
+    width: 60px; /* 아이콘 크기 */
+    height: 50px;
+}
+.item-info img {
+    width: 176px;
+    height: 114px;
+    border-radius: 10px;
+}
+.empty-cart .empty-p {
+    color: #cccccc;
+    font-size: 16px;
+}
+
+.btn-home {
+    display: inline-block;
+    padding: 10px 80px 10px 80px;
+    background-color: #ac2317;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 100px;
+}
+
+.btn-home:hover {
+    background-color: #a00;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* cart-item 스타일 */
+.cart-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #f9f9f9;
+    display: flex;
+    gap: 16px;
+    width: 750px; /* 가로 길이를 줄임 */
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 위 섹터: 가게명 */
+.cart-storename {
+    font-weight: bold;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 8px;
+}
+
+/* 중간 섹터: 구분선 */
+.cart-line {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 0;
+}
+
+/* 아래 섹터: 나머지 항목 */
+.cart-bottom {
+    display: flex; /* 가로 정렬 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: flex-start; /* 수정: 위쪽 정렬 */
+    gap: 16px; /* 요소 간 간격 */
+}
+
+/* 아래 섹터: 아이템 정보 */
+.item-info {
+    display: flex;
+    align-items: flex-start; /* 수정: 위쪽 정렬 */
+    gap: 16px;
+    flex-grow: 1; /* 유연한 공간 사용 */
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+    flex-direction: row; /* 수정: 가로 정렬로 변경 */
+    gap: 16px; /* 수정: 요소 간 간격 */
+    flex-grow: 1; /* 수정: 유연한 공간 사용 */
+}
+
+.item-details div {
+    font-size: 14px; /* 텍스트 크기 조정 */
+    margin-bottom: 0; /* 수정: 여백 제거 */
+}
+
+/* 수량 조절 버튼 */
+.quantity-control {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 8px; /* 버튼과 텍스트 간격 */
+}
+
+.quantity-control button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* 가격 */
+.price {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+    flex-shrink: 0; /* 크기 줄어들지 않도록 고정 */
+    padding: inherit;
+}
+
+/* 삭제 버튼 */
+.remove-btn {
+    cursor: pointer;
+    color: #d4d5d5;
+    font-size: 30px;
+    border: none;
+    background: none;
+    flex-shrink: 0; /* 크기 줄어들지 않도록 고정 */
+}
+
+/* 하단 디테일 섹션 */
+.detail-cart {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 요소 간 간격 균등 분배 */
+    gap: 8px; /* 수정: 요소 간 간격 줄임 */
+    width: 100%;
+}
+
+.detail-cart > div, .detail-cart > p {
+    text-align: center; /* 텍스트 정렬 */
+    flex: 1; /* 각 요소가 동일한 공간 차지 */
+}
+
+.detail-cart .delivery-type {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center;
+    gap: 2px; /* 수정: 상하 간격 줄임 */
+}
+
+.item-footer {
+    font-size: 14px;
+    color: #d5d6d6;
+    font-weight: bold;
+    margin-top: 4px; /* 수정: 상하 간격 조정 */
+    margin-bottom: 4px; /* 수정: 상하 간격 조정 */
+}
+
+.free-order {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ca3e3e;
+    margin-top: 4px; /* 수정: 상하 간격 조정 */
+    margin-bottom: 4px; /* 수정: 상하 간격 조정 */
+}
+.result-cart{
+    font-weight: bold;
+    font-size: 20px;
+    color: #d5d6d6;
+}
+
+
+.cart-payment-container {
+    align-items: center; /* 수직 중앙 정렬 */
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* 두 섹션 간 간격 */
+
+    max-width: 1200px;
+    margin: 100px auto 0; /* 상단 여백 100px, 자동 좌우 여백 */
+}
+
+/* 장바구니 비어있는 상태 */
+.empty-cart {
+    flex: 2; /* 비율 설정 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.pay-header {
+    font-weight: bold;
+    font-size: 24px;
+    text-align: left;
+    margin-top: 15px; /* 상단 간격을 좁힘 */
+    margin-bottom: 15px; /* 하단 간격을 좁힘 */
+}
+
+.payment-container {
+    flex: 1; /* 비율을 늘려서 더 많은 공간 차지 */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 4px 30px;/* 패딩 값을 줄여서 높이를 줄임 */
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    display: block;
+    width: 100%; /* 가로 길이를 100%로 설정하여 더 넓게 만듦 */
+    margin-bottom: 205px;
+}
+
+
+.pay-line{
+    border: 1px solid #d5d6d6;
+}
+
+.pay-body {
+    display: flex;
+    flex-direction: column; /* 세로로 정렬 */
+}
+.pay-body > * {
+    padding-top: 0; /* 상단 패딩 제거 */
+    padding-bottom: 0; /* 하단 패딩 제거 */
+}
+
+.pay-item-price,
+.pay-delivery-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0; /* 상하 간격을 살짝만 추가 */
+    margin: 0; /* 마진 제거 */
+}
+
+.pay-item-price > *,
+.pay-delivery-price > * {
+    margin: 0; /* 자식 요소들의 마진 제거 */
+    padding: 0; /* 자식 요소들의 패딩 제거 */
+}
+
+.pay-body-text {
+    text-align: left; /* 왼쪽 정렬 */
+    flex: 1; /* 남은 공간 차지 */
+}
+
+.pay-body-price .pay-body-deliveryPrice {
+    text-align: right; /* 오른쪽 정렬 */
+    flex-shrink: 0; /* 크기 줄어들지 않도록 고정 */
+}
+
+.pay-footer {
+    display: flex; /* Flexbox로 정렬 */
+    justify-content: space-between; /* 좌우로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    margin: -20px 0;
+}
+
+.pay-all-text {
+    text-align: left; /* 왼쪽 정렬 */
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.pay-all-price {
+    text-align: right; /* 오른쪽 정렬 */
+    font-size: 35px;
+    font-weight: bold;
+}
+
+/* 결제 하기 버튼 */
+.pay-btn {
+    border: none;
+    padding: 10px 80px 10px 80px;
+    background-color: #ac2317;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 15px auto;
+    width: 80%;
+    display: block;
+    height: 50px;
+}
+

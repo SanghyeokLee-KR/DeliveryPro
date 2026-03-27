@@ -1,0 +1,16 @@
+<!-- /img/store-management/icons/유저.svg -->
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+>
+    <!-- 얼굴 -->
+    <circle cx="12" cy="8" r="4"/>
+    <!-- 어깨/몸통 -->
+    <path d="M2 20c0-3.33 2.67-6 6-6h8c3.33 0 6 2.67 6 6"/>
+</svg>
