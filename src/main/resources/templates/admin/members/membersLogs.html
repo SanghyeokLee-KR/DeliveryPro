@@ -1,0 +1,88 @@
+<div class="member-container" th:fragment="logsContent">
+    <!-- 헤더 섹션: 제목과 검색 바 -->
+    <div class="member-header">
+        <h2 class="member-title">회원 관리</h2>
+        <div class="member-search">
+            <form class="member-search-form" method="get" th:action="@{/admin/members/logs}">
+                <input name="searchQuery" placeholder="회원 ID 검색" th:value="${searchQuery}" type="text">
+
+                <select class="filter-select" name="hisDeviceOs">
+                    <option value="">운영체제 선택</option>
+                    <option th:selected="${hisDeviceOs == 'Windows'}" value="Windows">Windows</option>
+                    <option th:selected="${hisDeviceOs == 'macOS '}" value="macOS">macOS</option>
+                    <option th:selected="${hisDeviceOs == 'Linux'}" value="Linux">Linux</option>
+                    <option th:selected="${hisDeviceOs == 'Android '}" value="Android">Android</option>
+                    <option th:selected="${hisDeviceOs == 'iOS'}" value="iOS">iOS</option>
+                </select>
+
+                <select class="filter-select" name="hisBrowser">
+                    <option value="">브라우저 선택</option>
+                    <option th:selected="${hisBrowser == 'Chrome'}" value="Chrome">Chrome</option>
+                    <option th:selected="${hisBrowser == 'Whale'}" value="Whale">Whale</option>
+                    <option th:selected="${hisBrowser == 'Firefox'}" value="Firefox">Firefox</option>
+                    <option th:selected="${hisBrowser == 'Edge'}" value="Edge">Edge</option>
+                    <option th:selected="${hisBrowser == 'Safari'}" value="Safari">Safari</option>
+                </select>
+
+                <button class="member-search-button" type="submit">검색</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 회원 리스트 테이블 -->
+    <table class="member-table">
+        <thead>
+        <tr>
+            <th>로그 기록 ID</th>
+            <th>회원 아이디</th>
+            <th>로그인 날짜</th>
+            <th>IP 주소</th>
+            <th>운영체제</th>
+            <th>브라우저</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="log, iterStat : ${logs}">
+            <td th:text="${log.hisLoginId}">1</td>
+            <td th:text="${userIds[iterStat.index]}">1</td>  <!-- 회원 ID에 해당하는 userId 출력 -->
+            <td th:text="${log.hisLoginDate}">2020</td>
+            <td th:text="${log.hisIpAddress}">192.168.1.1</td>
+            <td th:text="${log.hisDeviceOs}">Windows</td>
+            <td th:text="${log.hisBrowser}">Chrome</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징 네비게이션 -->
+    <div class="member-pagination">
+        <!-- 이전 페이지 링크 -->
+        <a class="pagination-item"
+           th:href="@{/admin/members/logs(page=${currentPage - 1}, size=${membersPage.size}, sortField=${sortField}, sortDir=${sortDir}, searchQuery=${searchQuery}, hisDeviceOs=${hisDeviceOs}, hisBrowser=${hisBrowser})}"
+           th:if="${membersPage.hasPrevious()}">
+            이전
+        </a>
+
+        <!-- 페이지 번호 링크 또는 현재 페이지 표시 -->
+        <span th:each="i : ${#numbers.sequence(0, membersPage.totalPages - 1)}">
+            <a class="pagination-item"
+               th:href="@{/admin/members/logs(page=${i}, size=${membersPage.size}, sortField=${sortField}, sortDir=${sortDir}, searchQuery=${searchQuery}, hisDeviceOs=${hisDeviceOs}, hisBrowser=${hisBrowser})}"
+               th:if="${i != currentPage}"
+               th:text="${i + 1}">
+            </a>
+            <span aria-current="page"
+                  class="pagination-current"
+                  th:if="${i == currentPage}"
+                  th:text="${i + 1}">
+            </span>
+        </span>
+
+
+        <!-- 다음 페이지 링크 -->
+        <a class="pagination-item"
+           th:href="@{/admin/members/logs(page=${currentPage + 1}, size=${membersPage.size}, sortField=${sortField}, sortDir=${sortDir}, searchQuery=${searchQuery}, hisDeviceOs=${hisDeviceOs}, hisBrowser=${hisBrowser})}"
+           th:if="${membersPage.hasNext()}">
+            다음
+        </a>
+
+    </div>
+</div>

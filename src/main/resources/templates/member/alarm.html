@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>알림 페이지</title>
+  <!-- CSS 파일 링크 -->
+  <link href="/layout/member/css/header.css" rel="stylesheet"/>
+  <link href="/layout/member/css/footer.css" rel="stylesheet"/>
+  <link href="/member/css/alarm.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+<div class="alarm-container">
+
+  <div class="contents-header">
+    <img src="/store/img/icons/bell.svg"/>
+    <p>알림 센터</p>
+  </div>
+  <div class="contents-body">
+    <ul class="customer_alarm_list" id="alarmList">
+      <!-- 실시간 알림 <li>가 여기 prepend 됩니다 -->
+
+    </ul>
+  </div>
+</div>
+
+<!-- 푸터 삽입 -->
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+</body>
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="/layout/member/js/header.js"></script>
+<script src="/layout/member/js/footer.js"></script>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+    <meta charset="utf-8">
+    <title>약관동의 with 회원가입</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="/member/css/agree.css" rel="stylesheet">
+    <link href="/member/css/join.css" rel="stylesheet">
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
+    <style>
+        /* 추가된 CSS */
+        .input-wrapper.error {
+            border: 2px solid #B40000; /* 빨간 테두리 */
+        }
+
+        .input-wrapper.success {
+            border: 1px solid #00C853; /* 초록 테두리 */
+        }
+
+        .error-message {
+            color: #B40000;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #00C853;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .small-button.success {
+            background-color: #00C853;
+            color: white;
+            font-weight: bold;
+            cursor: default;
+        }
+
+        .small-button.error {
+            background-color: #B40000;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<div class="container" id="agreeSection">
+    <h1>환영합니다!<br>아래 약관에 동의하시고 味추홀과 함께하세요!</h1>
+
+    <!-- 전체동의 -->
+    <div class="full-agree">
+        <label>
+            <input id="checkAll" type="checkbox">
+            전체동의
+        </label>
+    </div>
+
+    <!-- 약관 항목들 -->
+    <div id="terms-container">
+        <!-- 약관 항목들이 여기 동적으로 삽입됩니다 -->
+    </div>
+
+    <div class="agree-footer">
+        <button disabled id="nextBtn" type="submit">다음</button>
+    </div>
+</div>
+<div class="signup-container" id="signupSection" style="display: none;">
+    <h1>회원가입</h1>
+    <form action="/register" id="registrationForm" method="POST">
+        <!-- 아이디 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="idWrapper">
+                <img alt="아이디 아이콘" class="icon" src="/member/img/join/user.svg">
+                <input id="userId" name="userId" placeholder="아이디를 입력하세요" required type="text">
+                <button class="small-button" id="checkIdBtn" type="button">중복확인</button>
+            </div>
+            <div class="error-message" id="idErrorMessage">⚠ 아이디는 영문/숫자 조합 5~20자여야 합니다.</div>
+        </div>
+
+        <!-- 비밀번호 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="passwordWrapper">
+                <img alt="비밀번호 아이콘" class="icon" src="/member/img/join/lock.svg">
+                <input id="password" name="password" placeholder="비밀번호" required type="password">
+            </div>
+            <small>영문 대소문자, 숫자, 특수문자 포함 8자리 이상</small>
+            <div class="error-message" id="passwordLengthError">⚠ 비밀번호는 8자리 이상이어야 합니다.</div>
+        </div>
+
+        <!-- 비밀번호 재입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="passwordCheckWrapper">
+                <img alt="비밀번호 재입력 아이콘" class="icon" src="/member/img/join/lock.svg">
+                <input id="passwordCheck" name="passwordCheck" placeholder="비밀번호 재입력" required type="password">
+            </div>
+            <div class="error-message" id="passwordErrorMessage">⚠ 입력하신 비밀번호와 일치하지 않습니다.</div>
+        </div>
+
+        <!-- 이름 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="nameWrapper">
+                <img alt="이름 아이콘" class="icon" src="/member/img/join/name.svg">
+                <input id="name" name="username" placeholder="이름" required type="text">
+            </div>
+            <div class="error-message" id="nameErrorMessage">⚠ 이름은 한글 2~5글자만 가능합니다.</div>
+        </div>
+
+        <!-- 닉네임 입력 (추가된 부분) -->
+        <div class="input-group">
+            <div class="input-wrapper" id="nicknameWrapper">
+                <img alt="닉네임 아이콘" class="icon" src="/member/img/join/nickname.svg">
+                <input id="nickname" maxlength="100" name="nickname" placeholder="닉네임" type="text">
+            </div>
+            <div class="error-message" id="nicknameErrorMessage">⚠ 닉네임은 최대 100자까지 입력 가능합니다.</div>
+        </div>
+
+        <!-- 이메일 입력 영역 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="emailInputWrapper">
+                <img alt="이메일 아이콘" class="icon" src="/member/img/join/email.svg">
+                <input id="email" name="email" placeholder="이메일 주소 입력" required type="email">
+            </div>
+            <div class="error-message" id="emailErrorMessage">⚠ 올바른 이메일 주소가 아닙니다.</div>
+        </div>
+
+        <!-- 전화번호 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="phoneWrapper">
+                <img alt="전화번호 아이콘" class="icon" src="/member/img/join/phone.svg">
+                <input id="phone" name="phone" placeholder="전화번호 입력 (예: 010-1234-5678)" required type="tel">
+            </div>
+            <div class="error-message" id="phoneErrorMessage">⚠ 올바른 전화번호 형식이 아닙니다.</div>
+        </div>
+
+        <!-- 성별 선택 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="genderWrapper">
+                <img alt="성별 아이콘" class="icon" src="/member/img/join/gender.svg">
+                <select id="gender" name="gender" required>
+                    <option disabled selected value="">성별 선택</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
+                </select>
+            </div>
+            <div class="error-message" id="genderErrorMessage">⚠ 성별을 선택해주세요.</div>
+        </div>
+
+        <!-- 주소 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="addressWrapper">
+                <img alt="주소 아이콘" class="icon" src="/member/img/join/address1.svg">
+                <input id="sample6_postcode" name="postcode" placeholder="우편번호" readonly required type="text">
+                <button class="small-button" id="searchAddressBtn" type="button">주소검색</button>
+            </div>
+            <div class="error-message" id="postcodeErrorMessage">⚠ 우편번호를 입력해주세요.</div>
+        </div>
+
+        <div class="input-group">
+            <div class="input-wrapper" id="addressFieldWrapper">
+                <img alt="주소 아이콘" class="icon" src="/member/img/join/address2.svg">
+                <input id="sample6_address" name="address" placeholder="주소" readonly required type="text">
+            </div>
+            <div class="error-message" id="addressErrorMessage">⚠ 주소를 입력해주세요.</div>
+        </div>
+
+        <div class="input-group">
+            <div class="input-wrapper" id="detailAddressWrapper">
+                <img alt="상세주소 아이콘" class="icon" src="/member/img/join/address3.svg">
+                <input id="sample6_detailAddress" name="detailAddress" placeholder="상세주소" required type="text">
+            </div>
+            <div class="error-message" id="detailAddressErrorMessage">⚠ 상세주소를 입력해주세요.</div>
+        </div>
+
+        <!-- 생년월일 입력 -->
+        <div class="input-group">
+            <div class="input-wrapper" id="birthWrapper">
+                <img alt="생년월일 아이콘" class="icon" src="/member/img/join/calendar.svg">
+                <input id="birthdate" name="birthday" required type="date">
+            </div>
+            <div class="error-message" id="birthErrorMessage">⚠ 생년월일을 선택해주세요.</div>
+        </div>
+
+        <!-- 확인 버튼 -->
+        <div class="signup-button">
+            <button id="submitBtn" type="submit">가입하기</button>
+        </div>
+    </form>
+</div>
+<!-- 모달 창들 -->
+<!-- 모달은 JavaScript를 통해 동적으로 생성됩니다 -->
+
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<!-- termsData.js 로드 -->
+<script src="/member/js/term.js"></script>
+<script src="/member/js/join.js"></script>
+<script src="/layout/member/js/header.js"></script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+/* src/main/resources/static/admin/css/board-admin.css */
+
+/* 공통 리셋 */
+.board-admin-container * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.board-admin-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #555;
+    padding: 20px;
+}
+
+/* 다크모드 적용 */
+body.dark-mode .board-admin-container {
+    background-color: #181818;
+    color: #eee;
+}
+
+/* 컨테이너 스타일 */
+.board-admin-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.dark-mode .board-admin-container {
+    background-color: #2c2c2c;
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+/* 헤더 스타일 */
+.board-admin-header {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.board-admin-title {
+    font-size: 28px;
+    color: #555;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+body.dark-mode .board-admin-title {
+    color: #fff;
+}
+
+/* 검색 바 */
+.board-admin-search-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.board-admin-search input {
+    padding: 10px 15px;
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+    font-size: 14px;
+}
+
+.board-admin-search input:focus {
+    border-color: #555;
+    outline: none;
+}
+
+body.dark-mode .board-admin-search input {
+    background-color: #555;
+    color: #fff;
+    border-color: #555;
+}
+
+/* 검색 버튼 */
+.board-admin-search-button {
+    padding: 10px 25px;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.board-admin-search-button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+}
+
+body.dark-mode .board-admin-search-button {
+    background-color: #666;
+}
+
+/* 테이블 스타일 */
+.board-admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    color: #555;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.board-admin-table th, .board-admin-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.board-admin-table th {
+    background-color: #555;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+body.dark-mode .board-admin-table th {
+    background-color: #444;
+    color: #ccc;
+}
+
+.board-admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.board-admin-table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+body.dark-mode .board-admin-table tr:nth-child(even) {
+    background-color: #2c2c2c;
+}
+
+body.dark-mode .board-admin-table tr:hover {
+    background-color: #555;
+}
+
+/* 상태 텍스트 스타일 */
+.board-admin-status {
+    font-weight: bold;
+    color: #C0392B; /* 빨간색 */
+}
+
+body.dark-mode .board-admin-status {
+    color: #ff7373;
+}
+
+/* 수정 버튼 */
+.board-admin-edit-button {
+    padding: 8px 12px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+}
+
+.board-admin-edit-button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+body.dark-mode .board-admin-edit-button {
+    background-color: #0056b3;
+}
+
+body.dark-mode .board-admin-edit-button:hover {
+    background-color: #004494;
+}
+
+/* 페이징 네비게이션 */
+.board-admin-pagination {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.board-admin-pagination a.pagination-item,
+.board-admin-pagination span.pagination-current {
+    padding: 10px 18px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.board-admin-pagination a.pagination-item:hover {
+    background-color: #555;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.board-admin-pagination span.pagination-current {
+    background-color: #555;
+    color: #fff;
+    border: 1px solid #555;
+    font-weight: 600;
+}
+
+/* 다크 모드 적용 */
+body.dark-mode .board-admin-pagination a.pagination-item,
+body.dark-mode .board-admin-pagination span.pagination-current {
+    color: #ccc;
+    border-color: #555;
+}
+
+body.dark-mode .board-admin-pagination a.pagination-item:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* 반응형 디자인 */
+@media screen and (max-width: 768px) {
+    .board-admin-container {
+        padding: 20px 25px;
+    }
+
+    .board-admin-title {
+        font-size: 24px;
+    }
+
+    .board-admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .board-admin-search-form {
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .board-admin-search input {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .board-admin-search-button {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .board-admin-table th, .board-admin-table td {
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+
+    .board-admin-pagination a.pagination-item,
+    .board-admin-pagination span.pagination-current {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}

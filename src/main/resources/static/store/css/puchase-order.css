@@ -1,0 +1,344 @@
+
+.layout-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    width: 90%;
+    margin: 20px auto;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-status {
+    width: 350px;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    border: 2px solid #c5c3c3;
+    max-height: 1200px;
+    height: 800px;
+    overflow-y: scroll;
+}
+
+.status-header {
+    display: flex;
+    gap: 10px;
+}
+
+.status-header button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e9f7ef;
+    color: #4caf50;
+}
+
+.status-header .active {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.status-content p {
+    margin: 5px 0;
+}
+
+/*諛곕떖 諭껋�*/
+.status-content p .badge1{
+    margin-bottom: 5px;
+}
+.badge1 {
+    display: inline-block;
+    text-align: center;
+    border-radius: 15px;;
+    width: 35px;
+    height: 20px;
+    background-color: #4caf50;
+    color: #fff;
+    font-size: 10px;
+    margin-left: 7px;
+    padding-top: 2px;
+}
+
+
+.badge2 {
+    display: inline-block;
+    padding: 8px 8px 2px 8px;
+    text-align: center;
+    border-radius: 15px;;
+
+    width: 55px;
+    height: 30px;
+    background-color: #4caf50;
+    color: #fff;
+    font-size: 12px;
+}
+
+.right-section {
+    flex-grow: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 10px;
+}
+
+.order-details2{
+    padding-left: 15px;
+}
+.order-details2 h3{
+    margin-top: 15px;
+}
+.order-details1{
+    max-height: 500px;
+    height: 500px;
+    overflow-y: auto;  /* �몃줈 �ㅽ겕濡� 異붽� */
+}
+.delivery-info{
+    max-height: 290px;
+    height: 270px;
+}
+.order-details1, .delivery-info {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    border: 2px solid #c5c3c3;
+
+}
+
+.order-details1 h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.order-details1 table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.order-details1 table th, .order-details table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+
+.delivery-info .delivery-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.delivery-info .time-adjust {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.delivery-info .time-adjust button {
+    padding: 3px 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+.delivery-info .accept {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+
+}
+
+.delivery-info .reject {
+    color: #000000;
+    background-color: #FFFFFF;
+    border: 1px solid #d5d6d6;
+    border-radius: 24px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.
+    /*異붽� */
+.status-content{
+    margin-left: 15px;
+}
+.status-content-neworder{
+    color: #398900;
+    font-size: 18px;
+    padding-bottom: 10px;
+
+}
+
+
+.status-content-footer {
+    display: flex;
+    justify-content: space-between; /* 醫뚯슦 �앹쑝濡� 諛곗튂 */
+    align-items: center; /* �몃줈 �뺣젹 */
+    margin-bottom: 40px;
+    margin-top: 10px;
+}
+
+.status-content-footer p {
+    margin: 0; /* p �쒓렇 湲곕낯 留덉쭊 �쒓굅 */
+    font-weight: bold;
+}
+/*異붽�*/
+.details-first-text{
+    font-weight: 600;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.order-details2 hr{
+    border: 1px solid #999999;
+}
+.order-details2 h4{
+    margin-top: 10px;
+}
+.details-second-text{
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+.request {
+    display: flex;   /* flex 而⑦뀒�대꼫濡� �ㅼ젙 */
+    flex-direction: column; /* �몃줈 �뺣젹 */
+    gap: 7px;       /* �� p �쒓렇 �ъ씠�� 媛꾧꺽�� 20px濡� �ㅼ젙 */
+
+}
+.request-container{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.request strong{
+    margin-right: 25px;
+}
+
+/*delivery-info*/
+.delivery-info-header{
+    margin-top: 23px;
+    margin-bottom: -10px;
+    margin-left: 100px;
+
+}
+.delivery-first-text{
+
+    font-size: 25px;
+    font-weight: 850;
+    color: #000000;
+
+}
+
+
+.delivery-info-content {
+    display: flex;           /* flex濡� �꾩껜 �덉씠�꾩썐 �ㅼ젙 */
+    padding-left: 20px;
+    margin-bottom: 30px;
+    margin-left: 67px;
+}
+
+.delivery-info-left-section {
+    flex: 1;                   /* �쇱そ �뱀뀡�� �섎㉧吏� 怨듦컙�� 李⑥� */
+    padding: 10px;
+    margin-top: -7px;
+    display: flex;             /* �뚮젆�� 而⑦뀒�대꼫 */
+    gap: 5px;
+    justify-content: center;   /* �섑룊 諛⑺뼢 以묒븰 �뺣젹 */
+    align-items: center;       /* �섏쭅 諛⑺뼢 以묒븰 �뺣젹 */
+
+}
+
+.delivery-info-left-section img {
+    margin: 0;
+    width: 45px;
+    height: 45px;
+}
+
+.delivery-info-left-section p {
+    flex: 7;
+    margin: 0;              /* p �쒓렇�� 湲곕낯 留덉쭊 �쒓굅 */
+    font-size: 16px;        /* �띿뒪�� �ш린 �ㅼ젙 */
+}
+
+.delivery-info-right-section {
+    display: flex;           /* �몃줈濡� 諛곗튂�� �� �덈룄濡� �ㅼ젙 */
+    flex-direction: column;  /* �몃줈 諛곗튂 */
+    flex: 1;                 /* �ㅻⅨ履� �뱀뀡�� 怨듦컙�� 李⑥� */
+    padding-right: 20px;
+    margin-right: 30px;
+    margin-top: -4px;
+    padding-bottom: 10px;
+    align-items: center;     /* �섑룊 諛⑺뼢 以묒븰 �뺣젹 */
+    justify-content: center; /* �섏쭅 諛⑺뼢 以묒븰 �뺣젹 */
+}
+
+.delivery-info-right-top-section {
+    display: flex;               /* �꾩そ �뱀뀡�� �댁슜�� 媛�濡쒕줈 諛곗튂 */
+    justify-content: center;     /* �대� �붿냼瑜� 以묒븰�� 諛곗튂 */
+    margin-bottom: 5px;
+    margin-top: 16px;
+    text-align: center;
+    width: 100%;                 /* 遺�紐� �붿냼 �덈퉬瑜� 湲곗��쇰줈 */
+    max-width: 600px;            /* �먰븯�� 理쒕� �덈퉬 �ㅼ젙 (�좏깮 �ы빆) */
+}
+
+
+
+.accept, .reject {
+    padding: 17px 20px;      /* 踰꾪듉�� �⑤뵫 異붽� */
+    cursor: pointer;         /* 而ㅼ꽌媛� �ъ씤�곕줈 蹂�寃� */
+}
+
+.delivery-info-right-bottom-section {
+    font-size: 16px;         /* 諛곕떖�쒓컙 遺�遺� 湲��� �ш린 */
+    font-weight: bold;       /* 媛뺤“�� �띿뒪�� */
+    text-align: center;
+    margin-left: 20px;
+}
+
+.delivery-info-right-bottom-section strong {
+    color: #f39c12;          /* 媛뺤“�� 諛곕떖�쒓컙�� �됱긽 異붽� */
+}
+
+.time-adjust{
+    border: 1px solid #000000;
+    border-radius: 24px;
+    padding: 3px 10px;
+    display: flex;           /* �쒓컙 議곗젙 踰꾪듉�� 媛�濡쒕줈 諛곗튂 */
+    gap: 8px;               /* 踰꾪듉 媛� 媛꾧꺽 */
+
+}
+.delivery-add-text{
+    font-weight: bold;
+    padding-bottom: 5px;
+
+}
+.time-adjust span{
+    padding: 5px;
+}
+.delivery-actions{
+    margin-bottom: 7px;
+}
+
+/*媛믪씠 鍮꾩뿀�� ��*/
+.no-data {
+    text-align: center;
+    color: #cbc9c9;
+    font-size: 34px;
+    font-weight: bold;
+    display: flex;  /* Flexbox �쒖꽦�� */
+    justify-content: center;  /* �섑룊 以묒븰 �뺣젹 */
+    align-items: center;  /* �섏쭅 以묒븰 �뺣젹 */
+    height: 100%;  /* 遺�紐� �붿냼�� 留욊쾶 �믪씠 �ㅼ젙 */
+}

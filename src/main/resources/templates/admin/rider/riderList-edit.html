@@ -1,0 +1,47 @@
+<div class="member-edit-container" th:fragment="rider-editContent">
+    <!-- 카드 컨테이너 -->
+    <div class="member-edit-card">
+        <!-- 프로필 헤더 -->
+        <div class="member-edit-header">
+            <h2 class="member-edit-title">프로필</h2>
+        </div>
+
+        <!-- 프로필 상세 -->
+        <div class="member-edit-details">
+
+            <div class="member-edit-info">
+                <!-- 프로필 이미지 -->
+                <div class="member-edit-image">
+                    <img alt="프로필 이미지" src="/admin/img/icons/user-profile.svg">
+                </div>
+                <!-- 프로필 정보 -->
+                <div class="member-edit-basic-info">
+                    <h3 th:text="${rider.riderName}"></h3>
+                    <p>휴대전화번호: <span th:text="${rider.riderPhone}"></span></p>
+                    <p>주소: <span th:text="${rider.vehicleType}"></span></p>
+                </div>
+            </div>
+
+            <!-- 프로필 수정 폼 -->
+            <form class="member-edit-form" method="post" th:action="@{/admin/rider/{id}/edit(id=${rider.riderNo})}">
+
+                <input type="hidden" th:value="${rider.riderName}" name="riderName">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">라이더 상태</label>
+                        <select class="form-control" id="status" name="isAvailable" required th:value="${rider.isAvailable}">
+                            <option th:selected="${rider.isAvailable == '승인'}" value="승인">승인</option>
+                            <option th:selected="${rider.isAvailable == '차단'}" value="차단">차단</option>
+                            <option th:selected="${rider.isAvailable == '보류'}" value="보류">보류</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-reset" type="reset">리셋</button>
+                    <button class="btn-submit" type="submit">수정 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

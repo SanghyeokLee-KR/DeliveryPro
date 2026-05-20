@@ -1,0 +1,19 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="#707070"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+>
+    <!-- 쿠폰 테두리 -->
+    <rect x="2" y="6" width="20" height="12" rx="2" ry="2"/>
+    <!-- 절취선(점선) -->
+    <path d="M9 6v12" stroke-dasharray="2 2"/>
+    <!-- 할인 아이콘 ( % ) -->
+    <circle cx="15.5" cy="10.5" r="1"/>
+    <circle cx="15.5" cy="13.5" r="1"/>
+    <line x1="14" y1="12" x2="17" y2="12"/>
+</svg>

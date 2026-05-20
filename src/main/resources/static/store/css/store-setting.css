@@ -1,0 +1,138 @@
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    margin: 20px;*/
+/*    background-color: #f9f9f9;*/
+/*}*/
+
+.setting-container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.setting-section {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    /*justify-content: space-between;*/
+    margin-bottom: 10px;
+}
+
+.setting-row label {
+    font-size: 16px;
+    color: #333;
+}
+
+.setting-row1 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.setting-row1 label {
+    font-size: 16px;
+    color: #333;
+}
+
+.setting-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 5%;
+}
+
+.setting-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+.setting-time-inputs {
+    display: flex;
+    gap: 5px;
+}
+
+select {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.setting-break-time {
+    margin-top: 10px;
+    /*border-top: 1px solid #e0e0e0; 선*/
+    /*padding-top: 20px;*/
+}
+
+.setting-remove-btn {
+
+    color: #797979;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.setting-remove-btn:hover {
+    background-color: #616161;
+    color: white;
+}
+
+.setting-time-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10%;
+}
+
+.setting-time-range span {
+    font-size: 16px;
+    color: #666;
+}
+
+.setting-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.setting-hour24 {
+    justify-content: flex-end;
+    margin-left: 72%;
+}
+
+.setting-title1 {
+    font-size: 16px;
+    color: #333;
+    margin-left: 10%;
+}
+
+.setting-add-break-time {
+    font-size: 12px;
+    color: #666;
+    margin-left: 10%;
+    text-decoration: none; /* 밑줄 제거 */
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.setting-enter {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 20px;
+}

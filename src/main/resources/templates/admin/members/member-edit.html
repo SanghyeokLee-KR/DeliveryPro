@@ -1,0 +1,67 @@
+<div class="member-edit-container" th:fragment="membersContent">
+    <!-- 카드 컨테이너 -->
+    <div class="member-edit-card">
+        <!-- 프로필 헤더 -->
+        <div class="member-edit-header">
+            <h2 class="member-edit-title">프로필</h2>
+        </div>
+
+        <!-- 프로필 상세 -->
+        <div class="member-edit-details">
+
+            <div class="member-edit-info">
+                <!-- 프로필 이미지 -->
+                <div class="member-edit-image">
+                    <img alt="프로필 이미지" src="/admin/img/icons/user-profile.svg">
+                </div>
+                <!-- 프로필 정보 -->
+                <div class="member-edit-basic-info">
+                    <h3 th:text="${member.username}"></h3>
+                    <p class="member-edit-id">ID: <span th:text="${member.userId}"></span></p>
+                    <p>휴대전화번호 <span th:text="${member.phone}"></span></p>
+                    <p>주소 <span th:text="${member.address}"></span></p>
+                </div>
+            </div>
+
+            <!-- 프로필 수정 폼 -->
+            <form class="member-edit-form" method="post" th:action="@{/admin/members/{id}/edit(id=${member.mId})}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="grade">등급</label>
+                        <select class="form-control" id="grade" name="grade" required th:value="${member.grade}">
+                            <option th:selected="${member.grade == 'Welcome'}" value="Welcome">Welcome 등급</option>
+                            <option th:selected="${member.grade == 'Family'}" value="Family">Family 등급</option>
+                            <option th:selected="${member.grade == 'VIP'}" value="VIP">VIP 등급</option>
+                            <option th:selected="${member.grade == 'VVIP'}" value="VVIP">VVIP 등급</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">회원 상태</label>
+                        <select class="form-control" id="status" name="status" required th:value="${member.status}">
+                            <option th:selected="${member.status == '활성'}" value="활성">활성</option>
+                            <option th:selected="${member.status == '정지'}" value="정지">정지</option>
+                            <option th:selected="${member.status == '탈퇴'}" value="탈퇴">탈퇴</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">성별</label>
+                        <select class="form-control" id="gender" name="gender" required th:value="${member.gender}">
+                            <option th:selected="${member.gender == '남성'}" value="남성">남성</option>
+                            <option th:selected="${member.gender == '여성'}" value="여성">여성</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-reset" type="reset">리셋</button>
+                    <button class="btn-submit" type="submit">수정 완료</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

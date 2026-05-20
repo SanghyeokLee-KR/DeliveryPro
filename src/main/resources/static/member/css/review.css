@@ -1,0 +1,140 @@
+/* 모달 전체 스타일 */
+.review-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    display: none; /* 초기 상태 */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.review-modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+/*.review-modal-content h2 {*/
+/*    margin-bottom: 15px;*/
+/*    border-bottom: 1px solid #ccc; !* 회색 실선 추가 *!*/
+/*    box-sizing: border-box; !* border를 포함한 크기 조정 *!*/
+/*}*/
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #000;
+}
+
+
+/* 헤더 스타일 */
+.review-modal h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+    text-align: center;
+    color: #444;
+}
+
+.review-modal .border-line {
+    margin-top: 10px; /* h2와 회색 실선 간격 10px */
+    border-bottom: 1px solid #ccc;
+}
+
+/* 입력 필드 스타일 */
+.review-modal label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.review-modal input[type="text"],
+.review-modal input[type="file"],
+.review-modal textarea {
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+/* 텍스트 영역 스타일 */
+.review-modal textarea {
+    resize: none; /* 크기 조절 불가 */
+    height: 80px;
+}
+
+/* 별점 스타일 */
+#star-rating {
+    display: flex;
+    justify-content: center; /* 가로 가운데 정렬 */
+    margin-top: 5px;
+}
+
+#star-rating .star {
+    font-size: 40px;
+    cursor: pointer;
+    color: #ddd; /* 기본 별 색상 */
+    transition: color 0.3s ease; /* 부드러운 색상 변화 */
+}
+
+#star-rating .star:hover,
+#star-rating .star.selected {
+    color: #ffc107; /* 별 선택 시 색상 (황금색) */
+}
+
+/* 버튼 스타일 */
+.review-modal button[type="submit"] {
+    background: #bb0000; /* 파란색 버튼 */
+    color: #fff; /* 흰색 텍스트 */
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.review-modal button[type="submit"]:hover {
+    background: #a10000; /* 호버 시 어두운 파란색 */
+}
+
+/* 닫기 버튼 (hover 효과) */
+.close-button:hover {
+    color: #ff0000; /* 닫기 버튼 호버 시 빨간색 */
+}
+
+.review-title {
+    text-align: center;
+    font-size: 24px;
+    color: #828282;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+.review-title1 {
+    text-align: center;
+    font-size: 14px;
+    color: #828282;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.review-button {
+    display: flex;          /* Flexbox 활성화 */
+    justify-content: center; /* 가로 가운데 정렬 */
+}

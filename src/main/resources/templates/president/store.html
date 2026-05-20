@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>입점 신청하기</title>
+    <link href="/layout/store/css/store_main_header.css" rel="stylesheet">
+    <link href="/store/css/store.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+<h2>입점 신청하기</h2>
+<div class="store-section">
+    <form action="#" id="store-form" onsubmit="return checkAgreement();">
+        <label for="business-number">사업자 등록 번호</label>
+        <input id="business-number" name="business-number" placeholder="사업자 등록 번호를 입력해 주세요." type="text">
+
+        <label for="representative-name">대표자명</label>
+        <input id="representative-name" name="representative-name" placeholder="대표자명을 입력해 주세요." type="text">
+
+        <label for="phone-number">대표자 휴대폰 번호</label>
+        <input id="phone-number" name="phone-number" placeholder="대표자 휴대폰 번호를 입력해 주세요." type="text">
+
+        <label for="store-name">가게 이름</label>
+        <input id="store-name" name="store-name" placeholder="가게 이름을 입력해 주세요." type="text">
+        <hr>
+        <div class="agreement">
+            <label>개인정보 수집 및 이용 동의</label>
+            <ol>
+                <li>수집 목적: 입점신청자 연락 및 상담</li>
+                <li>수집 항목: 성명, 휴대폰번호, 제출서류(사업자등록증,영업신고증 등)에 포함된 개인정보</li>
+                <li>보유 및 이용기간: 6개월</li>
+                <li>개인정보 수집 및 이용 동의를 거부할 권리가 있으며, 거부할 경우 입점신청이 불가합니다.</li>
+            </ol>
+            <input id="agreement" name="agreement" type="checkbox">개인정보 수집 및 이용에 동의합니다 (필수)
+        </div>
+
+        <button class="submit-button" type="submit">입점 신청하기</button>
+    </form>
+</div>
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<script>
+    function checkAgreement() {
+        const checkbox = document.getElementById('agreement');
+        if (!checkbox.checked) {
+            alert('개인정보 수집 및 이용에 동의하셔야 신청이 가능합니다.');
+            return false; // 폼 제출 중단
+        }
+        return true; // 폼 제출 진행
+    }
+</script>
+
+</body>
+</html>

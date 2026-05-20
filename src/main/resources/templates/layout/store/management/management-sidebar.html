@@ -1,0 +1,131 @@
+<div th:fragment="managementsidebarContent">
+    <!-- 프로필 영역 -->
+    <div class="profile-area">
+        <div class="thumb">
+            <!-- 운영자 아이콘 (원하시는 SVG or PNG) -->
+            <!-- 매장 이름이 null일 경우 기본 이미지로 설정 -->
+            <img alt="매장 메인 사진"
+                 th:if="${session.pre_store_name != null}"
+                 th:src="@{/store-img/store-main-img/{image}(image=${session.pre_store_img})}" />
+
+            <!-- 매장 이름이 null일 경우 기본 이미지 사용 -->
+            <img alt="매장 메인 사진"
+                 th:if="${session.pre_store_name == null}"
+                 th:src="@{/admin/img/icons/회원.svg}" /></div>
+        <div class="profile-info">
+            <!-- 관리자 아이디 -->
+            <div class="admin-username"
+                 th:text="${session.pre_store_name != null} ? ${session.pre_store_name} : '사장님'">
+                admin
+            </div>
+            <!-- 관리자 역할 (슈퍼관리자 등) -->
+            <div class="admin-role"
+                 th:text="${session.preMem_username != null} ? ${session.preMem_username} : 'null'">
+                운영자
+            </div>
+        </div>
+    </div>
+
+    <!-- 빠른메뉴 아이콘 3개 -->
+    <div class="quick-menu">
+        <div id="orderbtn" class="quick-item" tabindex="0" aria-label="주문서 확인">
+            <img src="/store/img/icons/주문서아이콘.svg" alt="주문서 아이콘">
+            <span>주문서</span>
+        </div>
+        <div id="SSSbtn" class="quick-item" tabindex="0" aria-label="통계">
+            <img src="/store/img/icons/통계아이콘.svg" alt="통계 아이콘">
+            <span>통계</span>
+        </div>
+        <div id="sales" class="quick-item" tabindex="0" aria-label="매출">
+            <img src="/store/img/icons/매출아이콘.svg" alt="매출 아이콘">
+            <span>매출</span>
+        </div>
+    </div>
+
+    <!-- 예: 가게관리 -->
+    <div class="main-section">
+        <div class="section-title">
+            <!-- 아이콘 -->
+            <img src="/store/img/icons/가게관리.svg">
+            <span>가게관리</span>
+            <!-- 펼침/접힘 화살표 -->
+            <img class="arrow-toggle" src="/store/img/icons/화살표.svg">
+        </div>
+        <!-- 처음엔 접히도록 collapsed 클래스 추가 -->
+        <ul class="sub-menu collapsed">
+            <li id="store-list-view">가게리스트</li>
+            <li id="store-modify"  th:if="${session.pre_store_id}">가게 정보 수정</li>
+            <li id="store-Notification">사장알림</li>
+            <li id="store-add-btn">가게 추가하기</li>
+        </ul>
+    </div>
+
+    <!-- 영업시간 관리 -->
+    <div class="main-section" th:if="${session.pre_store_id}">
+        <div class="section-title">
+            <img src="/store/img/icons/영업시간.svg">
+            <span>영업시간 관리</span>
+            <img class="arrow-toggle" src="/store/img/icons/화살표.svg">
+        </div>
+        <ul class="sub-menu collapsed">
+            <li id="store-timeview">영업시간 메인</li>
+            <!-- <li id="store-closed">휴무일</li> -->
+            <li id="store-holiday">정기휴무일 설정</li>
+            <!-- <li id="store-temholiday">임시휴무일 설정</li>
+            <li id="store-stop">일시중지</li> -->
+            <li id="store-setting">영업시간 설정</li>
+        </ul>
+    </div>
+
+    <!-- 메뉴 관리 -->
+    <div class="main-section" th:if="${session.pre_store_id}">
+        <div class="section-title">
+            <img src="/store/img/icons/메뉴관리.svg">
+            <span>메뉴 관리</span>
+            <img class="arrow-toggle" src="/store/img/icons/화살표.svg">
+        </div>
+        <ul class="sub-menu collapsed">
+            <li id="store-menu-list" th:attr="data-value=${session.pre_store_id}">메뉴관리</li>
+            <li id="add-store-menu" th:attr="data-value=${session.pre_store_status}" onclick="checkApprovalStatus(this)">메뉴 등록요청</li>
+            <li>메뉴품절</li>
+            <li>주류메뉴 등록 요청</li>
+        </ul>
+    </div>
+
+    <!-- 배달관리 -->
+    <div class="main-section" th:if="${session.pre_store_id}">
+        <div class="section-title">
+            <img src="/store/img/icons/배달.svg">
+            <span>배달관리</span>
+            <img class="arrow-toggle" src="/store/img/icons/화살표.svg">
+        </div>
+        <ul class="sub-menu collapsed">
+            <li id="store-delivery">배달 지역 설정</li>
+            <li id="delivery-management">배달관리</li>
+        </ul>
+    </div>
+
+    <!-- 리뷰관리 -->
+    <div class="main-section" th:if="${session.pre_store_id}">
+        <div class="section-title">
+            <img src="/store/img/icons/리뷰.svg">
+            <span>리뷰관리</span>
+            <img class="arrow-toggle" src="/store/img/icons/화살표.svg">
+        </div>
+        <ul class="sub-menu collapsed">
+            <li id="store-review">리뷰관리</li>
+        </ul>
+    </div>
+
+    <!-- 쿠폰관리 -->
+    <div class="main-section" th:if="${session.pre_store_id}">
+        <div class="section-title">
+            <img src="/store/img/icons/쿠폰.svg">
+            <span>쿠폰관리</span>
+            <img class="arrow-toggle" src="/store/img/icons/화살표.svg">
+        </div>
+        <ul class="sub-menu collapsed">
+            <li>쿠폰관리</li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>사장님 셀프서비스</title>
+    <link rel="stylesheet" href="/layout/rider/css/header.css">
+    <link rel="stylesheet" href="/layout/rider/css/sidebar.css">
+    <link rel="stylesheet" href="/rider/css/rider-management.css">
+    <link rel="stylesheet" href="/rider/css/rider-modify.css">
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+
+<body>
+<!-- 상단 헤더 -->
+<header class="header" th:insert="~{layout/rider/management/management-header :: managementheaderContent}"></header>
+<!-- 메인 레이아웃 -->
+<div class="main-container">
+    <!-- 왼쪽 사이드바 -->
+    <aside class="sidebar"
+           th:insert="~{layout/rider/management/management-sidebar :: managementsidebarContent}"></aside>
+
+
+    <!-- 오른쪽 메인 콘텐츠 영역 -->
+    <main class="main-content">
+        <div class="rider-modifyprofile-profile-card">
+            <div class="rider-modifyprofile-profile-header">
+                <h1>프로필</h1>
+                <button class="rider-modifyprofile-exit-button">탈퇴하기　</button>
+            </div>
+            <div class="rider-modifyprofile-profile-content">
+                <div class="modifyprofile-header">
+                    <div class="rider-modifyprofile-profile-avatar">
+                        <div class="rider-modifyprofile-avatar-placeholder"></div>
+                    </div>
+                    <div class="modifyprofile-header-2">
+                        <div class="modifyprofile-header-1">
+                            <h2 th:text="${session.rider_name}"></h2>
+                            <div class="rider-modifyprofile-badge"><p>　라이더　</p></div>
+                        </div>
+                        <div class="modifyprofile-id">
+                            <p th:text="${session.rider_id}"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rider-modifyprofile-info">
+                    <div class="rider-modifyprofile-details">
+                        <div class="rider-modifyprofile-detail">연락처</div>
+                        <div class="rider-modifyprofile-detail">이메일</div>
+                        <div class="rider-modifyprofile-detail">생년월일</div>
+                        <div class="rider-modifyprofile-detail">성별</div>
+                        <div class="rider-modifyprofile-detail">이동수단</div>
+                    </div>
+                    <div class="rider-modifyprofile-detail-infos">
+                        <div class="rider-modifyprofile-detail-info">
+                            <!-- 전화번호 입력 -->
+                            <div class="input-group">
+                                <div class="input-wrapper" id="phoneWrapper">
+                                <input id="phone" name="phone" placeholder="전화번호 입력 " required type="tel">
+                            </div>
+                            </div>
+                        </div>
+                        <div class="rider-modifyprofile-detail-info">
+                            <div class="input-wrapper" id="emailInputWrapper">
+                                <input id="email" name="email" placeholder="이메일 주소 입력" required type="email">
+                            </div>
+                        </div>
+                        <div class="rider-modifyprofile-detail-info">
+                            <div class="input-wrapper" id="birthWrapper">
+                                <input id="birthdate" name="birthday" required type="date">
+                            </div>
+                        </div>
+                        <div class="rider-modifyprofile-detail-info">
+                            <div class="input-wrapper" id="genderWrapper">
+                                <select id="gender" name="gender" required>
+                                    <option disabled selected value="">성별 선택</option>
+                                    <option value="남성">남성</option>
+                                    <option value="여성">여성</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="rider-modifyprofile-detail-info">
+                            <div class="input-wrapper" id="vehicleWrapper">
+                                <select id="vehicle" name="vehicle" required>
+                                    <option disabled selected value="">이동수단 선택</option>
+                                    <option value="자전거">자전거</option>
+                                    <option value="도보">도보</option>
+                                    <option value="오토바이">오토바이</option>
+                                    <option value="전동킥보드">전동킥보드</option>
+                                    <option value="자동차">자동차</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="rider-modifyprofile-button">
+                <a class="rider-modifyprofile-edit-button" href="/riderProfile">수정완료</a>
+            </div>
+        </div>
+    </main>
+</div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script src="/rider/js/management_sh.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<div th:fragment="deliverysidebarContent">
+    <!-- 탭 전환 (배차 · 진행중 · 완료) -->
+    <div class="mydict" style="display:flex; justify-content: center; margin-bottom:10px;">
+        <label class="label-delivery-choice">
+            <input type="radio" name="delivery-status" value="배차" checked>
+            <span>배차</span>
+        </label>
+        <label class="label-delivery-choice">
+            <input type="radio" name="delivery-status" value="진행중">
+            <span>진행중</span>
+        </label>
+        <label class="label-delivery-choice">
+            <input type="radio" name="delivery-status" value="완료">
+            <span>완료</span>
+        </label>
+    </div>
+
+    <!-- [배차 탭] -->
+    <div id="tab-batcha" class="tab-content active">
+        <!-- 묶음 배달 영역 -->
+        <div class="delivery-group" style="margin-bottom: 15px;">
+            <h3 class="delivery-title">묶음 배달</h3>
+            <div id="groupDeliveryBox" th:utext="${groupDeliveryHtml}"></div>
+        </div>
+
+        <!-- 한집 배달 영역 -->
+        <div class="delivery-group" style="margin-bottom: 15px;">
+            <h3 class="delivery-title">한집 배달</h3>
+            <div id="singleDeliveryBox" th:utext="${singleDeliveryHtml}"></div>
+        </div>
+
+        <!-- 정렬 select box (인라인 스타일 및 "보기" 버튼 포함) -->
+        <div class="delivery-group" style="margin-bottom:15px; text-align:center;">
+            <select id="sort-select" class="sort-select"
+                    style="padding:5px 10px; border:1px solid #ccc; border-radius:4px; font-size:16px;">
+                <option value="distance">가장 가까운 순</option>
+                <option value="count">건수 많은 순</option>
+                <option value="fee">배달비 높은 순</option>
+            </select>
+            <button type="button" id="view-button"
+                    style="margin-left:10px; padding:5px 10px; border:1px solid #ccc; background:#f8f8f8; border-radius:4px; font-size:16px; cursor:pointer;">
+                보기
+            </button>
+        </div>
+    </div>
+
+
+    <!-- 진행중 탭 -->
+    <div class="delivery-group tab-content" id="tab-jinhaeng"
+         style="border:1px solid #ccc; padding:10px; margin-bottom:10px; display:none; max-height:680px; overflow-y:hidden;">
+        <div id="inProgressBox" th:utext="${inProgressHtml}"></div>
+    </div>
+
+
+    <!-- [완료 탭] -->
+    <div class="delivery-group tab-content" id="tab-done"
+         style="border:1px solid #ccc; padding:10px; margin-bottom:10px; display:none; max-height:680px; overflow-y:hidden;">
+        <div id="completedBox" th:utext="${completedHtml}"></div>
+    </div>
+</div>

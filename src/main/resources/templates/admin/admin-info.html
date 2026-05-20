@@ -1,0 +1,51 @@
+<div class="admin-info-container" th:fragment="admin-info">
+    <div class="admin-info-box">
+        <div class="admin-info-info">
+            <div class="admin-info-header">
+                <div class="admin-info-header-title">운영자</div>
+            </div>
+            <div class="admin-info-body">
+                <div class="admin-info-left">
+                    <div class="admin-info-img">
+                        <img alt="운영자 아이콘" src="/admin/img/icons/user-profile.svg">
+                    </div>
+                </div>
+                <div class="admin-info-right">
+                    <div class="admin-info-right-header">
+                        <div class="admin-info-right-header-info">
+                            <!-- 관리자 이름 -->
+                            <div class="admin-info-right-header-name">관리자</div>
+                            <!-- 계정 상태 -->
+                            <div class="admin-info-right-header-active" th:text="${admin.adminStatus}">활성</div>
+                        </div>
+                        <div class="admin-info-right-id">
+                            <div class="admin-info-right-id-info">ID. </div>
+                            <!-- 운영자 ID -->
+                            <div class="admin-info-right-id-info1" th:text="${admin.adminUsername}">Admin</div>
+                        </div>
+                        <div class="admin-info-right-email">
+                            <div class="admin-info-right-email-info">이메일</div>
+                            <!-- 운영자 이메일 -->
+                            <div class="admin-info-right-email-info1" th:text="${admin.adminEmail}">rlaqhrua@gmail.com</div>
+                        </div>
+                        <div class="admin-info-right-position">
+                            <div class="admin-info-right-position-info">직책</div>
+                            <!-- 운영자 역할 -->
+                            <div class="admin-info-right-position-info1" th:text="${admin.adminRole}">슈퍼 관리자</div>
+                        </div>
+                        <div class="admin-info-right-access-record">
+                            <div class="admin-info-right-access-record-info">접속 기록</div>
+                            <!-- 마지막 로그인 날짜 -->
+                            <div class="admin-info-right-access-record-info1" th:text="${admin.adminLastLogin}">2025-02-06</div>
+                        </div>
+                        <div class="admin-info-right-active">
+                            <div class="admin-info-right-active-info">상태</div>
+                            <!-- 계정 상태 -->
+                            <div class="admin-info-right-active-info1" th:text="${admin.adminStatus}">활성</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

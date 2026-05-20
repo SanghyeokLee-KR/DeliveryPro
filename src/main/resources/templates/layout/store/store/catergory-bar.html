@@ -1,0 +1,32 @@
+<!-- category-bar.html -->
+<div th:fragment="categoryContent">
+    <div class="storelist">
+        <div class="storelist-section">
+            <h1>어디로 배달해 드릴까요?</h1>
+            <p>배달받으실 동·이름으로검색해주세요</p>
+            <div class="storelist-search-bar">
+                <img height="40px" src="/member/img/my-page/위치-45.svg" width="40px">
+                <div class="storelist-input-container">
+                    <input id="adress" name="adress" type="text"/>
+                </div>
+                <button class="storelist-search-button" type="submit">검색</button>
+            </div>
+        </div>
+        <div class="storelist-control-bar">
+            <ul>
+                <li class="active" data-category="패스트푸드">패스트푸드</li>
+                <li data-category="치킨">치킨</li>
+                <li data-category="피자">피자</li>
+                <li data-category="양식">양식</li>
+                <li data-category="중식">중식</li>
+                <li data-category="한식">한식</li>
+                <li data-category="일식">일식</li>
+                <li data-category="족발·보쌈">족발·보쌈</li>
+                <li data-category="분식">분식</li>
+                <li data-category="샐러드">샐러드</li>
+                <li data-category="카페·디저트">카페·디저트</li>
+                <li data-category="도시락">도시락</li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+<div th:fragment="store-menu-modify-modal" class="menu-modify-modal-content">
+  <span class="menu-modify-close">&times;</span>
+  <h2>메뉴 수정</h2>
+
+  <form id="menu-modify-form" enctype="multipart/form-data">
+    <input type="hidden" id="modiMenuId" name="menuId">
+    <div class="menu-modify-btmar">
+      <label for="modiMenuName">메뉴 이름</label>
+      <input type="text" id="modiMenuName" name="menuName">
+    </div>
+
+    <div>
+      <label for="modiMenuPrice">가격</label>
+      <input type="number" id="modiMenuPrice" name="menuPrice">
+    </div>
+
+    <div class="menu-modify-btmar">
+      <label for="modiMenuDescription">설명</label>
+      <textarea id="modiMenuDescription" name="menuDescription"></textarea>
+    </div>
+
+    <div class="menu-modify-btmar">
+      <label class="menuPopular-title" for="menuPopular">메뉴 인기여부</label>
+      <select id="menuPopular" name="menuPopularity" style="width: 80px; border-radius: 8px; margin: 0 10px;">
+        <option value="0">일반</option>
+        <option value="1">인기</option>
+      </select>
+    </div>
+
+    <div class="menu-modify-btmar">
+      <!-- 파일 입력 버튼을 숨기고, 대신 label로 대체 -->
+      <input type="file" id="mpFile" name="mpFile" style="display:none; margin-top: 10px;">
+      <input type="hidden" id="menuPictureUrl" name="menuPictureUrl">
+      <label for="mpFile" class="menu-add-file-input">사진첨부하기</label>
+      <div class="menu-modi-img-title">
+        <span id="menu-img-title">현재 적용중인 이미지: </span>
+        <span id="menuImgName"></span>
+      </div>
+      <div class="menu-modi-img-div">
+        <img id="menuImagePreview" src="" alt="이미지 미리보기" style="max-width: 200px; margin: 20px 0;">
+      </div>
+    </div>
+
+    <button type="submit">수정 저장</button>
+  </form>
+</div>

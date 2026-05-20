@@ -1,0 +1,52 @@
+<div th:fragment="delivery-manangement" class="delivery-manangement-content">
+    <div class="delivery-wrapper">
+        <!-- 묶음배달 영역 (필요 시 별도 구현) -->
+        <div class="delivery-section">
+            <h3>묶음배달</h3>
+            <div id="groupDeliveryBox">
+                <!-- 여기서 별도 기능을 구현할 수 있음 -->
+            </div>
+        </div>
+        <!-- 한집배달 영역 (필요 시 별도 구현) -->
+        <div class="delivery-section">
+            <h3>한집배달</h3>
+            <div id="singleDeliveryBox">
+                <!-- 여기서 별도 기능을 구현할 수 있음 -->
+            </div>
+        </div>
+    </div>
+    <!-- 주문 내역 테이블 -->
+    <div id="processedOrders" class="delivery-order-history" style="margin-top:20px;">
+
+        <!-- 필터링 옵션 -->
+        <div id="deliveryFilter" style="margin-bottom:10px; display: flex; justify-content: space-between;">
+            <div class="order-history-title"><h3>처리 완료된 주문 내역</h3></div>
+            <select name="deliveryType" id="deliveryType">
+                <option value="all" selected>전체</option>
+                <option value="묶음배달">묶음배달</option>
+                <option value="한집배달">한집배달</option>
+            </select>
+        </div>
+
+
+        <table class="delivery-order-history-table" style="width:100%; text-align:left;">
+            <thead>
+            <tr>
+                <th class="delivery-order-number">주문번호</th>
+                <th class="delivery-order-time">처리시각</th>
+                <th class="delivery-order-type">배달유형</th>
+                <th class="delivery-order-status">상태</th>
+            </tr>
+            </thead>
+            <!-- AJAX로 데이터를 채워 넣을 tbody -->
+            <tbody id="deliveryDataBody">
+            <!-- 데이터가 없으면 여기에 표시 -->
+            </tbody>
+        </table>
+
+        <!-- 페이지네이션 컨트롤 (1~10 페이지 버튼) -->
+        <div id="pagination" style="margin-top:10px; text-align:center;">
+            <!-- 버튼들이 JS에서 생성됩니다. -->
+        </div>
+    </div>
+</div>

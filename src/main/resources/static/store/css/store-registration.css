@@ -1,0 +1,345 @@
+/* 컨테이너 스타일 */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #fff; /* 배경색을 흰색으로 설정 */
+}
+
+/* 수평선 스타일 */
+hr {
+    border: 1px solid #dbdbdb; /* 수평선 색상 */
+    margin-top: 20px; /* 수평선 위에 여백 */
+    margin-bottom: 20px; /* 수평선 아래에 여백 */
+    width: 90%; /* 수평선 너비를 컨테이너의 90%로 설정 */
+}
+
+/* 가게 추가 제목 스타일 */
+.add-store-title {
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center; /* 제목을 중앙 정렬 */
+    margin: 40px 0; /* 제목 위와 아래에 여백 */
+}
+
+/* 폼 스타일 */
+.add-store-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%; /* 폼 너비를 컨테이너의 80%로 설정 */
+    max-width: 900px; /* 최대 너비를 900px로 설정 */
+}
+
+/* 각 입력 항목 스타일 */
+.store-add--name,
+.store-add-category,
+.store-add-address,
+.store-add-photo,
+.store-add-phone,
+.store-add-into,
+.store-add-min-cash,
+.store-add-rider-tip,
+.store-add-min-time,
+.store-add-max-time,
+.store-add-operating-day,
+.store-add-operating-time,
+.store-add-closed-day,
+.store-add-area,
+.store-add-detail-address,
+.store-add-delivery-area{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    width: 100%;
+    max-width: 800px; /* 최대 너비를 800px로 설정 */
+    margin-bottom: 15px; /* 각 항목 간의 여백 */
+}
+
+
+/* 입력 필드 및 셀렉트 박스 스타일 */
+.add-store-input,
+.add-store-select,
+.area-select,
+textarea,
+.closed-day-container {
+    flex: 6; /* 입력 필드가 차지하는 공간 비율 (4:6 비율 중 6) */
+    max-width: 500px;
+    box-sizing: border-box; /* 너비가 padding을 포함하도록 설정 */
+}
+
+/* 휴무일 입력 부분 스타일 */
+.closed-day-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 항목들 간의 간격 */
+    box-sizing: border-box;
+    margin-left: -10px;
+}
+
+/* 제출 버튼 스타일 */
+.add-store-submit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #358800; /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색 */
+    border: none;
+    border-radius: 14px; /* 버튼의 모서리를 둥글게 */
+    display: block; /* 버튼을 블록 요소로 설정 */
+    width: 200px; /* 버튼 너비 설정 */
+    margin: 20px auto; /* 버튼에 여백 */
+}
+
+/* 입력 필드와 텍스트 영역 스타일 */
+input,
+textarea,
+select {
+    padding: 10px 0 10px 7px; /* 입력 필드 패딩 */
+    border-radius: 14px; /* 입력 필드 모서리를 둥글게 */
+    border: solid 1px #c9c9c9; /* 입력 필드 테두리 */
+}
+
+/* 파일 업로드 필드 스타일 */
+input[type="file"] {
+    border: none; /* 파일 입력 필드 테두리 제거 */
+    flex: 6; /* 파일 입력 필드도 6:4 비율을 따름 */
+    max-width: 500px;
+    box-sizing: border-box;
+    margin-left: -4px; /* 여백을 없애고 왼쪽 정렬 */
+}
+
+/* 파일 업로드 버튼 스타일 */
+input[type=file]::file-selector-button {
+    width: 130px;
+    height: 30px;
+    background: #b9b7b7; /* 배경색 */
+    border: 1px solid #b9b7b7; /* 테두리 */
+    color: #fff; /* 텍스트 색 */
+    border-radius: 10px;
+    cursor: pointer; /* 커서를 포인터로 변경 */
+}
+
+input[type=file]::file-selector-button:hover {
+    background: rgb(77,77,77); /* 마우스를 올리면 배경색 변경 */
+    color: #fff;
+}
+
+/* 휴무일 select 박스 스타일 */
+#store-holiday-week {
+    width: 100%; /* select 박스를 100% 너비로 설정 */
+}
+
+/* 입력 필드의 placeholder 스타일 */
+input::placeholder {
+    text-align: left; /* placeholder를 왼쪽 정렬 */
+    padding-left: 8px;
+    font-weight: bold; /* placeholder 텍스트 두껍게 */
+    color: #6c6565; /* placeholder 텍스트 색 */
+}
+
+/* 주소 입력 부분 스타일 */
+.store-add-address {
+    display: flex;
+    width: 100%;
+    max-width: 800px; /* 최대 너비를 800px로 설정 */
+    margin-bottom: 20px; /* 각 항목 간의 여백 */
+}
+
+.add-store-input {
+    padding: 10px 0 10px 7px; /* 입력 필드 패딩 */
+    border-radius: 14px; /* 입력 필드 모서리를 둥글게 */
+    border: solid 1px #c9c9c9; /* 입력 필드 테두리 */
+    margin-bottom: 10px; /* 입력 필드와 버튼 간의 간격 */
+    width: 100%; /* 입력 필드의 너비를 100%로 설정 */
+    font-weight: bold;
+
+}
+
+/* 주소 검색 버튼 스타일 */
+.address-search-button {
+    background: #b9b7b7; /* 배경색 */
+    border: 1px solid #b9b7b7; /* 테두리 */
+    color: #fff; /* 텍스트 색 */
+    border-radius: 10px;
+    cursor: pointer; /* 커서를 포인터로 변경 */
+    width: 130px;
+    height: 30px;
+}
+
+/* 버튼 hover 스타일 */
+.address-search-button:hover {
+    background: rgb(77,77,77); /* 마우스를 올리면 배경색 변경 */
+    color: #fff;
+}
+/* 라벨 스타일 */
+.add-store-label {
+    flex: 4;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    padding-right: 10px;
+}
+
+/* Flex 컨테이너 */
+.store-add-rider-tip {
+    display: flex; /* Flexbox 설정 */
+    justify-content: flex-start; /* 컨테이너 내 요소를 왼쪽 정렬 */
+    align-items: center; /* 수직 정렬 */
+}
+/*배달 가능 지역*/
+#preStoDeliveryArea {
+    width: 100%;
+    max-width: 800px;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 14px;
+    margin-left: 0;
+    margin-bottom: 10px; /* select와 그 아래 div와의 간격 */
+}
+/* 입력 필드 */
+.add-store-choice {
+    flex: 6; /* Flex 비율 */
+    max-width: 235px; /* 원하는 크기로 제한 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+    font-weight: bold; /* 텍스트 굵게 */
+    margin-left: 0; /* 왼쪽 여백 제거 */
+    margin-right: 195px; /* 오른쪽 여백 추가 */
+    text-align: left; /* 내부 텍스트 정렬 */
+}
+
+
+/* 주소 입력 필드와 버튼 스타일 */
+
+.store-add-address-right{
+    flex: 6;
+}
+
+/* 버튼 hover 스타일 */
+.address-search-button:hover {
+    margin-left: 1px;
+    background: rgb(77,77,77); /* 마우스를 올리면 배경색 변경 */
+    color: #fff;
+}
+.input-group small {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #777;
+    text-align: left;
+}
+
+
+
+.day-selection-group {
+    display: flex;
+    gap: 10px; /* 버튼 간 간격 */
+    margin-right: -10px;
+    margin-top: -10px;
+}
+
+.store-set-time-open-end {
+    display: flex; /* 전체 컨테이너를 flexbox로 설정 */
+    align-items: center; /* 수직 가운데 정렬 */
+    margin-left: 289px;
+    margin-top: -39px;
+    flex: 6;
+}
+
+.store-set-time {
+    display: flex; /* select와 span을 일렬로 배치 */
+    gap: 3px; /* select와 span 간의 간격 */
+    align-items: center; /* 수직 가운데 정렬 */
+    max-width: 213px;
+}
+
+.store-set-time-open-end span {
+    margin: 0 5px; /* span의 좌우 여백 */
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/* 기본 상태: 초록색 배경 */
+.day-box {
+    display: inline-block;
+    width: 45px;
+    height: 30px;
+    margin: 5px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    border: 1px solid #358900; /* 기본 테두리 */
+    border-radius: 8px;
+    background-color: white; /* 클릭 시 배경색 */
+    color: #358900; /* 기본 텍스트 색 */
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.day-box.clicked {
+    background-color: #358900; /* 기본 배경색 */
+    border-color: #358900; /* 클릭 시 테두리색 */
+    color: white/* 클릭 시 텍스트 색 */
+}
+
+
+/*배달 불가능 임시*/
+
+/* 배달 불가능 지역 선택 후 표시되는 부분 스타일 */
+.selected-areas-container {
+    margin-left: 285px;
+}
+
+/* 각 선택된 지역 스타일 */
+/* 배달 불가능 지역 선택 후 표시되는 부분 스타일 */
+.selected-areas-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap; /* 한 줄을 넘어가면 다음 줄로 배치 */
+    gap: 5px;  /* 아이템 간 간격을 조정 */
+    font-size: 12px; /* 글자 크기를 작게 */
+    max-width: 100%; /* 공간에 맞게 자동 조정 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+}
+
+/* 각 선택된 지역 스타일 */
+.selected-area-item {
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    font-size: 12px; /* 글자 크기를 작게 */
+    height: 30px; /* 아이템 높이를 줄여서 작게 보이게 */
+    margin-left: 3px!important;
+}
+
+/* 삭제 버튼 스타일 */
+.delete-button {
+    background: none;
+    border: none;
+    color: #7e7e7e;
+    font-weight: bold;
+    margin-left: 8px;
+    cursor: pointer;
+    font-size: 14px; /* x 버튼 크기 */
+}
+
+/* 삭제 버튼 hover 시 색상 변경 */
+.delete-button:hover {
+    color: #7e7e7e;
+}
+.area-select{
+    margin-left: 5px!important;
+}
+small{
+    margin-top: -20px;
+    margin-left: 300px;
+}
+

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>마이페이지</title>
+    <!-- CSS 파일 링크 -->
+    <link href="/layout/member/css/header.css" rel="stylesheet"/>
+    <link href="/layout/member/css/footer.css" rel="stylesheet"/>
+    <link href="/member/css/grade.css" rel="stylesheet"/>
+    <link href="/member/css/delivery.css" rel="stylesheet"/>
+    <link href="/member/css/myPage.css" rel="stylesheet"/>
+    <link href="/member/css/review.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/member/css/reviewList.css">
+</head>
+<body>
+<!-- 회원 ID를 숨겨진 입력 필드로 추가 -->
+<input id="member-id" th:value="${session.mem_id}" type="hidden"/>
+
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<!-- 마이페이지 전체 영역 -->
+<main class="grade-mypage-container">
+    <!-- 등급 정보 삽입 -->
+    <div th:insert="~{member/grade :: gradeContent}"></div>
+
+    <!-- 사용자 정보 컨트롤 바 -->
+    <div class="user-info-control-bar">
+        <ul>
+            <li class="active" data-target="user-info-order-list">주문 내역</li>
+            <li data-target="user-info-review-list">리뷰 관리</li>
+            <li data-target="user-info-info-list">개인정보 확인 및 수정</li>
+            <li data-target="user-info-address-list">배송지 관리</li>
+            <li data-target="user-info-reward-list">리워드 안내</li>
+        </ul>
+    </div>
+
+    <!-- 주문 내역 섹션 -->
+    <div class="user-info-order-list" id="user-info-order-list">
+        <h2 class="user-info-list-h2">주문 내역</h2>
+        <div class="user-info-order-con">
+            <p class="user-info-order-title">주문 이력 & 퀵오더 등록</p>
+            <div class="user-info-order-container">
+
+            </div>
+
+        </div>
+    </div>
+    <div th:insert="~{member/review :: reviewContent}"></div>
+
+
+    <!-- 리뷰 관리 섹션 -->
+    <div class="user-info-review-list" id="user-info-review-list" style="display: none">
+        <h2 class="user-info-list-h2">리뷰 관리</h2>
+        <div th:insert="~{member/reviewList :: reviewListContent}"></div>
+    </div>
+
+    <!-- 개인정보 확인 및 수정 섹션 -->
+    <section class="user-info-section user-info-info-list" id="user-info-info-list" style="display: none;">
+        <h2 class="user-info-list-h2">
+            개인정보 확인 및 수정
+        </h2>
+        <div class="container">
+            <div class="account-info">
+                <h2 class="account-text">계정정보</h2>
+                <button class="delete-account-btn" onclick="toggleUserInfo()">회원탈퇴</button>
+            </div>
+            <!-- 개인정보 표 -->
+            <table class="info-table">
+                <tr>
+                    <th>아이디</th>
+                    <td>[[${view.userId}]]</td>
+                </tr>
+                <tr>
+                    <th>성명</th>
+                    <td>[[${view.username}]]</td>
+                </tr>
+                <tr>
+                    <th>닉네임</th>
+                    <td class="action-cell">
+                        <span>[[${view.nickname}]]</span>
+                        <button class="arrow-btn" onclick="openModal('nickname')">&gt;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>휴대폰 번호</th>
+                    <td class="action-cell">
+                        <span>[[${view.phone}]]</span>
+                        <button class="arrow-btn" onclick="openModal('phone')">&gt;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>이메일 주소</th>
+                    <td class="action-cell">
+                        <span>[[${view.email}]]</span>
+                        <button class="arrow-btn" onclick="openModal('email')">&gt;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>생년월일</th>
+                    <td class="action-cell">
+                        <span>[[${view.birthday}]]</span>
+                        <button class="arrow-btn" onclick="openModal('birthday')">&gt;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>성별</th>
+                    <td class="action-cell">
+                        <span>[[${view.gender}]]</span>
+                        <button class="arrow-btn" onclick="openModal('gender')">&gt;</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- 로그인 기록 섹션 -->
+        <div class="user-info-login-list" id="user-info-login-list">
+            <div class="user-info-login-con">
+                <div class="user-info-login-title">로그인 기록</div>
+                <div class="user-info-login-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>로그인 날짜 및 시간</th>
+                            <th>IP 주소</th>
+                            <th>기기 OS</th>
+                            <th>브라우저 정보</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 데이터를 동적으로 추가 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 회원탈퇴 섹션 -->
+    <div class="user-info-delete-section" id="delete" style="display: none;">
+        <h2 class="user-info-list-h2">회원탈퇴</h2>
+        <div class="del_container">
+            <h1 class="del_title">탈퇴하면 아래 혜택이 모두 사라져요.</h1>
+            <div class="del_benefits">
+                <div class="del_benefit-item">
+                    <span>보유 포인트</span>
+                    <span class="del_highlight">0 P</span>
+                </div>
+                <div class="del_benefit-item">
+                    <span>보유 쿠폰</span>
+                    <span class="del_highlight">0 매</span>
+                </div>
+            </div>
+            <div class="del_confirmation">
+                <h1 class="del_title">꼭 확인해 주세요.</h1>
+                <ul>
+                    <li>• 적립금과 혜택은 모두 소멸되며 재가입 시 복구되지 않습니다.</li>
+                    <li>• 상품문의 1:1문에 등록된 게시물은 탈퇴 후에도 유지됩니다.</li>
+                    <li>• 삭제를 원하는 경우, 먼저 해당 게시글을 삭제하신 후 탈퇴해 주세요.</li>
+                    <li>• 관계법령에 따라 주문번호는 탈퇴 후 5년간 보존됩니다.</li>
+                    <li>• 5년간 기존 아이디를 재사용 하실 수 없으며 7일 이내 동일명의의 본인인증이 불가합니다!</li>
+                </ul>
+                <div class="del_checkbox">
+                    <input id="del_confirmation-checkbox" required type="checkbox">
+                    <label for="del_confirmation-checkbox">위 사항을 모두 확인했습니다.</label>
+                </div>
+            </div>
+            <div class="del_buttons">
+                <button class="del_cancel-btn" onclick="cancelDeletion()">더 써볼래요</button>
+                <button class="del_delete-btn" onclick="Delete()" type="button">탈퇴하기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달 창들 -->
+    <!-- 닉네임 수정 모달 -->
+    <div class="modal" id="modal-nickname" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-nickname')">&times;</span>
+            <div class="modal-all">
+                <div class="modal-header">
+                    <p>개인정보수정</p>
+                </div>
+                <hr/>
+                <div class="modal-body">
+                    <h3>닉네임</h3>
+                    <p>사용할 닉네임을 입력해주세요</p>
+                    <div class="change-box">
+                        <div class="input-wraper">
+                            <input id="nickname-field" maxlength="20" oninput="updateCharacterCount()" required
+                                   type="text"/>
+                            <span class="input-counter" id="char-count">0/20</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="check-btn">
+                    <button onclick="updateFieldAjax('nickname')" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 휴대폰 번호 수정 모달 -->
+    <div class="modal" id="modal-phone" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-phone')">&times;</span>
+            <div class="modal-all">
+                <div class="modal-header">
+                    <p>개인정보 수정</p>
+                </div>
+                <hr/>
+                <div class="modal-body">
+                    <h3>휴대폰번호</h3>
+                    <p>사용할 연락처를 입력해주세요</p>
+                    <div class="change-box">
+                        <input id="phone-field" maxlength="15" required type="text"/>
+                    </div>
+                </div>
+                <div class="check-btn">
+                    <button onclick="updateFieldAjax('phone')" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 이메일 수정 모달 -->
+    <div class="modal" id="modal-email" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-email')">&times;</span>
+            <div class="modal-all">
+                <div class="modal-header">
+                    <p>개인정보수정</p>
+                </div>
+                <hr/>
+                <div class="modal-body">
+                    <h3>이메일</h3>
+                    <p>사용할 이메일 주소를 입력해주세요</p>
+                    <div class="change-box">
+                        <input id="email-field" maxlength="50" required type="email"/>
+                    </div>
+                </div>
+                <div class="check-btn">
+                    <button onclick="updateFieldAjax('email')" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 생년월일 수정 모달 -->
+    <div class="modal" id="modal-birthday" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-birthday')">&times;</span>
+            <div class="modal-all">
+                <div class="modal-header">
+                    <p>개인정보 수정</p>
+                </div>
+                <hr/>
+                <div class="modal-body">
+                    <h3>생년월일</h3>
+                    <p>생년월일을 입력해주세요</p>
+                    <div class="birthday">
+                        <div class="change-box" id="birthday-field">
+                            <p>생년월일</p>
+                            <div class="birthday-select">
+                                <select id="year-select" name="year">
+                                    <option disabled selected value="">YYYY</option>
+                                    <!-- 연도 옵션 -->
+                                    <script>
+                                        for (let year = 1900; year <= new Date().getFullYear(); year++) {
+                                            document.write(`<option value="${year}">${year}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                                <select id="month-select" name="month">
+                                    <option disabled selected value="">MM</option>
+                                    <!-- 1월부터 12월 -->
+                                    <script>
+                                        for (let month = 1; month <= 12; month++) {
+                                            document.write(`<option value="${month}">${month.toString().padStart(2, '0')}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                                <select id="day-select" name="day">
+                                    <option disabled selected value="">DD</option>
+                                    <!-- 1일부터 31일까지 -->
+                                    <script>
+                                        for (let day = 1; day <= 31; day++) {
+                                            document.write(`<option value="${day}">${day.toString().padStart(2, '0')}</option>`);
+                                        }
+                                    </script>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="check-btn">
+                    <button onclick="updateFieldAjax('birthday')" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 성별 수정 모달 -->
+    <div class="modal" id="modal-gender" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('modal-gender')">&times;</span>
+            <div class="modal-all">
+                <div class="modal-header">
+                    <p>개인정보 수정</p>
+                </div>
+                <hr/>
+                <div class="modal-body">
+                    <h3>성별</h3>
+                    <p>성별을 선택해 주세요</p>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <span>남성</span>
+                            <input id="gender-field-남성" name="gender-field" required type="radio" value="남성"/>
+                            <span class="radio-button"></span>
+                        </label>
+                        <label class="radio-label">
+                            여성<input id="gender-field-여성" name="gender-field" required type="radio" value="여성"/>
+                            <span class="radio-button"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="check-btn">
+                    <button onclick="updateFieldAjax('gender')" type="button">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 배송지 관리 섹션 -->
+    <section class="user-info-section user-info-address-list" id="user-info-address-list" style="display: none;">
+
+        <h2 class="user-info-list-h2">배송지 관리</h2>
+
+        <!-- 배송지 항목 컨테이너 -->
+        <div id="address-container">
+            <!-- 동적으로 배송지 항목이 추가됩니다 -->
+        </div>
+
+        <!-- 배송지 추가 버튼 -->
+        <div class="ad_add-address" onclick="addAddress()">
+            <span>+</span>
+        </div>
+    </section>
+
+    <!-- 배송지 추가/수정 모달 -->
+    <div class="modal" id="address-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('address-modal')">&times;</span>
+            <div class="modal-all">
+                <div class="modal-header">
+                    <p id="modal-title">배송지 추가</p>
+                </div>
+                <hr/>
+                <div class="modal-body">
+                    <h3>배송지 정보를 입력해주세요</h3>
+                    <div class="change-box">
+                        <button onclick="execDaumPostcode()" type="button">주소 검색</button>
+                        <input id="address-field" placeholder="주소" readonly required type="text"/>
+                        <input id="address-detail-field" placeholder="상세 주소" required type="text"/>
+                        <input id="name-field" placeholder="배송지 이름 (예: 집, 회사)" required type="text"/>
+                        <input id="address-id-field" type="hidden"/> <!-- 수정 시 사용할 ID -->
+                    </div>
+                </div>
+                <div class="check-btn">
+                    <button onclick="saveAddress()" type="button">저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 리워드 안내 섹션 -->
+    <section class="user-info-section user-info-reward-list" id="user-info-reward-list" style="display: none;">
+        <h2 class="user-info-list-h2">리워드 안내</h2>
+        <div class="rew_container">
+            <img alt="등급안내" class="image-between" src="/member/img/my-page/등급안내.png"/>
+            <div class="rew_confirmation">
+                <hr/>
+                <h1 class="rew_title">회원등급 정책</h1>
+                <ul>
+                    <li>• 매월 1일에 전월 실 결제금액 기준으로 새롭게 등급이 적용됩니다.</li>
+                    <li>• 상품별 등급별 할인율은 상이할 수 있으며 등급이 높을수록 할인율도 높은편입니다.</li>
+                    <li>• 구매 급액에 따라 자동으로 등업됩니다.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- 푸터 삽입 -->
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<!-- JavaScript 파일 링크 -->
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/member/js/myPage.js"></script>
+<script src="/member/js/address.js"></script>
+<script src="/member/js/grade.js"></script>
+<script src="/member/js/review.js"></script>
+<script src="/layout/member/js/header.js"></script>
+<script src="/store/js/reviewList.js"></script>
+<script src="/member/js/reward.js"></script>
+</body>
+</html>

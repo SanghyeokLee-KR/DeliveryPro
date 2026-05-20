@@ -1,0 +1,136 @@
+<!-- src/main/resources/templates/admin/system/coupons.html -->
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>쿠폰 페이지</title>
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <link href="/member/css/coupon.css" rel="stylesheet">
+</head>
+<body>
+<!-- 헤더 -->
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+<br><br>
+<p style="font-size: 45px; text-align: center; font-weight: bold; margin-top: 50px;">내 쿠폰</p>
+<div class="main-container">
+    <!-- 위 쪽 -->
+    <div class="main-header">
+        <form action="/coupon" method="POST">
+            <!-- CSRF 토큰 x제거 -->
+            <label for="coupon" class="coupon-number">쿠폰 번호:</label>
+            <input type="text" class="coupon-insert" id="coupon" name="code" required>
+            <button type="submit">등록</button>
+        </form>
+    </div> <!-- 메인 위쪽 끝나는 지점 -->
+
+    <!-- 메인 부분-->
+    <div class="main-body">
+        <table>
+            <thead>
+            <tr>
+                <th>상태</th>
+                <th>사용 기한</th>
+                <th>주문 유형</th>
+                <th>쿠폰 정보</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="coupon : ${coupons}">
+                <td>
+                    <p class="td-status" th:text="${(coupon.status == 'Y') ? '사용가능' : '사용완료'}"></p>
+                </td>
+                <td th:text="${#temporals.format(coupon.expiredDate, 'yyyy.MM.dd')}">2025.01.25</td>
+                <td th:text="${coupon.orderType}">배달</td>
+                <td class="coupon-info">
+                    <span th:text="${coupon.deductPrice + '원 할인'}">2000원 할인</span><br>
+                    <p class="table-text" th:text="${coupon.minPrice + '원 이상 주문 시'}">15000원 주문시</p>
+                </td>
+            </tr>
+            <!-- 추가적인 쿠폰 데이터가 여기에 표시됩니다 -->
+            </tbody>
+        </table>
+    </div><!-- 메인 부분 끝나는 지점-->
+
+    <!-- 페이징 네비게이션 -->
+    <div class="userCoupon-pagination">
+        <!-- 이전 페이지 링크 -->
+        <a class="userCoupon-pagination-item"
+           th:href="@{/coupon(page=${currentPage - 1}, size=${couponsPage.size}, sortField=${sortField}, sortDir=${sortDir})}"
+           th:if="${couponsPage.hasPrevious()}">
+            이전
+        </a>
+
+        <!-- 페이지 번호 링크 -->
+        <span th:each="i : ${#numbers.sequence(0, couponsPage.totalPages - 1)}">
+        <a class="userCoupon-pagination-item"
+           th:href="@{/coupon(page=${i}, size=${couponsPage.size}, sortField=${sortField}, sortDir=${sortDir})}"
+           th:if="${i != currentPage}" th:text="${i + 1}">
+        </a>
+        <span aria-current="page"
+              class="userCoupon-pagination-current"
+              th:if="${i == currentPage}" th:text="${i + 1}">
+        </span>
+    </span>
+
+        <!-- 다음 페이지 링크 -->
+        <a class="userCoupon-pagination-item"
+           th:href="@{/coupon(page=${currentPage + 1}, size=${couponsPage.size}, sortField=${sortField}, sortDir=${sortDir})}"
+           th:if="${couponsPage.hasNext()}">
+            다음
+        </a>
+    </div>
+    <!-- 쿠폰 사용 기록 테이블 추가 -->
+    <div class="usage-section" th:if="${usages != null}">
+        <h2>쿠폰 사용 기록</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>사용 기록 ID</th>
+                <th>쿠폰 코드</th>
+                <th>쿠폰 이름</th>
+                <th>사용 시각</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="usage : ${usages}">
+                <td th:text="${usage.id}">1</td>
+                <td th:text="${usage.coupon.code}">WELCOME10</td>
+                <td th:text="${usage.coupon.name}">환영 쿠폰</td>
+                <td th:text="${#dates.format(usage.usedAt, 'yyyy-MM-dd HH:mm:ss')}">2025-01-13 10:00:00</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 푸터-->
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<script crossorigin="anonymous"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="/layout/member/js/header.js"></script>
+
+<script src="/admin/js/coupons.js"></script> <!-- 쿠폰 관련 JS -->
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const statusCells = document.querySelectorAll('.td-status');
+
+        statusCells.forEach(cell => {
+            if (cell.textContent === "사용완료") {
+                cell.classList.add('used');  // "사용완료" 상태일 때 'used' 클래스 추가
+            } else if (cell.textContent === "사용가능") {
+                cell.classList.add('not-used');  // "사용가능" 상태일 때 'not-used' 클래스 추가
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

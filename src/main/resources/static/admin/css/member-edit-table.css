@@ -1,0 +1,174 @@
+:root {
+    --color-primary: #393939;
+    --color-primary-dark: #357ABD;
+    --color-background: #F9FAFB;
+    --color-card: #FFFFFF;
+    --color-text: #333333;
+    --color-border: #E5E7EB;
+    --font-family: 'Noto Sans KR', sans-serif;
+    --transition-speed: 0.3s;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.member-edit-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: var(--color-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.member-edit-header {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.member-edit-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-align: left;
+    padding-left: 80px; /* 왼쪽 여백 */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.member-edit-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+}
+
+.member-edit-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    width: 55%;
+    margin-top: 20px;
+}
+
+.member-edit-image img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+}
+
+.member-edit-basic-info {
+    text-align: left;
+}
+
+.member-edit-basic-info h3 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    color: var(--color-text);
+}
+
+.member-edit-basic-info p {
+    font-size: 14px;
+    color: var(--color-text);
+}
+
+
+.member-edit-id {
+    font-size: 14px;
+    color: var(--color-text);
+    margin-bottom: 15px;
+}
+
+.member-edit-form {
+    display: grid;
+    gap: 25px;
+    width: 70%;
+}
+
+.form-row {
+    /* display: flex; */
+    justify-content: center;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    /* flex-direction: column; */
+    gap: 5px;
+    align-items: center;
+    justify-content: center; /* 세로로 중앙 정렬 */
+}
+
+.form-group label {
+    font-size: 14px;
+    color: var(--color-text);
+    font-weight: bold;
+    width: 17%; /* 부모 요소의 너비를 꽉 채우도록 설정 */
+    display: inline-block; /* 라벨을 블록처럼 동작하게 하여 너비를 적용 */
+    text-align: left;
+}
+
+.form-control {
+    width: 60%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-card);
+    color: var(--color-text);
+    transition: border-color var(--transition-speed) ease;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.btn-reset {
+    padding: 10px 20px;
+    background-color: #E5E7EB;
+    color: #333333;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.btn-reset:hover {
+    background-color: #D1D5DB;
+}
+
+.btn-submit {
+    padding: 10px 20px;
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.btn-submit:hover {
+    background-color: var(--color-primary-dark);
+}

@@ -1,0 +1,16 @@
+<div th:fragment="store-owner-notification">
+  <div id="storeOwnerNotification" class="son_container"
+       th:data-user-type="'store'"
+       th:data-user-id="${session.pre_store_id}">
+    <div class="son_header">
+      <img src="/store/img/icons/bell.svg"/>
+      <h3>알림센터</h3>
+    </div>
+    <div class="son-scrollbar" style="max-height: 790px; overflow-y: auto;">
+      <ul class="son_notification_list" id="sonNotificationList">
+        <!-- 실시간 알림 <li>가 여기 prepend 됩니다 -->
+
+      </ul>
+    </div>
+  </div>
+</div>

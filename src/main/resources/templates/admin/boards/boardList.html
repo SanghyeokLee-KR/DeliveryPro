@@ -1,0 +1,72 @@
+<div class="board-admin-container" th:fragment="boardsListContent">
+  <!-- 헤더 섹션: 제목과 검색 바 -->
+  <div class="board-admin-header">
+    <h2 class="board-admin-title">게시판 관리</h2>
+    <div class="board-admin-search">
+      <form class="board-admin-search-form" method="get" th:action="@{/admin/boardsList}">
+        <input name="searchQuery" placeholder="제목 또는 내용 검색" th:value="${searchQuery}" type="text">
+        <button class="board-admin-search-button" type="submit">검색</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 게시글 리스트 테이블 -->
+  <table class="board-admin-table">
+    <thead>
+    <tr>
+      <th>게시글 번호</th>
+      <th>회원 번호</th>
+      <th>제목</th>
+      <th>내용</th>
+      <th>작성일</th>
+      <th>답변 상태</th>
+      <th>수정</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board : ${boardsList}">
+      <td th:text="${board.boardId}">1</td>
+      <td th:text="${board.memId}">회원 ID</td>
+      <td><a th:href="@{/admin/boardsList/{id}(id=${board.boardId})}" th:text="${board.boardTitle}">게시글 제목</a></td>
+      <td th:text="${board.boardContent}">게시글 내용</td>
+      <td th:text="${#temporals.format(board.boardCreatedAt, 'yyyy-MM-dd')}"></td>
+      <td>
+        <span class="board-admin-status" th:text="${board.boardAnswerStatus}">미답변</span>
+      </td>
+      <td>
+        <a class="board-admin-edit-button"
+           th:href="@{/admin/boardsList/{id}/edit(id=${board.boardId})}">수정</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이징 네비게이션 -->
+  <div class="board-admin-pagination">
+    <!-- 이전 페이지 링크 -->
+    <a class="pagination-item"
+       th:href="@{/admin/boardsList(page=${currentPage - 1}, size=${boardsPage.size}, searchQuery=${searchQuery})}"
+       th:if="${boardsPage.hasPrevious()}">
+      이전
+    </a>
+
+    <!-- 페이지 번호 링크 -->
+    <span th:each="i : ${#numbers.sequence(0, boardsPage.totalPages - 1)}">
+            <a class="pagination-item"
+               th:href="@{/admin/boardsList(page=${i}, size=${boardsPage.size}, searchQuery=${searchQuery})}"
+               th:if="${i != currentPage}" th:text="${i + 1}">
+            </a>
+            <span aria-current="page"
+                  class="pagination-current"
+                  th:if="${i == currentPage}" th:text="${i + 1}">
+            </span>
+        </span>
+
+    <!-- 다음 페이지 링크 -->
+    <a class="pagination-item"
+       th:href="@{/admin/boardsList(page=${currentPage + 1}, size=${boardsPage.size}, searchQuery=${searchQuery})}"
+       th:if="${boardsPage.hasNext()}">
+      다음
+    </a>
+  </div>
+</div>
