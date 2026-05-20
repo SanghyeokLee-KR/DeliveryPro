@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>라이더 사이트</title>
+    <link rel="stylesheet" href="/layout/rider/css/rider_main_header.css">
+    <link rel="stylesheet" href="/rider/css/rider-main.css">
+    <link rel="stylesheet" href="/layout/rider/css/footer.css">
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/rider/rider-header :: rHeaderContent}"></header>
+<div class="rider-container">
+    <div class="rider-left">
+        <div class="rider-header">
+            <h3>이런 고민이 있다면 지금 시작해보세요!</h3>
+        </div>
+
+        <div class="rider-icon">
+            <img src="/rider/img/이미지/라이더-60.png" alt="페이지">
+        </div>
+        <div class="rider-content">
+            <div class="rider-content-box">
+                <a href="riderCondition">
+                    <img src="/rider/img/이미지/파이널-62.png" alt="라이더 자격 & 근무조건">
+                </a>
+            </div>
+            <div class="rider-content-box">
+                <a href="riderReason">
+                    <img src="/rider/img/이미지/파이널-61.png" alt="미추홀 라이더 지원 이유">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="rider-rigth">
+        <!-- 로그인 -->
+        <div class="president-all">
+            <div class="president-loginwithtips">
+                <div class="president-login-section">
+                    <div class="president-login-box">
+
+                <span th:if="${session.rider_no eq null}">
+                    <p>味추홀에 가입하여 최적의 경로로<br> 빠르게 배달해보세요!</p>
+                    <button id="rlogin" class="president-login-button">
+                        <img src="/store/img/logo/logo_white.png" width="70">로그인
+                    </button>
+                    <div class="president-login-links">
+                        <a href="#">아이디</a> |
+                        <a href="#">비밀번호찾기</a> |
+                        <a href="/r_JoinForm">회원가입</a>
+                    </div>
+                </span>
+                        <!--  이 부분 수정 -->
+                        <span th:if="${session.rider_id ne null}">
+                        <!-- 바뀜 -->
+                        <span>
+                            <!-- login-->
+                        <div class="login-header">
+                                <!-- 위쪽 전체-->
+                            <div class="login-top-section">
+
+                                <!-- 위 왼쪽-->
+                                <div class="top-left-section">
+                                <p th:text="${session.rider_name} + '님'"></p>
+                                <b>라이더</b>
+                                </div>
+                                <!-- 위 아래쪽 -->
+                                <div class="top-right-section">
+                                <span class="user-main-logout"><a href="rLogout">로그아웃</a></span>
+                                </div>
+                            </div>
+                            <!-- 아래 왼쪽 -->
+                            <div class="login-bottom-section">
+                                <p th:text="${session.rider_id}" style="color: #c2b8b8"></p>
+                            </div>
+
+                        </div>
+
+                    </span>
+                        <hr>
+                        <a th:href="@{/riderStartOfWork/{rId}(rId=${session.rider_no})}">
+                            <div class="rider-service-con">
+                                <p>업무 시작</p>
+                            </div>
+                        </a>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:insert="~{layout/rider/rider-footer :: footerContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+
+<script src="/layout/member/js/header.js"></script>
+<script>
+    $('#rlogin').click(() => {
+        location.href = "/rLoginForm";
+    });
+
+    $('#rLogout').click(() => {
+        location.href = "/rLogout";
+    });
+</script>
+<!--<script src="/layout/member/js/header.js"></script>-->
+</html>

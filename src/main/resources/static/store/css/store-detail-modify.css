@@ -1,0 +1,210 @@
+.store-details-section-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.store-details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    border: 1px solid rgba(200, 200, 200, 0.5);
+}
+
+.store-account-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.store-account-text {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    margin-left: 50px;
+}
+
+.store-info-table {
+    width: 80%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-collapse: collapse; /* 다시 collapse로 변경 */
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.store-info-table tr {
+    text-align: left;
+    border-bottom: 1px solid #ccc; /* 각 tr 아래에 border 추가 */
+}
+
+
+/* 테이블 셀 스타일 */
+.store-action-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 15px 20px 50px;
+    box-sizing: border-box;
+}
+
+.store-action-cell span {
+    white-space: nowrap;         /* 텍스트가 한 줄로 표시되도록 설정 */
+    overflow: hidden;            /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis;     /* 넘친 텍스트 대신 '...'을 표시 */
+    max-width: 400px;
+}
+
+/* 화살표 버튼 스타일 */
+.store-arrow-btn {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: rgba(200, 200, 200, 0.8) !important;
+    padding: 0;
+}
+
+.store-arrow-btn:hover {
+    color: grey;
+}
+
+
+/* 매장 수정 모달 css */
+.store-details-modify-modal {
+    position: fixed; /* 화면 기준 위치 고정 */
+    top: 0;
+    left: 0;
+    width: 100%; /* 전체 너비 */
+    height: 100%; /* 전체 높이 */
+    background: rgba(0, 0, 0, 0.5); /* 배경 어둡게 */
+    z-index: 1000; /* 다른 요소 위에 배치 */
+
+    /* Flexbox 설정 */
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+}
+
+.store-details-modify-modal-content {
+    background: #fff; /* 모달 배경 */
+    padding: 20px 30px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    width: 90%; /* 모달 너비 */
+    max-width: 400px; /* 최대 너비 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 */
+    position: relative; /* 닫기 버튼 위치 설정 */
+}
+
+.store-details-modify-modal-content .store-details-modify-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+
+.store-details-modify-modal-header {
+    background: #fff;
+    position: relative;
+    height: 40px;
+    padding: 20px 0 0 0;
+    z-index: 2;
+}
+.store-details-modify-modal-header p {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+.store-details-modify-change-box {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.store-details-modify-modal-body {
+    max-height: 400px;
+    overflow-y: auto; /* 스크롤 가능 */
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+.store-details-modify-modal-body h3{
+    margin: 10px 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.store-details-modify-modal-body p{
+    margin: 20px 0 10px 0;
+}
+
+.store-details-input-con {
+    position: relative;
+    width: 100%;
+}
+
+.store-details-input-con input[type="text"] {
+    border-radius: 8px;
+    width: 100%;
+    padding-right: 40px;
+}
+
+.store-details-input-con .store-detail-input-counter {
+    position: absolute; /* 절대 위치로 설정 */
+    top: 50%; /* 수직 중앙 정렬 */
+    right: 10px; /* 오른쪽 끝에서 10px 떨어지게 설정 */
+    transform: translateY(-50%); /* 정확한 수직 중앙 정렬 */
+    font-size: 14px; /* 글자 크기 조정 */
+    color: #888; /* 글자 색상 */
+}
+
+/* 닫기 버튼 */
+.store-details-modify-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #1F1F1F;
+    cursor: pointer;
+    z-index: 1100;
+}
+
+.store-details-modify-close-btn:hover {
+    color: #000;
+}
+
+
+.store-details-modify-modal-check-btn button {
+    width: 100%;
+    padding: 10px;
+    background-color: #398900; /* 버튼 색상 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.store-details-modify-modal-check-btn button:hover {
+    background-color: #22741C; /* 버튼 호버 색상 */
+}

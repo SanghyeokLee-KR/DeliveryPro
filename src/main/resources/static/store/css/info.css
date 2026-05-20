@@ -1,0 +1,184 @@
+/* 전체 정보 컨테이너 스타일 */
+.main-info-container {
+    background-color: #FFFFFF;
+    border: 1px solid #c8c8c8;
+    padding: 30px; /* 여백 설정 */
+    border-top : none;
+    margin: 0 auto 20px;
+}
+
+/* 텍스트 간격을 줄이기 위한 .info-body 스타일 */
+/*사장님 알림*/
+.info-president-body{
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    gap: 5px; /* 세로 간격 설정 */
+}
+
+.info-body {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    gap: 15px; /* 세로 간격 설정 */
+}
+
+/* .info-body 내부 div 간 마진과 패딩 제거 */
+.info-body > div {
+    margin: 0;
+    padding: 0;
+}
+
+/* p 요소의 기본 마진, 패딩, 줄 간격 제거 */
+.info-body p {
+    margin: 0;
+    padding: 0;
+    line-height: 1; /* 줄 간격 최소화 */
+}
+
+/* 이미지 크기 설정 */
+.info-img {
+    width: 20px;
+    height: 20px;
+}
+
+/* 사장님 알림 헤더 스타일 */
+.president-header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; /* 다른 섹션들과 동일한 간격을 맞추기 위해 margin-bottom 설정 */
+}
+
+
+.president-header p {
+    font-weight: bold;
+    font-size: 22px;
+    margin: 0; /* 기본 마진 제거 */
+}
+
+/* 업체 정보 헤더 스타일 */
+.store-header {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트 세로 중앙 정렬 */
+    gap: 10px;
+
+}
+
+.store-header img {
+    width: 20px;
+    height: 20px;
+}
+
+.store-header p {
+    font-weight: bold;
+    font-size: 22px;
+    margin: 0; /* 기본 마진 제거 */
+}
+
+/* 정보 항목 스타일 (영업시간, 전화번호, 주소 등) */
+.business-hour,
+.business-phone,
+.business-addr {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.info-left {
+    font-size: 16px;
+    font-weight: bold;
+    color: #c6c6c6;
+    width: 130px; /* 왼쪽 텍스트 폭 설정 */
+}
+
+.info-right {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 결제 정보 스타일 */
+.info-business {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 결제 정보 헤더 스타일 */
+.pay-header {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트 세로 중앙 정렬 */
+    gap: 10px;
+
+}
+
+.pay-header img {
+    width: 20px;
+    height: 20px;
+}
+
+.pay-header p {
+    font-weight: bold;
+    font-size: 22px;
+    margin: 0;
+}
+
+/* 최소 주문 금액 및 결제 수단 항목 스타일 */
+.min-pay,
+.pay-method {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 사업자 정보 스타일 */
+.info-business {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 사업자 정보 헤더 스타일 */
+.business-header {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트 세로 중앙 정렬 */
+    gap: 10px;
+
+}
+
+.business-header img {
+    width: 20px;
+    height: 20px;
+}
+
+.business-header p {
+    font-weight: bold;
+    font-size: 22px;
+    margin: 0;
+}
+
+/* 사업자 정보 항목 스타일 */
+.info-store-name,
+.info-business-number {
+    display: flex; /* 가로 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+/* 헤더 간 간격 설정 */
+.info-store,
+.info-pay,
+.info-business {
+    margin-top: 50px; /* 각 섹션 간 간격 */
+}
+
+/* 구분선 스타일 */
+.info-hr {
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* 임시 테스트 글자 스타일 */
+.text-container {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    justify-content: center; /* 부모 높이가 있을 경우 중앙 정렬 */
+}
+
+.text-text {
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+}

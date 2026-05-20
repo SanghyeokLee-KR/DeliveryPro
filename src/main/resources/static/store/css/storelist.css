@@ -1,0 +1,132 @@
+.storelist-container {
+    display: flex;
+    flex-wrap: wrap;
+    /* 세로 중앙 정렬 */
+    align-items: center;
+    padding-left: 180px;
+}
+
+.storelist-container > div {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 45%; /* 요소가 1개일 때도 크기를 유지하도록 기본 크기를 설정 */
+    margin: 10px; /* 요소들 간의 간격을 설정 */
+
+
+}
+
+.item {
+    display: flex;
+    align-items: center; /* 로고와 정보 세로 정렬 */
+    position: relative; /* delivery-time 위치 고정을 위한 기준 */
+    width: calc(50% - 10px); /* 부모의 절반 너비에서 간격 조정 */
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+.rlogo {
+    width: 100px;
+    height: 100px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+.rlogo .storeOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(240, 240, 240, 0.8); /* 옅은 회색 반투명 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    color: #333;
+    z-index: 10;
+}
+.rlogo.not-available {
+    text-align: center;
+    color: #ff5555;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.restaurants-info {
+    font-family: '맑은고딕', Malgun Gothic, '돋움', Dotum, 'Apple SD Gothic Neo', Helvetica, sans-serif;
+    letter-spacing: 0;
+    line-height: 1.42857143;
+    color: #333;
+    padding-left: 10px;
+}
+
+.restaurant-list .stars {
+    font-size: 12px;
+}
+
+
+.restaurants-info .restaurant-name {
+    font-size: 120%;
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.restaurant-name {
+    padding-top: 3px;
+
+}
+
+.restaurants-info li {
+    float: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 12px;
+    color: #808080;
+    list-style: none;
+}
+
+.stars {
+    font-size: 14px;
+    color: #ffa500;
+}
+
+.review_num {
+    font-size: 12px;
+    color: #666;
+    margin-left: 5px;
+}
+
+.payment-methods {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.payment {
+    margin-right: 10px;
+}
+
+.min-price {
+    margin-right: 10px; /* 배달 시간과 간격 조정 */
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+
+.delivery-time {
+    position: absolute; /* 부모 박스를 기준으로 위치 지정 */
+    right: 10px; /* 오른쪽 여백 */
+    top: 50%; /* 수직 중앙 */
+    transform: translateY(200%); /* 정확한 중앙 정렬 */
+    font-size: 12px;
+    color: #999;
+}
+

@@ -1,0 +1,152 @@
+.body {
+    margin: 0; /* 기본 여백 제거 */
+    font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+    text-align: center; /* 전체 글씨 중앙 정렬 */
+}
+
+/* 전체 컨테이너에 flex 설정 */
+.main-container {
+    display: flex;
+    flex-direction: column;   /* 세로로 배치 */
+    align-items: center;      /* 수평 중앙 정렬 */
+    justify-content: center;  /* 수직 중앙 정렬 */
+    max-width: 1200px;        /* 최대 너비 설정 */
+    margin: -50px auto 100px auto; /* 수평, 수직 중앙 정렬, margin-top만 20px로 줄임 */
+    padding: 50px 20px 100px 20px;
+    box-sizing: border-box;   /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* main-header를 중앙 정렬 */
+.main-header {
+    width: 100%;             /* 전체 너비 */
+    margin: 0 auto;          /* 수평 중앙 정렬 */
+    text-align: center;      /* 텍스트 중앙 정렬 */
+}
+
+/* main-body 스타일 설정 */
+.main-body {
+    width: 100%;             /* 전체 너비 */
+    margin-top: 50px;        /* 상단 간격 */
+    text-align: center;      /* 텍스트 중앙 정렬 */
+}
+
+/* 제목 중앙 정렬 */
+.body p {
+    text-align: center;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0; /* margin 제거 */
+    text-align: center;      /* 테이블 내용 중앙 정렬 */
+}
+
+/* 테이블 경계 설정 */
+table, th, td {
+
+    border-top: 3px solid #c5bcbc;
+    border-bottom: 3px solid #c5bcbc;
+    text-align: center; /* 테이블 내용 중앙 정렬 */
+}
+
+/* 헤더 배경색 */
+th {
+    height: 50px;
+    background-color: #f4f4f4; /* 배경색 */
+    font-weight: bold;      /* 텍스트 굵게 */
+    font-size: 18px;        /* 폰트 크기 키우기 */
+}
+
+/* tbody 설정 (기존 설정 유지) */
+tbody {
+    text-align: center; /* 테이블 본문 내용 중앙 정렬 */
+}
+
+.coupon-info {
+    padding-top: 10px;
+}
+
+/* 쿠폰 입력 부분 css */
+.coupon-number {
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 20px;
+}
+
+.coupon-insert {
+    border-radius: 7px;
+    width: 320px;
+    padding: 10px;
+    margin-bottom: 8px;
+    border: 1px solid #c7bdbd;
+}
+
+.main-header button {
+    font-weight: bold;
+    width: 85px;
+    padding: 7px;
+    margin-left: 20px;
+    border: none;
+    background-color: #d10000;
+    color: white;
+    border-radius: 18px;
+}
+
+.table-text {
+    font-size: 12px;
+    color: #7e7e7e;
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+
+
+.td-status {
+    margin: 0 auto;
+}
+
+/* 사용 완료 상태 */
+.used {
+    color: #fff;
+    border-radius: 18px;
+    background-color: #737070;
+    text-align: center;
+    padding: 3px;
+    width: 50%;
+    font-weight: bold;
+}
+
+/* 사용 가능 상태 */
+.not-used {
+    color: #fff;
+    border-radius: 18px;
+    background-color: #cf0000;
+    text-align: center;
+    padding: 3px;
+    width: 50%;
+    font-weight: bold;
+}
+
+/* td font-bold 설정 */
+.coupon-info,
+.order-type {
+    font-weight: bold;
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.main-container .userCoupon-pagination-current{
+    background-color: #bb0000;
+    color: #ffffff;
+    border: 1px solid #bb0000;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: default;
+    margin-top : 40px
+}
+
+.main-container .userCoupon-pagination{
+    margin-top: 20px
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <link href="/common/css/qna.css" rel="stylesheet">
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer.css" rel="stylesheet">
+    <title>QnA</title>
+</head>
+<body>
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<div class="container">
+    <div class="qna-header">
+        <h1>QnA</h1>
+        <div class="search-bar">
+            <select name="search-category" id="searchCategory">
+                <option value="boardTitle">제목</option>
+                <option value="boardContent">내용</option>
+            </select>
+            <input placeholder="검색어를 입력해주세요." type="text" id="searchKeyword"/>
+            <button id="searchBtn">검색</button>
+        </div>
+    </div>
+
+    <div class="qna-header-line"></div>
+
+    <div class="qna-body">
+        <div class="qna-filters">
+            <div class="left-section">
+                <button class="question-button" onclick="location.href='/question';">질문하기</button>
+            </div>
+            <div class="right-section">
+                <select id="sortOrder">
+                    <option value="latest">최신순</option>
+                    <option value="oldest">오래된 순</option>
+                </select>
+                <select id="limit">
+                    <option>5개씩 보기</option>
+                    <option>10개씩 보기</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="qna-table">
+            <table>
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>등록일</th>
+                    <th>답변</th>
+                </tr>
+                </thead>
+
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <div id="numbering"></div>
+        </div>
+
+    </div>
+</div>
+
+
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        crossorigin="anonymous"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=">
+</script>
+<script src="/common/js/qna.js">
+
+</script>
+<script src="/layout/member/js/header.js"></script>
+</body>
+</html>

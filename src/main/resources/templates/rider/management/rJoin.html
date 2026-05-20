@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>사장님 사이트</title>
+    <link rel="stylesheet" href="/layout/rider/css/rider_main_header.css">
+    <link rel="stylesheet" href="/layout/rider/css/footer.css">
+    <link href="/rider/css/rJoin.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/rider/rider-header :: rHeaderContent}"></header>
+
+<!-- 회원가입 폼 -->
+<div class="rider-signup-container" id="riderSignupSection">
+    <h1>회원가입</h1>
+    <form action="/riderRegister" id="riderRegistrationForm" method="POST">
+        <!-- 아이디 입력 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderIdWrapper">
+                <img alt="아이디 아이콘" class="icon" src="/member/img/join/user.svg">
+                <input id="rider_id" name="riderId" placeholder="아이디를 입력하세요" required type="text">
+            </div>
+            <p id="check1" style="text-align: left"></p>
+        </div>
+
+        <!-- 비밀번호 입력 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderPasswordWrapper">
+                <img alt="비밀번호 아이콘" class="icon" src="/member/img/join/lock.svg">
+                <input id="rider_pw" name="riderPw" placeholder="비밀번호" required type="password">
+            </div>
+            <small>영문 대소문자, 숫자, 특수문자 포함 8자리 이상</small>
+            <p id="check2" style="text-align: left"></p>
+        </div>
+
+        <!-- 비밀번호 재입력 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderPasswordCheckWrapper">
+                <img alt="비밀번호 재입력 아이콘" class="icon" src="/member/img/join/lock.svg">
+                <input id="rider_pw_Check" name="riderPasswordCheck" placeholder="비밀번호 재입력" required type="password">
+            </div>
+            <p id="check3" style="text-align: left"></p>
+        </div>
+
+        <!-- 이름 입력 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderNameWrapper">
+                <img alt="이름 아이콘" class="icon" src="/member/img/join/name.svg">
+                <input id="rider_name" name="riderName" placeholder="이름" required type="text">
+            </div>
+        </div>
+
+        <!-- 전화번호 입력 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderPhoneWrapper">
+                <img alt="전화번호 아이콘" class="icon" src="/member/img/join/phone.svg">
+                <input id="rider_phone" name="riderPhone" placeholder="전화번호 입력 (예: 010-1234-5678)" required type="tel">
+            </div>
+        </div>
+
+        <!-- 성별 선택 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderGenderWrapper">
+                <img alt="성별 아이콘" class="icon" src="/member/img/join/gender.svg">
+                <select id="rider_gender" name="riderGender" required>
+                    <option disabled selected value="">성별 선택</option>
+                    <option value="남성">남성</option>
+                    <option value="여성">여성</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 생년월일 입력 -->
+        <div class="rider-input-group">
+            <div class="rider-input-wrapper" id="riderBirthWrapper">
+                <img alt="생년월일 아이콘" class="icon" src="/member/img/join/calendar.svg">
+                <input id="rider_birth" name="riderBirth" required type="date">
+            </div>
+        </div>
+
+        <!-- 확인 버튼 -->
+        <div class="rider-signup-button">
+            <button id="riderSubmitBtn" type="submit">가입하기</button>
+        </div>
+    </form>
+</div>
+
+
+<footer th:insert="~{layout/rider/rider-footer :: footerContent}"></footer>
+
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="/layout/member/js/header.js"></script>
+
+<script>
+    // 아이디 중복체크
+    let rId = $('#rider_id');
+    let check1 = $('#check1')
+    let check_id = false;
+
+    // ajax로 id 가입여부 확인하기
+    rId.keyup(() => {
+        // console.log(mId.val());
+        // mId : 입력창
+        // mId.val : 입력값
+
+        $.ajax({
+            type: "POST",
+            url: "riderIdCheck",
+            data: {"rId": rId.val()},
+            dataType: "text",
+            success: function (result) {
+                if (result == "OK") {
+                    check1.html(rId.val() + "는 사용가능한 아이디");
+                    check1.css('color', 'blue');
+                    check_id = true;
+                } else {
+                    check1.html(rId.val() + "는 사용중인 아이디");
+                    check1.css('color', 'red');
+                    check_id = false;
+                }
+            },
+            error: function () {
+                alert('idCheck 통신 실패!')
+            }
+        });
+    });
+
+    // 비밀번호 정규화
+    let rPw = $('#rider_pw');
+    let check2 = $('#check2');
+    let check_pw1 = false;
+
+    rPw.keyup(() => {
+        let pwVal = rPw.val();
+
+        // 기본값 : -1
+        let num = pwVal.search(/[0-9]/);        // 숫자
+        let eng = pwVal.search(/[a-z]/);        // 소문자
+        let eng1 = pwVal.search(/[A-Z]/);        // 대문자
+        let spe = pwVal.search(/[~!@#$%^&*]/);  // 특수문자
+        let spc = pwVal.search(/\s/);           // 공백
+
+        console.log(`num : ${num}, eng : ${eng}, eng1 : ${eng1}, spe : ${spe}, spc : ${spc} `);
+
+        if (pwVal.length < 2 || pwVal.length > 16) {
+            check2.html('2-16자리 입력!');
+            check2.css('color', 'red');
+            check_pw1 = false;
+        } else if (spc != -1) {
+            check2.html('공백없이 입력!');
+            check2.css('color', 'red');
+            check_pw1 = false;
+        } else {
+            check2.html('사용가능한 비밀번호!');
+            check2.css('color', 'blue');
+            check_pw1 = true;
+        }
+
+    });
+
+    // 비밀번호 확인
+    let checkPw = $('#rider_pw_Check');
+    let check3 = $('#check3')
+    let check_pw2 = false;
+
+    checkPw.keyup(() => {
+        pwVal = rPw.val();              // 비밀번호에 입력한 값
+        let checkVal = checkPw.val();   // 비번 확인에 입력한 값
+
+        if (pwVal == checkVal) {
+            check3.html('비밀번호 일치');
+            check3.css("color", 'blue');
+            check_pw2 = true;
+        } else {
+            check3.html('비밀번호 불일치');
+            check3.css("color", 'red');
+            check_pw2 = false;
+        }
+    });
+
+</script>
+</body>
+</html>

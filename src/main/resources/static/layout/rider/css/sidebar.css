@@ -1,0 +1,195 @@
+/*************************************************
+ * 1) 사이드바
+ *************************************************/
+.sidebar {
+    width: 260px;
+    background-color: #fff;
+    border-right: 1px solid #eee;
+    padding: 20px;
+    overflow-y: auto;
+    position: fixed;
+    top: 70px; /* 헤더 높이 */
+    left: 0;
+    height: calc(100vh - 70px);
+    z-index: 999;
+    transition: transform 0.3s ease; /* 오프캔버스 효과 */
+}
+
+.sidebar.visible {
+    transform: translateX(0); /* 모바일에서 열릴 때 */
+}
+
+body.dark-mode .sidebar {
+    background-color: #2c2c2c; /* 다크모드 사이드바 배경 */
+    border-right: 1px solid #444;
+}
+
+/*************************************************
+ * 2) 프로필 영역 (사이드바 상단)
+ *************************************************/
+.profile-area {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fafafa;
+}
+body.dark-mode .profile-area {
+    background-color: #3a3a3a;
+    border: 1px solid #555;
+}
+.profile-area .thumb {
+    width: 48px;
+    height: 48px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    margin-right: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+body.dark-mode .profile-area .thumb {
+    background-color: #555;
+}
+.profile-area .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.profile-info {
+    font-size: 14px;
+    line-height: 1.4;
+    color: #333;
+}
+body.dark-mode .profile-info {
+    color: #ddd;
+}
+.profile-info .store-name {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+/*************************************************
+ * 3) 빠른 메뉴
+ *************************************************/
+.quick-menu {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+.quick-item {
+    flex: 1;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    padding: 15px 0;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.quick-item:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+}
+.quick-item img {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 6px;
+}
+.quick-item span {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+body.dark-mode .quick-item {
+    background-color: #3a3a3a;
+    color: #ddd;
+}
+body.dark-mode .quick-item:hover {
+    background-color: #555;
+}
+
+/*************************************************
+ * 4) 메인 섹션 (아코디언 메뉴)
+ *************************************************/
+.main-section {
+    margin-bottom: 15px;
+}
+.section-title {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+.section-title:hover {
+    background-color: #f0f0f0;
+}
+.section-title .section-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 12px;
+    fill: #555;
+}
+.section-title .arrow-toggle {
+    margin-left: auto;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s ease;
+    fill: #999;
+}
+.main-section.open .arrow-toggle {
+    transform: rotate(180deg);
+}
+body.dark-mode .section-title {
+    color: #ddd;
+}
+body.dark-mode .section-title:hover {
+    background-color: #444;
+}
+
+.section-title img {
+    margin-right: 10px;
+}
+
+/*************************************************
+ * 5) 하위 메뉴 (sub-menu)
+ *************************************************/
+.sub-menu {
+    list-style: none;
+    margin: 8px 0 0 0;
+    padding-left: 30px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+.main-section.open .sub-menu {
+    max-height: 500px;
+}
+.sub-menu li {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s ease, padding-left 0.3s ease;
+    padding-left: 13px;
+}
+.sub-menu li:hover {
+    color: #000;
+    text-decoration: underline;
+}
+body.dark-mode .sub-menu li {
+    color: #aaa;
+}
+body.dark-mode .sub-menu li:hover {
+    color: #fff;
+    text-decoration: underline;
+}

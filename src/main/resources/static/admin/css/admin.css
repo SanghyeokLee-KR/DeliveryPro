@@ -1,0 +1,121 @@
+/*************************************************
+ * 1) 기본 리셋 및 바디
+ *************************************************/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 라이트모드 기본 스타일 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4; /* 전체 배경 */
+    color: #333; /* 기본 텍스트 색상 */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 화면 높이 이상 확장 */
+}
+
+/*************************************************
+ * 2) 다크모드 전역
+ *************************************************/
+body.dark-mode {
+    background-color: #181818; /* 다크 배경 */
+    color: #eee; /* 다크 글자색 */
+}
+
+/*************************************************
+ * 3) 메인 레이아웃 (헤더 + 사이드바 + 메인)
+ *************************************************/
+/* 헤더가 70px 고정이므로 본문이 그만큼 아래로 */
+.main-container {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 70px);
+    margin-top: 70px; /* 헤더와 겹치지 않도록 */
+}
+
+/*************************************************
+ * 4) 메인 콘텐츠 (사이드바 오른쪽 영역)
+ *************************************************/
+.main-content {
+    flex: 1;
+    background-color: #f9f9f9;
+    margin-left: 260px; /* 사이드바 폭 */
+    padding: 20px;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode .main-content {
+    background-color: #222;
+    color: #fff;
+}
+
+/*************************************************
+ * 5) 표, 검색, 필터, 버튼 등 (메인 영역)
+ *************************************************/
+.member-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.member-table th,
+.member-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.member-table th {
+    background-color: #f4f4f4;
+}
+
+body.dark-mode .member-table th {
+    background-color: #444;
+    color: #ccc;
+}
+
+body.dark-mode .member-table td {
+    background-color: #2c2c2c;
+    color: #eee;
+}
+
+/* 검색, 상태필터 */
+.member-search,
+.status-filter {
+    margin-bottom: 20px;
+}
+
+.member-search input,
+.status-filter select {
+    padding: 8px;
+    width: 100%;
+    max-width: 300px;
+}
+
+/* 일반 버튼 (파랑 계열) */
+button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/*************************************************
+ * 6) 반응형 (모바일) - 오프캔버스
+ *************************************************/
+@media screen and (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}

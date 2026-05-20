@@ -1,0 +1,93 @@
+/* src/store/css/store-owner-notification.css */
+
+/* 전체 컨테이너 */
+.son_container {
+    max-width: 900px;
+    height: 800px;
+    background-color: #ffffff;
+    margin: 2% auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: hidden;
+    border-radius: 12px 12px 0 0; /* 위 좌우만 둥글게 */
+}
+
+.son_header {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #378801;
+    border: 2px solid #378801;
+    border-radius: 12px 12px 0 0;
+    padding: 25px;
+}
+
+.son_header img {
+    width: 40px;
+    margin: 0 20px;
+}
+
+.son_notification_list {
+    list-style: none;
+    padding: 20px 30px;
+    margin: 0;
+}
+
+/* css 이름이 달라서 작동 안하는거 */
+.son_notification_item {
+    padding: 15px 25px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.son_notification_item:hover {
+    background-color: #f9f9f9;
+}
+
+.son_notification_item:last-child {
+    border-bottom: none;
+}
+/* 여기까지 */
+
+.son-message {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #333333;
+    font-weight: bold;
+}
+
+.son-timestamp {
+    font-size: 14px;
+    color: #888;
+}
+
+/* 스크롤바 트랙 (배경) */
+.son-scrollbar::-webkit-scrollbar {
+    width: 15px; /* 스크롤바의 너비 */
+}
+
+/* 스크롤바 트랙의 배경 */
+.son-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1; /* 트랙 배경 색상 */
+    border-radius: 10px; /* 둥근 외곽 */
+}
+
+/* 스크롤바의 핸들 (실제 스크롤바) */
+.son-scrollbar::-webkit-scrollbar-thumb {
+    background: #ccc; /* 핸들 색상 */
+    border-radius: 10px; /* 둥근 핸들 */
+    border: 2px solid #f1f1f1; /* 트랙과 핸들 사이의 간격 */
+}
+
+/* 스크롤바 핸들에 마우스를 올렸을 때 색상 */
+.son-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #808080; /* 마우스를 올렸을 때 핸들 색상 */
+}
+
+/* 스크롤바 화살표 제거 (크롬에서만 해당) */
+.son-scrollbar::-webkit-scrollbar-button {
+    display: none; /* 화살표 버튼 숨기기 */
+}

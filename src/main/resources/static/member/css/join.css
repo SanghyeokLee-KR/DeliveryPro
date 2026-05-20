@@ -1,0 +1,165 @@
+/* 기본 설정 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+/* 헤더 스타일 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
+    border-bottom: 2px solid #B40000;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+header nav ul li {
+    font-size: 14px;
+}
+
+/* 회원가입 폼 스타일 */
+.signup-container {
+    width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+.input-wrapper .icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 8px 5px;
+    background-color: transparent;
+}
+
+.small-button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.signup-button button {
+    width: 100%;
+    padding: 12px;
+    background-color: #B40000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.signup-button button:hover {
+    background-color: #990000;
+}
+
+/* 푸터 스타일 */
+footer {
+    margin-top: 50px;
+    text-align: center;
+}
+
+footer ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+footer ul li {
+    font-size: 12px;
+    color: #777;
+}
+
+/* 비밀번호 조건 메시지 스타일 */
+.input-group small {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #777;
+    text-align: left;
+}
+
+/* 생년월일 입력 스타일 */
+input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    outline: none;
+}
+
+/* 인증 버튼 스타일 */
+.small-button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* 성별 드롭다운 스타일 */
+.input-wrapper select {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 8px 5px;
+    background-color: transparent;
+}
+
+.input-wrapper .icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}

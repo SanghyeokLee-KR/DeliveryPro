@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>사장님 셀프서비스</title>
+    <link rel="stylesheet" href="/layout/rider/css/header.css">
+    <link rel="stylesheet" href="/layout/rider/css/sidebar.css">
+    <link rel="stylesheet" href="/rider/css/rider-management.css">
+    <link rel="stylesheet" href="/rider/css/rider-deliverydetails.css">
+    <link rel="shortcut icon" href="/favicon-3.ico" type="image/x-icon"/>
+</head>
+
+<body>
+<!-- 상단 헤더 -->
+<header class="header" th:insert="~{layout/rider/management/management-header :: managementheaderContent}"></header>
+<!-- 메인 레이아웃 -->
+<div class="main-container">
+    <!-- 왼쪽 사이드바 -->
+    <aside class="sidebar"
+           th:insert="~{layout/rider/management/management-sidebar :: managementsidebarContent}"></aside>
+
+
+    <!-- 오른쪽 메인 콘텐츠 영역 -->
+    <main class="main-content">
+        <div class="rider-delivery-details-card">
+            <div class="rider-delivery-details-header">
+                <h1>배달 내역</h1>
+            </div>
+
+            <div class="rider-delivery-body">
+                <div class="rider-delivery-title">이번달 배달 건수</div>
+                <div class="rider-delivery-number">
+                    <div class="rider-delivery-number-count">56</div>
+                    <div class="rider-delivery-number-enter">건</div>
+                </div>
+            </div>
+
+            <!-- 추가 -->
+            <section class="settlement-section">
+                <div class="settlement-header">
+
+                </div>
+                <div class="settlement-filter">
+                    <select id="month-select" name="month">
+                        <option value="2025-01" selected>2025년 01월</option>
+                        <!-- 추가 월 옵션 -->
+                    </select>
+                </div>
+                <table class="settlement-table">
+                    <thead>
+
+
+                    <tr>
+                        <th>날짜</th>
+                        <th>번호</th>
+                        <th>가게명</th>
+                        <th>배달완료시간</th>
+                        <th>금액</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>2025.01.13</td>
+                        <td>034</td>
+                        <td>투썸플레이스 인천법원점</td>
+                        <td>13:01</td>
+                        <td>4000원</td>
+                    </tr>
+                    <tr>
+                        <td>2025.01.12</td>
+                        <td>032</td>
+                        <td>롯데리아 인천학익점</td>
+                        <td>12:47</td>
+                        <td>4000원</td>
+                    </tr>
+                    <tr>
+                        <td>2025.01.12</td>
+                        <td>087</td>
+                        <td>Bhc 용현2동점</td>
+                        <td>20:24</td>
+                        <td>3200원</td>
+                    </tr>
+                    <tr>
+                        <td>2025.01.11</td>
+                        <td>085</td>
+                        <td>Bbq 용현점</td>
+                        <td>20:15</td>
+                        <td>5600원</td>
+                    </tr>
+                    <tr>
+                        <td>2025.01.11</td>
+                        <td>078</td>
+                        <td>이디야 인천법원점</td>
+                        <td>19:59</td>
+                        <td>7000원</td>
+                    </tr>
+                    <tr>
+                        <td>2025.01.11</td>
+                        <td>077</td>
+                        <td>투썸플레이스 인천법원점</td>
+                        <td>19:38</td>
+                        <td>3500원</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination">
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                </div>
+            </section>
+
+
+        </div>
+    </main>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script src="/rider/js/management_sh.js"></script>
+
+</body>
+</html>

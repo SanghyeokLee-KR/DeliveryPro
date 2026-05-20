@@ -1,0 +1,96 @@
+<!-- 예: admin/system/advertisements-single.html -->
+<div th:fragment="adsContent">
+    <div class="adv_container">
+        <div class="adv_header">
+            <h2 class="adv_title">광고 목록</h2>
+            <button type="button" class="adv_button" onclick="openAdCreateModal()">광고 추가하기</button>
+        </div>
+
+        <table class="adv_table">
+            <thead>
+            <tr>
+                <th>순서</th> <!-- advOrder -->
+                <th>제목</th>
+                <th>이미지 URL</th>
+                <th>등록일</th>
+                <th>관리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ad : ${advList}">
+                <td th:text="${ad.advOrder}">1</td>
+                <td th:text="${ad.advTitle}">도미노피자</td>
+                <td th:text="${ad.advImageUrl}">/admin/img/광고/광고_1번사진_도미노피자.jpg</td>
+                <td th:text="${#temporals.format(ad.advCreatedAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td>
+                    <!-- 수정 -->
+                    <button type="button" class="adv_small_btn"
+                            th:onclick="|openAdEditModal(${ad.advId})|">
+                        수정
+                    </button>
+                    <!-- 삭제 -->
+                    <button type="button" class="adv_small_btn red"
+                            th:onclick="|if(confirm('삭제하시겠습니까?')){ location.href='/admin/advertisements/${ad.advId}/delete'}|">
+                        삭제
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 등록 모달 -->
+    <!-- style="display:none;" 제거해서 CSS에서 제어 -->
+    <div id="advCreateModal" class="adv_modal">
+        <div class="adv_modal_content">
+            <span class="adv_close" onclick="closeAdCreateModal()">&times;</span>
+            <h3 class="adv_modal_title">광고 등록</h3>
+
+            <form th:action="@{/admin/advertisements}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <div class="adv_modal_form_group">
+                    <label>광고 제목</label>
+                    <input type="text" name="advTitle" placeholder="예) 도미노피자" required/>
+                </div>
+                <div class="adv_modal_form_group">
+                    <label>이미지 업로드</label>
+                    <input type="file" name="advImageFile" accept=".jpg,.png"/>
+                </div>
+                <div class="adv_modal_buttons">
+                    <button type="submit" class="adv_button">등록하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 수정 모달 (파일 업로드 추가) -->
+    <div id="advEditModal" class="adv_modal">
+        <div class="adv_modal_content">
+            <span class="adv_close" onclick="closeAdEditModal()">&times;</span>
+            <h3 class="adv_modal_title">광고 수정</h3>
+
+            <form th:action="@{/admin/advertisements/update}"
+                  method="post"
+                  enctype="multipart/form-data">
+                <!-- hidden: advId -->
+                <input type="hidden" name="advId" id="editAdvId"/>
+                <div class="adv_modal_form_group">
+                    <label>광고 제목</label>
+                    <input type="text" name="advTitle" id="editAdvTitle"/>
+                </div>
+                <div class="adv_modal_form_group">
+                    <label>이미지 URL (현재)</label>
+                    <input type="text" name="advImageUrl" id="editAdvImageUrl" readonly/>
+                </div>
+                <div class="adv_modal_form_group">
+                    <label>이미지 변경 업로드</label>
+                    <input type="file" name="advImageFile" accept=".jpg,.png"/>
+                </div>
+                <div class="adv_modal_buttons">
+                    <button type="submit" class="adv_button">수정하기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

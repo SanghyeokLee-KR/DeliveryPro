@@ -1,0 +1,39 @@
+
+<div id="modal" class="review-modal" style="display: none;" th:fragment="reviewContent">
+    <div class="review-modal-content">
+        <span class="close-button" onclick="reviewCloseModal('modal')">&times;</span>
+        <h2>리뷰 작성하기</h2>
+        <div class="border-line"></div>
+        <form id="review-form" action="/review" method="POST" enctype="multipart/form-data">
+
+            <input type="hidden" id="modal-order-id" name="orderId" value=""/>
+            <input type="hidden" id="modal-preSto-id" name="preStoId" value=""/>
+
+            <div id="star-rating">
+                <span class="star" data-value="1">★</span>
+                <span class="star" data-value="2">★</span>
+                <span class="star" data-value="3">★</span>
+                <span class="star" data-value="4">★</span>
+                <span class="star" data-value="5">★</span>
+            </div>
+            <input type="hidden" id="rating-value" name="reviewRating" value="0">
+
+            <!-- 리뷰 내용 -->
+            <div class="review-title">음식은 어떠셨나요?</div>
+            <div class="review-title1">
+                <label for="review-content">남겨주신 의견은 서비스 품질 개선에 활용됩니다.</label>
+            </div>
+            <textarea id="review-content" name="reviewContent" rows="4" placeholder="리뷰를 작성해주세요."></textarea>
+
+            <!-- 리뷰 사진 업로드 -->
+            <!--            <label for="reviewPicture">리뷰 사진:</label>-->
+            <input type="file" id="reviewPicture" name="reviewPicture" accept="image/*" multiple>
+            <!-- 제출 버튼 -->
+            <div class="review-button">
+                <button type="submit">리뷰 작성</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+

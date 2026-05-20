@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <!-- 기존 CSS -->
+  <link href="/layout/member/css/header.css" rel="stylesheet">
+  <link href="/layout/member/css/footer.css" rel="stylesheet">
+
+  <!-- 새로 만든 CSS (qnaview.css) -->
+  <link href="/common/css/qnaview.css" rel="stylesheet">
+
+  <title>QnA</title>
+</head>
+<body>
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<div class="qnaview-container">
+  <div class="qnaview-back">
+    <a href="/qnaForm">&lt; 목록</a>
+  </div>
+
+  <!-- 기존 #modiForm1 코드 -->
+  <div id="modiForm1">
+
+    <div class="qnaview-header">
+      <div class="qnaview-title">
+        [[${view.boardTitle}]]
+      </div>
+      <div class="qnaview-buttons" th:if="${session.mem_id == view.memId}">
+        <button id="modify">수정</button>
+        <button id="delete">삭제</button>
+      </div>
+    </div>
+
+    <!-- 날짜 -->
+    <div class="qnaview-information">
+      <div class="qnaview-date">[[${#strings.substring(view.boardCreatedAt, 0, 10)}]]</div>
+    <div class="qnaview-author">작성자 | [[${view.nickname}]]</div>
+    </div>
+    <!-- 구분선 -->
+    <div class="qnaview-divider"></div>
+
+    <!-- 내용 -->
+    <div class="qnaview-content">[[${view.boardContent}]]</div>
+
+    <div class="qnaview-divider"></div>
+    </div>
+  </div>
+
+  <!-- 수정 폼 #modiForm2 -->
+  <div id="modiForm2">
+    <h2>게시글 수정 페이지</h2>
+    <form action="/bModify" method="POST">
+      <div class="qnaview-container">
+      <div class="qnaviews-header">
+        <!-- 제목 -->
+        <div class="qnaview-title-section">
+          <label for="boardTitle">제목</label>
+          <input type="text" id="boardTitle" name="boardTitle" th:placeholder="${view.boardTitle}" required>
+        </div>
+        <!-- 내용 작성 -->
+        <div class="qnaview-content-section">
+          <textarea id="board_content" name="boardContent" rows="10" cols="50" th:placeholder="${view.boardContent}" required></textarea>
+        </div>
+      </div>
+      </div>
+      <input type="hidden" name="boardId" th:value="${view.boardId}"/>
+      <input type="hidden" name="memId" th:value="${view.memId}"/>
+      <input type="hidden" name="boardAnswerStatus" th:value="${view.boardAnswerStatus}"/>
+      <div class="qnaview-footer">
+      <button class type="submit">수정</button>
+      </div>
+    </form>
+  </div>
+<div class="qnaview-comments">
+  <div id="comment-list">
+    <!-- 댓글 목록이 여기에 동적으로 삽입됨 -->
+  </div>
+</div>
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script src="/layout/member/js/header.js"></script>
+
+<script>
+  $('#modiForm2').hide();
+  $('#modify').click(()=>{
+    $('#modiForm2').show();
+    $('#modiForm1').hide();
+    $('.qnaview-comments').hide(); // 댓글도 숨김
+  });
+  $('#delete').click(()=>{
+    if(confirm('정말 삭제하시겠습니까?')){
+      location.href = `/bDelete?boardId=[[${view.boardId}]]`;
+    }
+  });
+
+  let boardId = $("input[name='boardId']").val();
+
+    $.ajax({
+      url: `/api/comments/${boardId}`,
+      type: "Post",
+      success: function (comments) {
+        let commentList = $("#comment-list");
+        commentList.empty();  // 기존 목록 초기화
+        // 응답이 배열인지 확인 후 변환
+        if (!Array.isArray(comments)) {
+          comments = comments ? [comments] : [];  // 단일 객체면 배열로 변환
+        }
+        comments.forEach(function (comment) {
+          let commentDiv = `
+                          <div class="comment-box">
+                              <div class="comment-meta">
+                                  <div class="comment-tag">답변</div>
+                                  <strong>${comment.adminId ? '관리자' : '사용자'}</strong>
+                                  <span>${comment.commentDate}</span>
+                              </div>
+                              <p class="comment-content">${comment.commentContents}</p>
+                          </div>`;
+          commentList.append(commentDiv);
+        });
+      },
+      error: function () {
+        console.log("댓글을 불러오는 중 오류가 발생했습니다.");
+      }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>주문하기</title>
+    <!-- 기존 CSS 링크들은 그대로 유지 -->
+    <link href="/layout/member/css/header.css" rel="stylesheet">
+    <link href="/layout/member/css/footer1.css" rel="stylesheet">
+    <link href="/store/css/storelist.css" rel="stylesheet">
+    <link href="/store/css/categorybar.css" rel="stylesheet">
+</head>
+<body>
+
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<!-- 상단 검색영역 및 카테고리 바 (기존 코드) -->
+<div th:insert="~{layout/store/store/catergory-bar :: categoryContent}"></div>
+
+<!-- 실제 매장/메뉴 영역 -->
+<div class="storelist-container" id="storelist">
+    <!-- 매장 리스트가 로드될 영역 -->
+</div>
+
+<footer th:insert="~{layout/member/footer1 :: footer1Content}"></footer>
+
+<!-- 기존 JS 코드 그대로 -->
+<script crossorigin="anonymous"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="/store/js/store-list.js"></script>
+<script src="/layout/member/js/header.js"></script>
+</body>
+</html>

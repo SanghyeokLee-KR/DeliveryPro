@@ -1,0 +1,262 @@
+/* 마이페이지 전체 영역 */
+.grade-mypage-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    font-family: 'Arial', sans-serif;
+}
+
+.grade-mypage-info {
+    padding: 20px;
+    text-align: center;
+}
+
+.grade-mypage-title h1 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 40px;
+}
+
+.grade-mypage-reward {
+    border: 1px solid #cccccc;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 700px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.grade-mypage-reward-title {
+    background-color: #d30000;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px 10px 10px 20px;
+    text-align: left;
+}
+
+.grade-mypage-reward-title h3 {
+    color: #fff;
+    margin: 0;
+}
+
+.grade-mypage-details {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    height: 80%;
+    margin: 10px 0;
+}
+
+.grade-badge img {
+    width: 150px;
+    height: 150px;
+}
+
+.grade-welcome-text {
+    border-left: 1px solid #cccccc;
+    padding-left: 90px;
+}
+
+.grade-welcome-text p {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+    text-align: left;
+}
+
+.grade-welcome-text .grade-welcome-span {
+    font-size: 20px;
+    font-weight: bold;
+    color: #000;
+}
+
+.grade-points {
+    margin-top: 5px;
+}
+
+.grade-points-detail {
+    width: 180px;
+    height: 30px;
+    background-color: #cccccc;
+    border-radius: 10px;
+    margin: 15px 0;
+    padding: 2px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grade-points-detail p {
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+}
+
+.grade-points-level {
+    width: 250px;
+    height: 50px;
+    background-color: #F6F6F6;
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 0 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grade-points-level p {
+    font-size: 18px;
+    color: #000;
+}
+
+.grade-points-level .grade-point-span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #d30000;
+    margin-left: 10px;
+}
+
+.grade-point-l {
+    margin: 0 15px;
+    color: #cccccc;
+    font-size: 30px;
+}
+
+/* 기본 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* 2024-12-27(1:56)에 새로 추가, 수정된 css */
+#arrow-container {
+    cursor: pointer; /* 마우스가 올라가면 손가락 모양으로 변경 */
+}
+
+#arrow:active {
+    transform: scale(0.9); /* 클릭 시 이미지를 눌리는 듯한 효과 */
+}
+
+.card-cn {
+    display: flex;
+    width: 700px;
+    border-top: 1px solid #ddd;
+    /*border-radius: 8px;*/
+    /*box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+    background-color: #fff;
+    margin: 0 auto;
+    align-items: center;
+    gap: 20px;
+}
+
+/* 카드가 숨겨져 있을 때 */
+.card {
+    display: none; /* 기본적으로 숨김 처리 */
+    transform: translateY(-20px); /* 애니메이션을 위한 Y축 위치 */
+    opacity: 0; /* 초기에는 투명 */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* 애니메이션을 위한 트랜지션 */
+}
+
+/* 카드가 보일 때 */
+.card.show {
+    display: block; /* 보이도록 설정 */
+    transform: translateY(0); /* 원래 위치로 내려옴 */
+    opacity: 1; /* 불투명 */
+}
+
+/* 여기까지 2024-12-27 grade.css 변경 */
+
+/* 이미지 섹션 */
+.image {
+    flex: 0 0 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 40px;
+}
+
+.image img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* 텍스트 세부 정보 */
+.details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin-bottom: 10px;
+
+}
+
+.nickname-span {
+    font-weight: bold;
+    font-size: 20px;
+    color: #1F1F1F;
+}
+
+
+.label {
+    font-size: 14px;
+    color: #555;
+}
+
+.value1 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    flex: 1;
+    text-align: left;
+    margin-top: 20px;
+}
+
+.value {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    flex: 1;
+    text-align: right;
+    margin-right: 15px;
+}
+
+/* 배지 스타일 */
+.value_badge {
+    display: inline-block;
+    background-color: #bb0000;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: right;
+    margin: 0 10px;
+}
+
+
+/* 게이지 css 끝 */
+.progressbar {
+    width: 98%;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.progress {
+    height: 100%;
+    border-radius: 5px;
+    width: 0%; /* 초기값 */
+}

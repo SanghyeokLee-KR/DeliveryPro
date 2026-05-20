@@ -1,0 +1,132 @@
+<!--
+    header.html
+    - Thymeleaf 프래그먼트로 정의
+    - 주로 다른 페이지에서 th:insert="~{layout/member/header :: headerContent}" 형태로 삽입
+-->
+
+<div class="header-container" th:fragment="headerContent">
+    <!-- 로고 및 토글 -->
+    <div class="logo">
+        <a href="/customer">
+            <img alt="Logo" src="/member/img/logo/Logo.png">
+        </a>
+        <div class="toggle-button-cover">
+            <div class="button r" id="button-3">
+                <input class="checkbox" type="checkbox">
+                <div class="knobs"></div>
+                <div class="layer"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 네비게이션 메뉴 -->
+    <nav class="main-nav">
+        <ul class="main-ul">
+            <a href="#">
+                <li class="main-li">메뉴</li>
+            </a>
+            <a href="/storeList?category=패스트푸드">
+                <li class="main-li">주문하기</li>
+            </a>
+            <a href="/qnaForm">
+                <li class="main-li">QnA</li>
+            </a>
+            <a href="/story">
+                <li class="main-li">스토리</li>
+            </a>
+        </ul>
+    </nav>
+
+    <!-- 로그인 및 주소 -->
+    <div class="user-menu">
+        <div style="display: flex; flex-direction: column; width: 300px; margin-left: 100px;">
+            <div style="margin: 5px; display: flex;">
+                <!-- 로그인 전 -->
+                <span th:if="${session.mem_id eq null and loggedIn == null}">
+                    <a class="main-jl" href="mLoginForm">로그인</a>
+                    <span class="ilo">|</span>
+                    <a class="main-jl" href="mJoinForm">회원가입</a>
+                </span>
+
+                <!-- 로그인 후 -->
+                <span class="main-ut" th:if="${session.mem_id ne null or loggedIn != null}">
+                    <a class="main-jl" href="/mLogout">로그아웃</a>
+                    <span class="ilo">|</span>
+                    <a class="main-jl main-nickname" th:text="${session.mem_nickname}"></a>
+                </span>
+
+                <!-- 마이페이지 아이콘 -->
+                <!-- 여기서 onclick="return loginConfirm(event)"가 핵심 -->
+                <a class="loginConfirm"
+                   onclick="return loginConfirm(event)"
+                   th:href="@{/myPage/{mId}(mId=${session.mem_id})}">
+                    <svg data-name="레이어 1" id="_레이어_1" viewBox="0 0 132.83 135.96" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <style>
+                                .cls-1 {
+                                    fill: #bc0000;
+                                    stroke-width: 0px;
+                                }
+                            </style>
+                        </defs>
+                        <path class="cls-1"
+                              d="M66.42,13.38c11.07,0,20.04,8.97,20.04,20.04s-8.97,20.04-20.04,20.04-20.04-8.97-20.04-20.04,8.97-20.04,20.04-20.04M66.42,2.03c-17.31,0-31.39,14.08-31.39,31.39s14.08,31.39,31.39,31.39,31.39-14.08,31.39-31.39S83.72,2.03,66.42,2.03h0Z"/>
+                        <path class="cls-1"
+                              d="M125.18,133.93c-3.13,0-5.67-2.54-5.67-5.67,0-22.82-18.56-41.38-41.38-41.38h-23.41c-22.82,0-41.38,18.56-41.38,41.38,0,3.13-2.54,5.67-5.67,5.67s-5.67-2.54-5.67-5.67c0-29.07,23.65-52.73,52.73-52.73h23.41c29.07,0,52.73,23.65,52.73,52.73,0,3.13-2.54,5.67-5.67,5.67Z"/>
+                    </svg>
+                </a>
+
+                <!-- 장바구니 아이콘 (예시) -->
+                <!-- 동일하게 onclick="return loginConfirm(event)" 로 로그인 체크 -->
+                <a class="loginConfirm" th:href="@{/cart/{mId}(mId=${session.mem_id})}"
+                   onclick="return loginConfirm(event)">
+                    <svg data-name="레이어 1" id="_레이어_1" viewBox="0 0 154.64 120.52" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <style>
+                                .cls-1 {
+                                    fill: #bc0000;
+                                    stroke-width: 0px;
+                                }
+                            </style>
+                        </defs>
+                        <path class="cls-1"
+                              d="M101.8,92.61H25.8c-2.48,0-4.68-1.59-5.45-3.95L1.72,32.03c-.58-1.76-.27-3.68.81-5.17,1.08-1.48,2.8-2.36,4.64-2.36h.04l103.88.7,4.86-19.72c.63-2.56,2.93-4.37,5.57-4.37h25.94c3.17,0,5.74,2.57,5.74,5.74s-2.57,5.74-5.74,5.74h-21.44l-18.65,75.65c-.63,2.56-2.93,4.37-5.57,4.37ZM29.96,81.13h67.34l10.96-44.47-93.15-.63,14.84,45.1Z"/>
+                        <circle class="cls-1" cx="28.28" cy="108.61" r="10.8"/>
+                        <circle class="cls-1" cx="98.75" cy="108.61" r="10.8"/>
+                    </svg>
+                </a>
+                <div class="notification-wrapper">
+                    <!-- 알림 목록 -->
+                    <div class="customer-notification" style="display: none;"
+                         th:insert="~{customer-notification :: customer-notification}">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 주소 표시 영역 -->
+            <!-- 클릭 시 주소 등록/관리로 이동, 로그인 확인 후 이동 -->
+            <a id="add-addr"
+               onclick="setActiveTab('address'); return confirmNavigation(event)"
+               th:href="@{/myPage/{mId}(mId=${session.mem_id})}">
+                <div class="address">
+                    <div class="input-container">
+                        <svg class="svg-icon" viewBox="0 0 95.27 151.13" xmlns="http://www.w3.org/2000/svg">
+                            <path class="cls-1"
+                                  d="M5.08,66.34l40.87,82.01,43.63-80.58c12.94-29.57-7.48-63.46-39.72-64.94-.48-.02-.96-.04-1.44-.04-.48,0-.96,0-1.44,0C14.71,3.17-6.85,36.35,5.08,66.34ZM26.25,49.45c.2-11.81,9.93-21.21,21.74-21.01,11.8.2,21.21,9.93,21.01,21.74-.2,11.81-9.93,21.21-21.74,21.01-11.81-.2-21.21-9.93-21.01-21.74Z"/>
+                        </svg>
+                        <div class="scroll-container">
+                            <!-- 세션에 mem_address가 없으면 기본 주소 없음 표시 -->
+                            <span id="scroll-text">
+                            <!-- 세션에 mem_address가 있으면 해당 주소를 표시 -->
+                            <span th:if="${session.mem_address != null}"
+                                  th:text="${session.mem_address}">기본 주소 없음</span>
+                                <!-- 세션에 mem_address가 없으면 안내 문구를 표시 -->
+                            <span th:if="${session.mem_address == null}">미추홀의 서비스를 이용해주세요!</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

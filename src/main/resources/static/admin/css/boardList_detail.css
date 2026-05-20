@@ -1,0 +1,174 @@
+/* 게시글 상세 컨테이너 */
+.board-detail-form,
+.comment-form {
+    width: 65%;
+    margin: 20px auto;
+    padding: 20px 80px;
+    border-radius: 5px;
+    background: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+.board-detail-form {
+    margin-bottom: 25px;
+}
+
+/* 제목, 작성자, 작성일 레이아웃 */
+.board-detail-header {
+    display: flex;
+    flex-direction: column;  /* 제목과 메타 정보를 세로로 배치 */
+    margin-bottom: 15px;
+}
+
+/* 작성자, 작성일 좌 우 정렬 */
+.board-meta {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.meta-left, .meta-right {
+    padding: 5px 10px;
+}
+
+/* 작성자 작성일 스타일 */
+.meta-left {
+    text-align: left;
+    display: flex; /* 수평 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+    margin-left: -13px;
+
+}
+.meta-left p,
+.meta-left span{
+    font-size: 14px;
+    font-weight: bold;
+    color: #737373;
+}
+.meta-left p,
+.meta-left span {
+    margin: 0 5px; /* 요소 간의 간격 조정 */
+}
+
+.meta-right {
+    text-align: right;
+}
+
+/* 내용 스타일 */
+.board-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* 등록 버튼 */
+
+.comment-form button {
+    padding: 5px 22px;
+    background: #353835;
+    color: white;
+    border: none;
+    border-radius: 18px;
+    cursor: pointer;
+    font-size: 12px;
+    display: block;  /* 버튼을 block 요소로 변경 */
+    margin:20px auto 5px auto;
+}
+
+
+.comment-form button:hover {
+    background: #171616;
+}
+.board-title{
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.qna-mark-p {
+    display: inline-block;
+    padding: 3px 18px; /* 크기 조정 */
+    background-color: #e1e1e1; /* 배경 색 */
+    color: black; /* 글자 색 */
+    border-radius: 24px; /* 원 모양 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    font-size: 14px; /* 글자 크기 */
+    margin-top: 20px;
+}
+/* 제목, 작성자, 작성일 레이아웃 */
+.board-detail-title {
+    display: flex;  /* flexbox로 레이아웃을 만들기 */
+    justify-content: space-between;  /* 좌우 끝에 배치 */
+    align-items: center;  /* 세로 중앙 정렬 */
+    width: 100%;  /* 가로 크기 100% */
+    margin-top: 20px;
+}
+
+/* 작성자, 작성일 좌 우 정렬 */
+.title-left {
+    text-align: left;  /* 왼쪽 정렬 */
+}
+
+.title-right {
+    text-align: right;  /* 오른쪽 정렬 */
+}
+
+/* 상태 스타일 (미답변) */
+.status {
+    padding: 3px 18px; /* 크기 조정 */
+    border-radius: 24px; /* 원 모양 */
+    background-color: #e1e1e1; /* 배경 색 */
+    color: #333;
+}
+
+.pending {
+    background-color: #e1e1e1; /* 배경 색 */
+    color: #333;
+}
+/* 게시글 버튼들 */
+.board-detail-buttons {
+    display: flex;
+    justify-content: space-between; /* 왼쪽과 오른쪽 끝에 배치 */
+    align-items: center;  /* 세로 중앙 정렬 */
+    width: 100%;  /* 가로 크기 100% */
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+.btn {
+    color: #c7c6c6;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.board-remove-btn {
+    padding: 5px 30px; /* 크기 조정 */
+    border-radius: 20px; /* 원 모양 */
+    background-color: #e1e1e1; /* 배경 색 */
+    color: #333;
+    margin: 0 auto; /* 버튼을 중앙 정렬 */
+    display: block;  /* 버튼을 block 요소로 변경해 중앙 정렬 */
+    font-weight: bold;
+}
+.board-remove-btn:hover{
+    background-color: #c8c8c8;
+}
+.board-detail-text{
+    font-weight: bold;
+    font-size: 13px;
+}
+.board-detail-hr{
+    border: 1px solid #c8c8c8;
+}
+.comment-p{
+    margin: 10px 0 20px 0;
+    font-weight: 900;  /* 가장 굵은 폰트 */
+    font-size: 15px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    height: 200px; /* 원하는 높이로 조정 */
+}

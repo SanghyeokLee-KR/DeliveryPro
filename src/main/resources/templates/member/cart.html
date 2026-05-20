@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <title>장바구니</title>
+    <!-- CSS 링크 -->
+    <link href="/member/css/cart.css" rel="stylesheet">
+    <link href="/layout/member/css/header.css" rel="stylesheet"/>
+    <link href="/layout/member/css/footer.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- 상단 메뉴바 -->
+<header th:insert="~{layout/member/header :: headerContent}"></header>
+
+<!-- 장바구니 영역 -->
+<div class="class">
+    <h1>장바구니</h1>
+    <p class="breadcrumb"><span class="bold">장바구니</span> &gt; 주문결제 &gt; 주문완료</p>
+</div>
+
+<div class="line"></div>
+<section class="cart-payment-container">
+    <div class="empty-cart">
+
+        <div id="cart"></div>
+        <a class="btn-home" href="/customer">홈으로 가기</a>
+
+    </div>
+
+    <!-- 오른 쪽 -->
+    <div class="payment-container">
+        <p class="pay-header">결제정보</p>
+        <hr class="pay-line">
+        <div class="pay-body">
+            <div class="pay-item-price">
+                <p class="pay-body-text">상품 금액</p>
+                <p class="pay-body-price">0원</p>
+            </div>
+            <div class="pay-delivery-price">
+                <p class="pay-body-text">배송비</p>
+                <p class="pay-body-deliveryPrice">0원</p>
+            </div>
+        </div>
+
+        <hr class="pay-line">
+        <div class="pay-footer">
+            <p class="pay-all-text">총 결제금액</p>
+            <p class="pay-all-price">0원</p>
+        </div>
+        <button class="pay-btn" onclick="pay()">결제하기</button><!-- 결제하기 -->
+    </div>
+
+</section>
+<!-- 하단 푸터 -->
+<footer th:insert="~{layout/member/footer :: footerContent}"></footer>
+<script crossorigin="anonymous" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script src="/layout/member/js/header.js"></script>
+<script src="/member/js/cart.js"></script>
+</body>
+</html>

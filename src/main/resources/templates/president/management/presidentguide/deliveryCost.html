@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사장님 사이트</title>
+  <link rel="stylesheet" href="/layout/store/css/store_main_header.css">
+  <link rel="stylesheet" href="/store/css/presidentguide/deliveryCost.css">
+  <link rel="stylesheet" href="/layout/member/css/footer.css">
+  <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+
+<div class="container">
+  <div class="tag">배달요금</div>
+  <h1>배달요금 안내</h1>
+  <p class="date" id="current-date">오늘 날짜</p>
+
+  <div class="line"></div>
+
+  <p>효율적인 메뉴 관리를 통해 고객에게 정확한 정보를 제공해주세요.        </p>
+
+  <div class="card">
+    <h3>한집배달</h3>
+    <p>한집배달은 음식을 빠르고 신선하게 받을 수 있는 서비스입니다.
+      <br>라이더가 한 집으로만 배송하기 때문에 음식이 식지 않고 빨리 도착하지만, <br>배달비는 3,000원으로 비쌉니다.</p>
+  </div>
+
+  <div class="card">
+    <h3>묶음배달</h3>
+    <p>묶음배달은 여러 사람의 음식을 한 번에 받아서 배송하는 방식입니다.<br>음식이 늦게 도착할 수 있지만 배달비는 2,000원으로 저렴합니다.</p>
+  </div>
+
+  <div class="card">
+    <h3>서비스 도입 이유</h3>
+    <p>한집배달과 묶음배달은 고객의 다양한 요구를 충족시키기 위해 도입되었습니다.<br> 빠르고 신선한 음식을 원할 때, 배달비를 절약하고자 할 때<br> 각 서비스를 고객의 요구에 맞춰 선택할 수 있습니다.</p>
+  </div>
+
+  <p>정확한 메뉴 정보로 고객의 신뢰를 높이고, 원활한 주문을 유도하세요!</p>
+
+  <div class="line"></div>
+</div>
+
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script>
+  // 현재 날짜 가져오기
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+  const day = String(today.getDate()).padStart(2, '0');
+
+  // 날짜 형식: YYYY. MM. DD
+  const formattedDate = `${year}. ${month}. ${day}`;
+
+  // HTML 요소에 날짜 삽입
+  document.getElementById('current-date').textContent = formattedDate;
+</script>
+</html>

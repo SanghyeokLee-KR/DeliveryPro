@@ -1,0 +1,412 @@
+/* 기본 스타일 설정 */
+body {
+    margin: 0; /* 기본 여백 제거 */
+    font-family: Arial, sans-serif; /* 기본 폰트 설정 */
+}
+
+/* 전체 레이아웃 컨테이너 */
+.user-main-container {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    align-items: flex-start; /* 상단 정렬 */
+    justify-content: space-between; /* 양 끝 정렬 */
+    max-width: 1200px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 수평 중앙 정렬 */
+    /* 내부 여백 추가 */
+    padding: 50px 20px 100px 20px;
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 왼쪽 메인 배너 & 메뉴 영역 */
+.user-main-banner-and-menu {
+    flex: 0 0 70%; /* 전체 너비의 70% 차지 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 화살표 스타일 */
+.user-main-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.left-arrow {
+    left: 10px;
+}
+
+.right-arrow {
+    right: 10px;
+}
+
+/* 메인 배너 섹션 */
+.user-main-banner {
+    width: 100%; /* 배너가 부모 요소의 전체 너비를 차지 */
+    margin-bottom: 20px; /* 아래 여백 추가 */
+    overflow: hidden;
+    position: relative;
+}
+
+/* 배너 이미지 스타일 */
+.user-main-banner-image {
+    width: 100%; /* 이미지가 부모 요소의 전체 너비를 차지 */
+    height: auto; /* 높이는 자동으로 조절 */
+    object-fit: cover; /* 이미지 비율 유지하며 잘림 */
+}
+
+.user-main-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    width: calc(100%); /* 5개 이미지 + 2개 클론 */
+}
+
+.user-main-slider-image {
+    width: 100%; /* 부모 요소의 전체 너비를 차지 */
+    height: 470px; /* 모든 이미지를 고정 높이로 설정 */
+    object-fit: cover; /* 비율을 유지하면서 크기에 맞게 조절 */
+    flex: 0 0 100%; /* 슬라이더에서 한 번에 하나의 이미지가 보이도록 설정 */
+}
+
+/* 페이지네이션 영역 스타일 */
+.user-main-pagination {
+    position: absolute;
+    bottom: 10px; /* 슬라이더 하단에 위치 */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px; /* 점 사이 간격 */
+}
+
+/* 페이지네이션 점 스타일 */
+.pagination-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.6); /* 기본 색상 (반투명 흰색) */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 활성화된 페이지네이션 점 스타일 */
+.pagination-dot.active {
+    background-color: white; /* 활성화된 점은 흰색 */
+}
+
+
+/* 수평 구분선 스타일 */
+hr {
+    margin: 20px 0; /* 위아래 여백 설정 */
+    border: none; /* 기본 테두리 제거 */
+    border-top: 2px solid #ddd; /* 상단에만 실선 추가 */
+}
+
+/* 메뉴 리스트 섹션 스타일 */
+.user-main-menu-section {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    flex-wrap: wrap; /* 자식 요소를 여러 줄로 감싸기 */
+    gap: 20px; /* 아이콘 간 간격 설정 */
+    background-color: #fff; /* 배경색 흰색 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    justify-content: space-between; /* 아이템 간 공간 균등 배분 */
+}
+
+/* 메뉴 아이템 스타일 */
+.user-main-menu-item {
+    flex: 0 0 calc((100% / 6) - 20px); /* 한 줄에 6개 배치, 간격 고려 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 메뉴 아이콘 이미지 스타일 */
+.user-main-menu-item img {
+    width: 105px; /* 아이콘 너비 설정 */
+    height: 105px; /* 아이콘 높이 설정 */
+    object-fit: contain; /* 이미지 비율 유지하며 전체 표시 */
+    /*수정*/
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease; /* 부드러운 변화 */
+}
+
+.user-main-menu-item:hover img {
+    transform: scale(1.1); /* 이미지 크기 살짝 확대 */
+    outline: 2px solid #bb0000; /* 빨간색 테두리 추가 */
+    border-radius: 20px; /* 이미지 모서리 둥글게 */
+
+}
+
+/* 오른쪽 영역 컨테이너 */
+.user-all {
+    flex: 0 0 25%; /* 전체 너비의 25% 차지 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 일반 섹션 스타일 */
+.user-section {
+    background-color: #eff0f4; /* 배경색 설정 */
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 3px;
+
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 그룹 섹션 (필요시 스타일 추가) */
+.user-group-section {
+}
+
+.user-grouped-sections {
+}
+
+/* 배달 & 포장 섹션 컨테이너 */
+.user-main-delivery-section {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    justify-content: space-between; /* 아이템 간 공간 균등 배분 */
+    gap: 10px; /* 아이템 간 간격 설정 */
+    margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+/* 배달 및 포장 옵션 스타일 */
+.user-main-delivery-option,
+.user-main-packaging-option {
+    flex: 1; /* 남은 공간을 균등하게 차지 */
+    background: #fff; /* 배경색 흰색 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    padding: 20px; /* 내부 여백 추가 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+.user-main-delivery-option img,
+.user-main-packaging-option img {
+    width: 50px; /* 너비를 100px로 설정 */
+    height: 50px; /* 높이를 100px로 설정 */
+    margin-bottom: 10px;
+    object-fit: contain; /* 이미지 비율 유지하면서 전체 표시 */
+}
+
+
+/* 배달 및 포장 옵션 텍스트 스타일 */
+.user-main-delivery-option p,
+.user-main-packaging-option p {
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 18px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+}
+
+/* 드롭다운 메뉴 컨테이너 */
+.user-dropdown {
+    background: #fff; /* 배경색 흰색 */
+    overflow: hidden; /* 넘치는 내용 숨기기 */
+    margin-bottom: 20px; /* 아래 여백 추가 */
+    border: 1px solid #ddd; /* 테두리 설정 */
+}
+
+/* 드롭다운 헤더 스타일 */
+.user-dropdown-header {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center; /* 아이템 세로 정렬 */
+    padding: 12px 16px; /* 내부 여백 설정 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+}
+
+/* 드롭다운 아이콘 스타일 */
+.user-dropdown-icon {
+    width: 20px; /* 아이콘 너비 설정 */
+    height: 20px; /* 아이콘 높이 설정 */
+    margin-right: 8px; /* 오른쪽 여백 추가 */
+}
+
+/* 드롭다운 내용 컨테이너 */
+.user-dropdown-content {
+    display: none; /* 기본적으로 숨김 */
+    border-top: 1px solid #ddd; /* 상단 테두리 설정 */
+    background: #fff; /* 배경색 흰색 */
+}
+
+/* 드롭다운 아이템 스타일 */
+.user-dropdown-item {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    padding: 12px 16px; /* 내부 여백 설정 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    font-size: 14px; /* 폰트 크기 설정 */
+}
+
+/* 드롭다운 아이템 호버 효과 */
+.user-dropdown-item:hover {
+    background-color: #f4f4f4; /* 배경색 변경 */
+}
+
+/* 드롭다운 활성화 시 내용 표시 */
+.user-dropdown.active .user-dropdown-content {
+    display: block; /* 내용 표시 */
+}
+
+/* 드롭다운 화살표 애니메이션 */
+.user-dropdown-arrow {
+    transition: transform 0.3s ease; /* 변환 애니메이션 설정 */
+}
+
+/* 드롭다운 활성화 시 화살표 회전 */
+.user-dropdown.active .user-dropdown-arrow {
+    transform: rotate(180deg); /* 화살표 회전 */
+}
+
+/* 로그인 및 추천 섹션 컨테이너 */
+.user-loginwithrecommend {
+    background-color: #eff0f4; /* 배경색 설정 */
+    padding: 12px 20px 20px;
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 로그인 섹션 하단 여백 */
+.user-main-login-section {
+    margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+/* 로그인 박스 스타일 */
+.user-main-login-box {
+    background: #fff; /* 배경색 흰색 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 20px; /* 내부 여백 추가 */
+    padding-bottom: 27px; /* 내부 여백 추가 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+/* 로그인 박스 문단 스타일 */
+.user-main-login-box p {
+    margin: 0 0 10px; /* 아래 여백 추가 */
+    font-size: 15px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+}
+
+/* 로그인 버튼 스타일 */
+.user-main-login-button {
+    display: inline-flex; /* 인라인 플렉스 박스 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    justify-content: center; /* 아이템 가로 정렬 */
+    background-color: #c00; /* 배경색 설정 */
+    color: #fff; /* 글자색 흰색 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    padding: 10px 30px; /* 내부 여백 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin-bottom: 10px; /* 아래 여백 추가 */
+}
+
+.user-main-button-uio {
+    display: inline-flex; /* 인라인 플렉스 박스 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    justify-content: center; /* 아이템 가로 정렬 */
+    background-color: #c00; /* 배경색 설정 */
+    color: #fff; /* 글자색 흰색 */
+    font-size: 12px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    padding: 5px 10px; /* 내부 여백 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 20px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin: 10px 5px 10px 5px; /* 아래 여백 추가 */
+    gap: 5px;
+}
+
+.user-main-button-uio button img {
+    color: #fff;
+}
+
+
+/* 로그인 링크 스타일 */
+.user-main-login-links a {
+    color: #333; /* 글자색 설정 */
+    text-decoration: none; /* 텍스트 장식 제거 */
+    font-size: 12px; /* 폰트 크기 설정 */
+    margin: 0 5px; /* 좌우 여백 추가 */
+}
+
+/* 추천 섹션 컨테이너 (필요시 스타일 추가) */
+.user-main-recommend-section {
+    display: flex; /* Flexbox 레이아웃 사용 */
+    flex-direction: column; /* 요소들을 세로로 정렬 (가로로 정렬하려면 row로 변경) */
+    justify-content: center; /* 수직 중앙 정렬 */
+    align-items: center; /* 수평 중앙 정렬 */
+    gap: 20px; /* 요소 간 간격 조정 (필요시 조절) */
+    padding: 10px; /* 내부 여백 추가 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+    background-color: #f9f9f9; /* 배경색 설정 (선택사항) */
+    border-radius: 8px; /* 모서리 둥글게 설정 (선택사항) */
+}
+
+/* 헤더와 버튼을 포함한 섹션 */
+.user-header-with-buttons {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    justify-content: space-between; /* 양 끝 정렬 */
+    align-items: center; /* 아이템 세로 정렬 */
+}
+
+/* 추천 섹션 제목 스타일 */
+.user-main-h3 {
+    margin: 0; /* 기본 여백 제거 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+}
+
+/* 페이지네이션 버튼 컨테이너 */
+.user-pagination-buttons {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    gap: 5px; /* 버튼 간 간격 설정 */
+}
+
+/* 페이지네이션 버튼 스타일 */
+.user-pagination-buttons button {
+    border: 1px solid #ddd; /* 테두리 설정 */
+    background: #f9f9f9; /* 배경색 설정 */
+    padding: 5px 10px; /* 내부 여백 설정 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    font-size: 14px; /* 폰트 크기 설정 */
+}
+
+/* 추천 슬라이드 컨테이너 */
+.user-main-recommend-slide {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    flex-wrap: nowrap; /* 한 줄로 유지 */
+    gap: 10px; /* 아이템 간 간격 설정 */
+    margin-top: 15px; /* 위 여백 추가 */
+}
+
+/* 추천 페이지 컨테이너 */
+.user-main-recommend-page {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    gap: 10px; /* 아이템 간 간격 설정 */
+}
+
+/* 개별 추천 아이템 스타일 */
+.user-main-recommend-item {
+    width: 120px; /* 아이템 너비 설정 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+/* 추천 아이템 이미지 스타일 */
+.user-main-recommend-item img {
+    width: 100%; /* 이미지가 부모 요소의 전체 너비를 차지 */
+    height: auto; /* 높이는 자동으로 조절 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    margin-bottom: 5px; /* 아래 여백 추가 */
+    object-fit: cover; /* 이미지 비율 유지하며 잘림 */
+}
+
+.user-main-logout {
+    font-size: 12px;
+    color: #b5c6c6;
+}
+

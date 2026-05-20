@@ -1,0 +1,322 @@
+/* 전체 레이아웃 컨테이너 */
+.president-container {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    align-items: flex-start; /* 상단 정렬 */
+    justify-content: space-between; /* 양 끝 정렬 */
+    max-width: 1200px; /* 최대 너비 설정 */
+    margin: 0 auto; /* 수평 중앙 정렬 */
+    /* 내부 여백 추가 */
+    padding: 50px 20px 100px 20px;
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 왼쪽 메인 배너 & 메뉴 영역 */
+.president-banner-and-menu {
+    flex: 0 0 70%; /* 전체 너비의 70% 차지 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 메인 배너 섹션 */
+.president-banner {
+    width: 100%; /* 배너가 부모 요소의 전체 너비를 차지 */
+    margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+/* 배너 이미지 스타일 */
+.president-banner-image {
+    width: 100%; /* 이미지가 부모 요소의 전체 너비를 차지 */
+    height: auto; /* 높이는 자동으로 조절 */
+    object-fit: cover; /* 이미지 비율 유지하며 잘림 */
+    border-radius: 8px; /* 모서리 둥글게 */
+}
+
+
+/* 메뉴 리스트 섹션 스타일 */
+.president-section {
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    flex-wrap: wrap; /* 자식 요소를 여러 줄로 감싸기 */
+    gap: 20px; /* 아이콘 간 간격 설정 */
+    background-color: #fff; /* 배경색 흰색 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    justify-content: space-between; /* 아이템 간 공간 균등 배분 */
+}
+
+.president-section img {
+    width: 105px; /* 아이콘 너비 설정 */
+    height: 105px; /* 아이콘 높이 설정 */
+    object-fit: contain; /* 이미지 비율 유지하며 전체 표시 */
+    /*수정*/
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease; /* 부드러운 변화 */
+}
+
+.president-item:hover img {
+    transform: scale(1.1); /* 이미지 크기 확대 */
+    outline: 2px solid #4b8625; /* 초록색 테두리 추가 */
+    border-radius: 20px; /* 모서리 둥글게 */
+}
+
+
+/* 메뉴 아이템 스타일 */
+.president-item {
+    flex: 0 0 calc((100% / 6) - 20px); /* 한 줄에 6개 배치, 간격 고려 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    display: flex; /* 플렉스 박스 레이아웃 사용 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 메뉴 아이콘 이미지 스타일 */
+.president-item img {
+    width: 105px; /* 아이콘 너비 설정 */
+    height: 105px; /* 아이콘 높이 설정 */
+    object-fit: contain; /* 이미지 비율 유지하며 전체 표시 */
+}
+
+/* 오른쪽 영역 컨테이너 */
+.president-all {
+    flex: 0 0 25%; /* 전체 너비의 25% 차지 */
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+/* 로그인 섹션 하단 여백 */
+.president-login-section {
+    margin-bottom: 20px; /* 아래 여백 추가 */
+}
+
+/* 로그인 박스 스타일 */
+.president-login-box {
+    background-color: #fff; /* 배경색 설정 */  /*바뀜*/
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 30px 20px 20px;
+    text-align: center; /* 텍스트 중앙 정렬 */
+    width : 300px;
+    border:2px solid #eff0f4; /*바뀜*/
+    position: relative;  /* 내부의 절대 위치 요소를 기준으로 배치할 수 있게 설정 */
+}
+/*바뀜*/
+.login-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.login-top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: -12px; /* 위아래 간격 */
+}
+
+.top-left-section {
+    flex: 7; /* 7:3 비율에서 왼쪽 */
+    text-align: left;
+
+}
+.top-left-section p{
+    font-weight: bold;
+    font-size: 18px;
+}
+.top-left-section b{
+    border-radius: 10px;
+    font-weight: normal;
+    background-color: #cceabc;
+    color: #326512;
+    width: 60px;
+    padding: 5px;
+}
+.top-left-section p,
+.top-left-section b{
+    display: inline; /* 두 요소를 한 줄에 배치 */
+    margin: 0;       /* 기본 여백 제거 */
+    vertical-align: middle; /* 텍스트 수직 정렬 */
+
+}
+
+
+
+.login-bottom-section {
+    text-align: left;
+    margin-top: 4px; /* 위아래 간격 */
+    color: #7e7e7e;
+    font-size: 14px;
+}
+
+.president-login-box {
+    background-color: #fff; /* 배경색 설정 */  /*바뀜*/
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 30px 20px 20px;
+    text-align: center; /* 텍스트 중앙 정렬 */
+    width : 300px;
+    border:2px solid #eff0f4; /*바뀜*/
+    position: relative;  /* 내부의 절대 위치 요소를 기준으로 배치할 수 있게 설정 */
+}
+
+
+/* 로그아웃 버튼*/
+.top-right-section {
+    flex: 3; /* 7:3 비율에서 오른쪽 */
+    text-align: center;
+    font-size: 15px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    border-radius: 10px;
+    border:1px solid#398900;
+    width: 30px;
+    padding: 3px;
+    background-color: #fff;
+}
+
+/* 로그인 버튼 스타일 */
+.president-login-button {
+    display: inline-flex; /* 인라인 플렉스 박스 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    justify-content: center; /* 아이템 가로 정렬 */
+    background-color: #4c8725; /* 배경색 설정 */
+    color: #fff; /* 글자색 흰색 */
+    font-size: 16px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    padding: 10px 30px; /* 내부 여백 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin-bottom: 10px; /* 아래 여백 추가 */
+    width: 280px;
+}
+
+.president-button-uio {
+    display: inline-flex; /* 인라인 플렉스 박스 사용 */
+    align-items: center; /* 아이템 세로 정렬 */
+    justify-content: center; /* 아이템 가로 정렬 */
+    background-color: #4c8725; /* 배경색 설정 */
+    color: #fff; /* 글자색 흰색 */
+    font-size: 12px; /* 폰트 크기 설정 */
+    font-weight: bold; /* 폰트 두께 설정 */
+    padding: 5px 10px; /* 내부 여백 설정 */
+    border: none; /* 테두리 제거 */
+    border-radius: 20px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    margin: 10px 5px 10px 5px; /* 아래 여백 추가 */
+    gap: 5px;
+}
+
+.president-button-uio button img {
+    color: #fff;
+}
+
+
+/* 로그인 링크 스타일 */
+.president-login-links a {
+    color: #333; /* 글자색 설정 */
+    text-decoration: none; /* 텍스트 장식 제거 */
+    font-size: 12px; /* 폰트 크기 설정 */
+    margin: 0 5px; /* 좌우 여백 추가 */
+}
+
+
+.tips {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+.tip {
+    flex: 1;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0 10px;
+    font-size: 14px;
+
+}
+.tipTitle {
+    font-weight: bold;
+    font-size: 30px;
+    margin-left : 10px;
+}
+.tip img {
+    width: 50px; /* 이미지 크기 */
+    height: 50px;
+    margin-bottom: 10px; /* 이미지와 텍스트 간 간격 */
+}
+
+.tip-button {
+    background-color: #ffffff;
+    color: #ddd;
+    font-size: 14px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: 200px;
+}
+
+.tip-button:hover {
+    background-color: #4b8625;
+}
+.president-loginwithtips {
+    /* 내부 여백 추가 */
+    /* 내부 여백 추가 */
+    padding: 0 20px 20px;
+    box-sizing: border-box; /* 패딩과 보더를 포함한 박스 크기 계산 */
+}
+
+.popular-menu {
+    background-color: #edf5eb;
+}
+
+.store-coupon {
+    background-color: #fefbec;
+}
+
+.delivery-fee {
+    background-color: #f1f8fe;
+}
+
+.login-banner {
+    text-align: center; /* 이미지를 중앙에 정렬 */
+    margin-top: 20px; /* 로그인 박스와 간격 추가 */
+}
+
+.login-banner img {
+    width: 100%; /* 이미지가 부모 컨테이너 너비를 채우도록 설정 */
+    max-width: 600px; /* 최대 너비 설정 */
+    height: auto; /* 이미지 비율 유지 */
+    border-radius: 8px; /* 둥근 모서리 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}
+
+/*바뀜*/
+/* 2024-12-30(2:24) 추가된 css */
+.pre-service-con {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;/*바뀜*/
+    border-radius: 12px;/*바뀜*/
+    border:1px solid #398900;/*바뀜*/
+    width: 95%;/*바뀜*/
+    height: 40px;
+    color: #398900;
+    font-weight: bold;
+    margin: 10px auto;
+}
+
+.president-button-u {
+    display: flex;  /* Flexbox를 사용 */
+    align-items: center;  /* 세로 중앙 정렬 */
+    justify-content: center;  /* 가로 중앙 정렬 */
+    text-decoration: none;  /* 링크 밑줄 제거 */
+}
+
+.president-button-u img {
+    margin-right: 8px;  /* 이미지와 텍스트 간 간격 조정 */
+}
+.president-login-box hr{
+    border:1px solid rgb(245, 245, 245);
+}

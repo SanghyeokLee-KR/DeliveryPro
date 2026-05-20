@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사장님 사이트</title>
+  <link rel="stylesheet" href="/layout/store/css/store_main_header.css">
+  <link rel="stylesheet" href="/store/css/presidentguide/closedDays.css">
+  <link rel="stylesheet" href="/layout/member/css/footer.css">
+  <link rel="shortcut icon" href="/favicon-2.ico" type="image/x-icon"/>
+</head>
+<body>
+<!-- 헤더 삽입 -->
+<header th:insert="~{layout/store/store/president-header :: pHeaderContent}"></header>
+
+
+<div class="container">
+  <div class="tag">휴무일</div>
+  <h1>휴무일 안내</h1>
+  <p class="date" id="current-date">오늘 날짜</p>
+
+  <div class="line"></div>
+
+  <p>효율적인 메뉴 관리를 통해 고객에게 정확한 정보를 제공해주세요.        </p>
+
+  <div class="card">
+    <h3>휴무일 설정 방법</h3>
+    <p>휴무일을 설정할 수 있습니다!
+      <br>휴무일을 설정하려면 [영업시간 관리] 메뉴로 이동 후 [정기 휴무일 설정] 메뉴 선택한 후,
+      <br> 원하는 날짜를 선택하고 '확인' 버튼을 클릭하세요.]
+      <br> 임시 휴무일과 정기 휴무일 날짜를 설정할 수 있습니다.</p>
+  </div>
+
+  <div class="card">
+    <h3>일시정지 방법</h3>
+    <p>개인적인 일이 생겼을 시 가게를 일시 정지할 수 있습니다!
+      <br>일시 정지를 하고 싶으시다면 [영업시간 관리] 메뉴로 이동 후 [정기 휴무일 설정] 메뉴 선택한 후,
+      <br>중지 시간을 선택한 후, '일시정지' 버튼을 클릭하세요.</p>
+  </div>
+  <p>휴무일 설정은 원활한 운영을 위해 중요한 부분입니다.<br>
+    정확한 날짜와 요일을 설정하여, 고객에게 보다 나은 서비스를 제공하세요!</p>
+
+  <div class="line"></div>
+</div>
+
+<footer th:insert="~{layout/store/store/president-footer :: pFooterContent}"></footer>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+<script>
+  // 현재 날짜 가져오기
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1 필요
+  const day = String(today.getDate()).padStart(2, '0');
+
+  // 날짜 형식: YYYY. MM. DD
+  const formattedDate = `${year}. ${month}. ${day}`;
+
+  // HTML 요소에 날짜 삽입
+  document.getElementById('current-date').textContent = formattedDate;
+</script>
+</html>

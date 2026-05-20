@@ -1,0 +1,28 @@
+/* src/main/resources/static/rider/css/main.css */
+
+/* 메인(지도) 영역 전용 스타일 */
+.main_map-wrap {
+    width: 100%;
+    height: 800px;
+    margin-bottom: 20px;
+}
+
+#main_map {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-content {
+    margin-left: 400px; /* 사이드바 폭만큼 */
+    padding: 20px;      /* 여유 패딩 */
+}
+
+/* 탭 전환 영역 */
+#tab-batcha, #tab-batcha2, #tab-jinhaeng, #tab-done {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}

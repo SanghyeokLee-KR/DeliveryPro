@@ -1,0 +1,65 @@
+.alarm-container{
+    max-width: 900px;
+    height: 800px;
+    background-color: #ffffff;
+    margin: 3% auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: hidden;
+    border-radius: 12px 12px 0 0; /* 위 좌우만 둥글게 */
+}
+.contents-header {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #c82333;
+    border: 2px solid #c82333;
+    border-radius: 12px 12px 0 0;
+    padding: 25px;
+}
+
+.contents-header img {
+    width: 40px;
+    margin: 0 20px;
+}
+
+.contents-header p {
+    font-size: 25px;
+    font-weight: bold;
+    margin: 0; /* 기본 마진 제거 */
+    color: white;
+}
+.contents-body{
+    padding: 15px 25px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.contents-body:hover {
+    background-color: #f9f9f9;
+}
+
+.contents-body:last-child {
+    border-bottom: none;
+}
+
+contents-body::-webkit-scrollbar{
+    width: 15px;
+}
+contents-body::-webkit-scrollbar-track{
+    background: #f1f1f1; /* 트랙 배경 색상 */
+    border-radius: 10px; /* 둥근 외곽 */
+}
+/* 스크롤바의 핸들 (실제 스크롤바) */
+.contents-body::-webkit-scrollbar-thumb {
+    background: #ccc; /* 핸들 색상 */
+    border-radius: 10px; /* 둥근 핸들 */
+    border: 2px solid #f1f1f1; /* 트랙과 핸들 사이의 간격 */
+}
+
+/* 스크롤바 핸들에 마우스를 올렸을 때 색상 */
+.contents-body::-webkit-scrollbar-thumb:hover {
+    background: #808080; /* 마우스를 올렸을 때 핸들 색상 */
+}
