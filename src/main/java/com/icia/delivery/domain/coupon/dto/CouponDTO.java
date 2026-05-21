@@ -1,5 +1,6 @@
-package com.icia.delivery.dto.admin;
+package com.icia.delivery.domain.coupon.dto;
 
+import com.icia.delivery.domain.coupon.entity.CouponEntity;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

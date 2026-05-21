@@ -1,10 +1,10 @@
 // src/main/java/com/icia/delivery/controller/admin/CouponController.java
-package com.icia.delivery.controller.admin;
+package com.icia.delivery.domain.coupon.controller;
 
-import com.icia.delivery.dto.admin.CouponDTO;
-import com.icia.delivery.dto.admin.CouponEntity;
-import com.icia.delivery.dto.admin.CouponUsageEntity;
-import com.icia.delivery.service.admin.CouponService;
+import com.icia.delivery.domain.coupon.dto.CouponDTO;
+import com.icia.delivery.domain.coupon.entity.CouponEntity;
+import com.icia.delivery.domain.coupon.entity.CouponUsageEntity;
+import com.icia.delivery.domain.coupon.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

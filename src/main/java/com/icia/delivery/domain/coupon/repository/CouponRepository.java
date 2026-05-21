@@ -1,6 +1,6 @@
-package com.icia.delivery.dao.admin;
+package com.icia.delivery.domain.coupon.repository;
 
-import com.icia.delivery.dto.admin.CouponEntity;
+import com.icia.delivery.domain.coupon.entity.CouponEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

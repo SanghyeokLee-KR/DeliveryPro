@@ -1,5 +1,6 @@
-package com.icia.delivery.dto.admin;
+package com.icia.delivery.domain.coupon.entity;
 
+import com.icia.delivery.domain.coupon.dto.CouponDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
