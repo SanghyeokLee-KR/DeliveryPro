@@ -1,4 +1,4 @@
-package com.icia.delivery.controller.map;
+package com.icia.delivery.domain.rider.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

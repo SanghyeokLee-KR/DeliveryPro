@@ -1,4 +1,4 @@
-package com.icia.delivery.controller.common;
+package com.icia.delivery.global.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

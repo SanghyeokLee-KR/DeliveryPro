@@ -7,7 +7,7 @@ import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.entity.MemberEntity;
-import com.icia.delivery.service.IpService;
+import com.icia.delivery.global.service.IpService;
 import com.icia.delivery.util.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

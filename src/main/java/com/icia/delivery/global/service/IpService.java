@@ -1,4 +1,4 @@
-package com.icia.delivery.service;
+package com.icia.delivery.global.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
