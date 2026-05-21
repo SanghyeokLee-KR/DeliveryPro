@@ -1,12 +1,12 @@
 package com.icia.delivery.domain.cart.service;
 
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.domain.cart.dto.CartDTO;
 import com.icia.delivery.domain.cart.entity.CartEntity;
 import com.icia.delivery.domain.cart.repository.CartRepository;
 import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.dto.member.OrderDTO;
 import com.icia.delivery.dto.member.OrderItemDTO;
 import jakarta.servlet.http.HttpSession;

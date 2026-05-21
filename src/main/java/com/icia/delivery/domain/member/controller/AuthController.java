@@ -1,8 +1,8 @@
-package com.icia.delivery.controller.member;
+package com.icia.delivery.domain.member.controller;
 
-import com.icia.delivery.dto.member.MemberEntity;
-import com.icia.delivery.dto.member.UserProfile;
-import com.icia.delivery.service.member.AuthService;
+import com.icia.delivery.domain.member.entity.MemberEntity;
+import com.icia.delivery.domain.member.dto.UserProfile;
+import com.icia.delivery.domain.member.service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

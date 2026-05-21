@@ -1,6 +1,6 @@
 package com.icia.delivery.domain.coupon.entity;
 
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

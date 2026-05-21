@@ -1,6 +1,6 @@
 package com.icia.delivery.domain.deliveryaddress.service;
 
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.domain.deliveryaddress.dto.DeliveryAddressDTO;
 import com.icia.delivery.domain.deliveryaddress.entity.DeliveryAddressEntity;
 import com.icia.delivery.domain.deliveryaddress.repository.DeliveryAddressRepository;

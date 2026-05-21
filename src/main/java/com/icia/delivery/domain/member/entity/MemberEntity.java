@@ -1,5 +1,6 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.member.entity;
 
+import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.loginhistory.entity.LoginHistoryEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,14 +1,14 @@
 // src/main/java/com/icia/delivery/domain/notification/service/NotificationService.java
 package com.icia.delivery.domain.notification.service;
 
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.admin.repository.AdminRepository;
 import com.icia.delivery.domain.notification.dto.NotificationDTO;
 import com.icia.delivery.domain.notification.entity.NotificationEntity;
 import com.icia.delivery.domain.notification.repository.NotificationRepository;
 import com.icia.delivery.domain.rider.repository.RiderRepository;
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import com.icia.delivery.global.exception.BusinessException;
 import com.icia.delivery.global.exception.ErrorCode;

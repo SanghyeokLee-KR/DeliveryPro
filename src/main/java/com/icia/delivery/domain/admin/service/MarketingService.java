@@ -1,10 +1,10 @@
 package com.icia.delivery.domain.admin.service;
 
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.dao.member.OrderRepository;
 import com.icia.delivery.domain.store.repository.StoreRepository;
-import com.icia.delivery.dto.member.MemberDTO;
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.dto.MemberDTO;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.dto.member.OrderDTO;
 import com.icia.delivery.dto.member.OrderEntity;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
