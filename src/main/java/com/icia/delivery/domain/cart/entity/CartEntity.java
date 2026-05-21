@@ -1,6 +1,7 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.cart.entity;
 
 
+import com.icia.delivery.domain.cart.dto.CartDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,7 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.cart.dto;
 
 
+import com.icia.delivery.domain.cart.entity.CartEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,6 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.reward.dto;
 
+import com.icia.delivery.domain.reward.entity.RewardEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.icia.delivery.dao.member;
+package com.icia.delivery.domain.cart.repository;
 
-import com.icia.delivery.dto.member.CartEntity;
+import com.icia.delivery.domain.cart.entity.CartEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
