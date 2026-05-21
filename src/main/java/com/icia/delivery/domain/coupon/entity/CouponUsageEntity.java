@@ -1,4 +1,4 @@
-package com.icia.delivery.dto.admin;
+package com.icia.delivery.domain.coupon.entity;
 
 import com.icia.delivery.dto.member.MemberEntity;
 import jakarta.persistence.*;

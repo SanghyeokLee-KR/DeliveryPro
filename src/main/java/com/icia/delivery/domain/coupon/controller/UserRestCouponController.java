@@ -1,9 +1,9 @@
-package com.icia.delivery.controller.admin;
+package com.icia.delivery.domain.coupon.controller;
 
 
-import com.icia.delivery.dto.admin.CouponDTO;
-import com.icia.delivery.dto.admin.CouponEntity;
-import com.icia.delivery.service.admin.CouponService;
+import com.icia.delivery.domain.coupon.dto.CouponDTO;
+import com.icia.delivery.domain.coupon.entity.CouponEntity;
+import com.icia.delivery.domain.coupon.service.CouponService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

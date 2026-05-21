@@ -1,7 +1,7 @@
 // src/main/java/com/icia/delivery/dao/admin/CouponUsageRepository.java
-package com.icia.delivery.dao.admin;
+package com.icia.delivery.domain.coupon.repository;
 
-import com.icia.delivery.dto.admin.CouponUsageEntity;
+import com.icia.delivery.domain.coupon.entity.CouponUsageEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

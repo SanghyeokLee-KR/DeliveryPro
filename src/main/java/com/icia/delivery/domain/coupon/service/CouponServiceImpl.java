@@ -1,11 +1,11 @@
-package com.icia.delivery.service.admin;
+package com.icia.delivery.domain.coupon.service;
 
-import com.icia.delivery.dao.admin.CouponRepository;
-import com.icia.delivery.dao.admin.CouponUsageRepository;
 import com.icia.delivery.dao.member.MemberRepository;
-import com.icia.delivery.dto.admin.CouponDTO;
-import com.icia.delivery.dto.admin.CouponEntity;
-import com.icia.delivery.dto.admin.CouponUsageEntity;
+import com.icia.delivery.domain.coupon.dto.CouponDTO;
+import com.icia.delivery.domain.coupon.entity.CouponEntity;
+import com.icia.delivery.domain.coupon.entity.CouponUsageEntity;
+import com.icia.delivery.domain.coupon.repository.CouponRepository;
+import com.icia.delivery.domain.coupon.repository.CouponUsageRepository;
 import com.icia.delivery.dto.member.MemberEntity;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

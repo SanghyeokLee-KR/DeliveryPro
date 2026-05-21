@@ -1,8 +1,8 @@
-package com.icia.delivery.service.admin;
+package com.icia.delivery.domain.coupon.service;
 
-import com.icia.delivery.dto.admin.CouponDTO;
-import com.icia.delivery.dto.admin.CouponEntity;
-import com.icia.delivery.dto.admin.CouponUsageEntity;
+import com.icia.delivery.domain.coupon.dto.CouponDTO;
+import com.icia.delivery.domain.coupon.entity.CouponEntity;
+import com.icia.delivery.domain.coupon.entity.CouponUsageEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
