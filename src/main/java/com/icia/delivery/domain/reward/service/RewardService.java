@@ -1,10 +1,10 @@
-package com.icia.delivery.service.member;
+package com.icia.delivery.domain.reward.service;
 
 import com.icia.delivery.dao.member.MemberRepository;
-import com.icia.delivery.dao.member.RewardRepository;
+import com.icia.delivery.domain.reward.repository.RewardRepository;
 import com.icia.delivery.dto.member.MemberEntity;
-import com.icia.delivery.dto.member.RewardDTO;
-import com.icia.delivery.dto.member.RewardEntity;
+import com.icia.delivery.domain.reward.dto.RewardDTO;
+import com.icia.delivery.domain.reward.entity.RewardEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

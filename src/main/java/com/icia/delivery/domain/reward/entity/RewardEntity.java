@@ -1,5 +1,6 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.reward.entity;
 
+import com.icia.delivery.domain.reward.dto.RewardDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,6 +1,6 @@
-package com.icia.delivery.dao.member;
+package com.icia.delivery.domain.reward.repository;
 
-import com.icia.delivery.dto.member.RewardEntity;
+import com.icia.delivery.domain.reward.entity.RewardEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

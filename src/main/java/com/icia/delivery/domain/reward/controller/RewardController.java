@@ -1,7 +1,7 @@
-package com.icia.delivery.controller.member;
+package com.icia.delivery.domain.reward.controller;
 
-import com.icia.delivery.dto.member.RewardDTO;
-import com.icia.delivery.service.member.RewardService;
+import com.icia.delivery.domain.reward.dto.RewardDTO;
+import com.icia.delivery.domain.reward.service.RewardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
