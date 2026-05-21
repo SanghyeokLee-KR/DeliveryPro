@@ -5,6 +5,27 @@ Spring Boot 기반 음식 배달 플랫폼 프로젝트입니다.
 
 ---
 
+## ⭐ Project Highlights
+
+DeliveryPro는 기존 음식 배달 플랫폼의 기능을 유지하면서,
+응답 구조, 예외 처리, 도메인 패키지, 트랜잭션 경계, 테스트 실행 환경을 단계적으로 정리한 리팩토링 프로젝트입니다.
+단순 기능 구현을 넘어 Spring Boot 애플리케이션의 유지보수성과 테스트 가능성을 높이는 데 초점을 맞췄습니다.
+
+* 공통 `ApiResponse`를 도입해 REST API 응답 형식을 일관되게 표준화했습니다.
+* `BusinessException`, `ErrorCode`, `GlobalExceptionHandler`를 기반으로 예외 처리 흐름을 구조화했습니다.
+* `DeliveryAddress`, `Notification`, `LoginHistory` 3개 도메인을 독립 패키지로 분리해 응집도를 높였습니다.
+* Controller에 있던 트랜잭션 책임을 Service 계층으로 이동해 계층별 역할을 명확히 했습니다.
+* 주요 Service의 `jakarta.transaction.Transactional`을 Spring `@Transactional`로 전환했습니다.
+* 조회 전용 메서드에는 `@Transactional(readOnly = true)`를 적용해 트랜잭션 의도를 명확히 표현했습니다.
+* 10개 이상 Service의 트랜잭션 적용 방식을 점진적으로 정리했습니다.
+* `test` profile을 구축해 테스트 전용 설정을 분리하고, `compileJava`와 `test` 검증이 통과되도록 정리했습니다.
+
+포트폴리오용 한 줄 요약:
+
+DeliveryPro는 공통 응답/예외 처리, 도메인 패키지 분리, Service 중심 트랜잭션 관리, 테스트 profile 구축을 통해 유지보수성과 검증 가능성을 개선한 Spring Boot 기반 음식 배달 플랫폼입니다.
+
+---
+
 ## 📌 Overview
 
 DeliveryPro는 음식 주문부터 배달까지의 전체 흐름을 구현한 프로젝트입니다.
