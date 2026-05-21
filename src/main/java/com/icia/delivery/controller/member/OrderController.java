@@ -1,7 +1,7 @@
 package com.icia.delivery.controller.member;
 
 import com.icia.delivery.dto.member.OrderDTO;
-import com.icia.delivery.dto.rider.GroupRiderCallRequest;
+import com.icia.delivery.domain.deliverygroup.dto.GroupRiderCallRequest;
 import com.icia.delivery.service.member.OrderService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

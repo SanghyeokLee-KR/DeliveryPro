@@ -1,7 +1,7 @@
 package com.icia.delivery.dao.menu;
 
 import com.icia.delivery.dto.menu.MenuEntity;
-import com.icia.delivery.dto.president.PreStoreMenuEntity;
+import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
