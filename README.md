@@ -85,6 +85,110 @@ src/main/java/com/icia/delivery
 
 ---
 
+## 🏗 리팩토링 아키텍처
+
+DeliveryPro는 리팩토링을 통해 공통 응답 구조, 예외 처리 흐름,
+Service 중심 트랜잭션 경계, 도메인 패키지 분리를 명확히 했습니다.
+아래 다이어그램은 리팩토링 후 주요 요청 처리 흐름과 계층별 책임을 보여줍니다.
+
+```mermaid
+flowchart TB
+    Client["Client (Browser)"]
+    StaticJS["Static JS<br/>address.js<br/>alarm.js<br/>myPage.js"]
+
+    subgraph ControllerLayer["Controller Layer"]
+        Controllers["MVC / REST Controllers"]
+        ApiResponse["ApiResponse<br/>Standard Success Response"]
+        GlobalExceptionHandler["GlobalExceptionHandler<br/>REST Exception Response"]
+    end
+
+    subgraph ErrorLayer["Common Error Handling"]
+        BusinessException["BusinessException"]
+        ErrorCode["ErrorCode"]
+    end
+
+    subgraph ServiceLayer["Service Layer"]
+        Services["Business Services<br/>Transactional Boundary"]
+        ReadOnlyTx["Read-only Query Methods<br/>@Transactional(readOnly = true)"]
+        WriteTx["Write Methods<br/>@Transactional"]
+    end
+
+    subgraph DomainPackages["Domain Packages"]
+        DeliveryAddress["deliveryaddress"]
+        Notification["notification"]
+        LoginHistory["loginhistory"]
+    end
+
+    subgraph RepositoryLayer["Repository Layer"]
+        Repositories["Spring Data JPA Repositories"]
+    end
+
+    DB[("Database<br/>Oracle")]
+
+    Client --> StaticJS
+    StaticJS --> Controllers
+    Client --> Controllers
+
+    Controllers --> ApiResponse
+    Controllers --> Services
+    Controllers -. exception .-> GlobalExceptionHandler
+
+    Services --> ReadOnlyTx
+    Services --> WriteTx
+    Services --> DomainPackages
+    Services --> Repositories
+
+    Repositories --> DB
+
+    Services -. throws .-> BusinessException
+    BusinessException --> ErrorCode
+    GlobalExceptionHandler --> ErrorCode
+    GlobalExceptionHandler --> ApiResponse
+```
+
+### 계층별 역할
+
+* **Client / Static JS**
+  * 브라우저 요청과 화면 이벤트를 담당합니다.
+  * `address.js`, `alarm.js`, `myPage.js`는 공통 응답 구조인 `ApiResponse`에 맞춰 응답을 처리합니다.
+
+* **Controller Layer**
+  * 요청을 받고 Service 계층을 호출합니다.
+  * REST 응답은 `ApiResponse`로 표준화하고, 트랜잭션 책임은 Service 계층으로 이동했습니다.
+
+* **Common Error Handling**
+  * 비즈니스 예외는 `BusinessException`과 `ErrorCode`로 표현합니다.
+  * REST 예외 응답은 `GlobalExceptionHandler`에서 일관된 구조로 변환합니다.
+
+* **Service Layer**
+  * 비즈니스 로직과 트랜잭션 경계를 담당합니다.
+  * 조회 메서드는 `@Transactional(readOnly = true)`, 생성/수정/삭제 메서드는 기본 `@Transactional`을 적용해 의도를 명확히 했습니다.
+
+* **Domain Packages**
+  * `deliveryaddress`, `notification`, `loginhistory`를 도메인 단위 패키지로 분리했습니다.
+  * 관련 Controller, Service, Repository, DTO, Entity를 응집도 있게 관리할 수 있도록 구조를 정리했습니다.
+
+* **Repository Layer / Database**
+  * Repository는 Spring Data JPA 기반 데이터 접근을 담당합니다.
+  * 실제 저장소는 Oracle DB를 사용합니다.
+
+### 리팩토링 전후 비교
+
+리팩토링 전에는 응답 형식, 예외 처리, 트랜잭션 경계, 일부 도메인 코드의 위치가 기능별로 흩어져 있어
+유지보수 기준이 명확하지 않았습니다.
+
+리팩토링 후에는 공통 응답과 예외 처리 구조를 도입하고,
+Controller의 트랜잭션 책임을 Service 계층으로 이동했으며,
+핵심 도메인을 패키지 단위로 분리해 계층별 책임과 변경 범위를 명확히 했습니다.
+
+### Portfolio Summary
+
+DeliveryPro는 공통 응답/예외 처리, Service 중심 트랜잭션 관리,
+도메인 패키지 분리를 통해 기존 기능을 유지하면서도 유지보수성과 확장성을 높인
+Spring Boot 기반 음식 배달 플랫폼입니다.
+
+---
+
 ## ⚙️ Configuration
 
 이 프로젝트는 보안을 위해 민감 정보를 외부 설정으로 분리합니다.
