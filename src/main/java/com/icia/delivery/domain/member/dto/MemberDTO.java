@@ -1,7 +1,8 @@
 // src/main/java/com/icia/delivery/dto/member/MemberDTO.java
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.member.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

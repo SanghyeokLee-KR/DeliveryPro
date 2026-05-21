@@ -1,10 +1,10 @@
 package com.icia.delivery.domain.loginhistory.service;
 
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.entity.LoginHistoryEntity;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

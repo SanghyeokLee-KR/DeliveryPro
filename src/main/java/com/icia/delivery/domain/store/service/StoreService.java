@@ -1,6 +1,6 @@
 package com.icia.delivery.domain.store.service;
 
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.dao.member.OrderRepository;
 import com.icia.delivery.domain.review.entity.ReviewEntity;
 import com.icia.delivery.domain.review.repository.reviewRepository;
@@ -12,7 +12,7 @@ import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
 import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.dto.member.OrderEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

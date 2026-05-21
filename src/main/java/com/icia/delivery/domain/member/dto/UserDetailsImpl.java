@@ -1,5 +1,5 @@
 // src/main/java/com/icia/delivery/dto/member/UserDetailsImpl.java
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.member.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

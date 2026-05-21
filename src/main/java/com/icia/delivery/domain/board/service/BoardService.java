@@ -4,7 +4,7 @@ package com.icia.delivery.domain.board.service;
 import com.icia.delivery.domain.board.dto.BoardDTO;
 import com.icia.delivery.domain.board.entity.BoardEntity;
 import com.icia.delivery.domain.board.repository.BoardRepository;
-import com.icia.delivery.dto.member.MemberDTO;
+import com.icia.delivery.domain.member.dto.MemberDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

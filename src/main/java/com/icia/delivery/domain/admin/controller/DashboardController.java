@@ -1,7 +1,7 @@
 package com.icia.delivery.domain.admin.controller;
 
 
-import com.icia.delivery.dto.member.MemberDTO;
+import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.dto.member.OrderDTO;
 import com.icia.delivery.domain.admin.service.AdminService;
 import com.icia.delivery.domain.admin.service.DashboardService;

@@ -1,7 +1,7 @@
 // src/main/java/com/icia/delivery/dao/member/MemberRepository.java
-package com.icia.delivery.dao.member;
+package com.icia.delivery.domain.member.repository;
 
-import com.icia.delivery.dto.member.MemberEntity;
+import com.icia.delivery.domain.member.entity.MemberEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -64,4 +64,3 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     @Query("SELECT m.userId FROM MemberEntity m WHERE m.mId = :memberId")
     List<String> findMemberUserIdById(@Param("memberId") Long memberId);
 }
-

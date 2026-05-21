@@ -3,7 +3,7 @@ package com.icia.delivery.domain.admin.controller;
 
 import com.icia.delivery.domain.admin.service.OperatorService;
 import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
-import com.icia.delivery.dto.member.MemberDTO;
+import com.icia.delivery.domain.member.dto.MemberDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.member.dto;
 
 
 import lombok.Data;

@@ -1,13 +1,13 @@
-package com.icia.delivery.service.member;
+package com.icia.delivery.domain.member.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.icia.delivery.dao.member.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
-import com.icia.delivery.dto.member.MemberDTO;
-import com.icia.delivery.dto.member.MemberEntity;
-import com.icia.delivery.dto.member.UserProfile;
+import com.icia.delivery.domain.member.dto.MemberDTO;
+import com.icia.delivery.domain.member.entity.MemberEntity;
+import com.icia.delivery.domain.member.dto.UserProfile;
 import com.icia.delivery.service.IpService;
 import com.icia.delivery.util.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
