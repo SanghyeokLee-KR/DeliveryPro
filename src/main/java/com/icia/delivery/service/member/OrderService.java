@@ -16,9 +16,9 @@ import com.icia.delivery.domain.notification.service.NotificationService;
 import com.icia.delivery.util.KakaoApiUtil;
 import com.icia.delivery.util.KakaoGeocoderUtil;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -537,7 +537,7 @@ public class OrderService {
         System.out.println("[acceptBatchOrders] 묶음배달 처리 완료, 최적 순서 부여됨");
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Long getMemIdByOrderId(Long orderId) {
         return orderRepository.findMemIdByOrderId(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("🚨 해당 주문 ID의 회원 정보가 없습니다: " + orderId));

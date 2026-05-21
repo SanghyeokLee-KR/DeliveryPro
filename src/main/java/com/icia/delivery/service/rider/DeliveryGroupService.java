@@ -5,9 +5,9 @@ import com.icia.delivery.dao.rider.DeliveryGroupRepository;
 import com.icia.delivery.dto.member.OrderEntity;
 import com.icia.delivery.dto.rider.DeliveryGroupDTO;
 import com.icia.delivery.dto.rider.DeliveryGroupEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +25,7 @@ public class DeliveryGroupService {
     /**
      * 배달 상태가 "배달중" 또는 "배달완료"인 묶음 배달 주문 내역 조회
      */
+    @Transactional(readOnly = true)
     public List<DeliveryGroupDTO> getProcessedGroupOrders() {
         List<DeliveryGroupEntity> entities =
                 deliveryGroupRepository.findByDeliveryStatusIn(Arrays.asList("배달중", "배달완료"));
@@ -36,6 +37,7 @@ public class DeliveryGroupService {
     /**
      * 배달 상태가 "배달중" 또는 "배달완료"인 한집배달 주문 내역 조회
      */
+    @Transactional(readOnly = true)
     public List<DeliveryGroupDTO> getProcessedSingleOrders() {
         List<DeliveryGroupEntity> entities =
                 deliveryGroupRepository.findByDeliveryTypeAndDeliveryStatusIn("한집배달",

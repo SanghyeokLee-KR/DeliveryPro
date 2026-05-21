@@ -5,7 +5,6 @@ import com.icia.delivery.dto.admin.CouponDTO;
 import com.icia.delivery.dto.admin.CouponEntity;
 import com.icia.delivery.service.admin.CouponService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ public class UserRestCouponController {
     private final HttpSession session;
 
     // 회원별 쿠폰을 조회하는 엔드포인트 (GET 방식 예시)
-    @Transactional
     @GetMapping("/getCoupons")
     public List<CouponDTO> getCoupons() {
         Long currentMemberId = getCurrentMemberId();

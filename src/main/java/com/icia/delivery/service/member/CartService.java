@@ -6,9 +6,9 @@ import com.icia.delivery.dao.president.StoreMenuRepository;
 import com.icia.delivery.dto.member.*;
 import com.icia.delivery.dto.president.PreStoreMenuEntity;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class CartService {
     /**
      * 장바구니 목록 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<CartDTO> cartList() {
         List<CartDTO> dtoList = new ArrayList<>();
 
@@ -62,6 +62,7 @@ public class CartService {
     /*
      * 장바구니 항목 삭제
      */
+    @Transactional
     public ModelAndView removeCartItem(Long CartId) {
         mav = new ModelAndView();
 
@@ -149,6 +150,7 @@ public class CartService {
         return   CartDTO.toDTO(savedEntity);
     }
 
+    @Transactional
     public ModelAndView deleteCart(CartDTO cart) {
 
         mav = new ModelAndView();

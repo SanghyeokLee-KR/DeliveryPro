@@ -11,10 +11,10 @@ import com.icia.delivery.dto.member.OrderEntity;
 import com.icia.delivery.dto.member.ReviewEntity;
 import com.icia.delivery.dto.president.*;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -732,7 +732,7 @@ public class StoreService {
         }
         return "";
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public String checkStoreStatus(Long storeId) {
         Optional<PreStoreEntity> storeOpt = storerepostory.findById(storeId);
         if (storeOpt.isPresent()) {
@@ -811,7 +811,7 @@ public class StoreService {
         return salesData;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Map<String, Object> storeMemBirthSalesData() {
         Long preStoId = (Long) session.getAttribute("pre_store_id");
 

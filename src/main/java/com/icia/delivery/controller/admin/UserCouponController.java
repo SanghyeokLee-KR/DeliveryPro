@@ -3,7 +3,6 @@ package com.icia.delivery.controller.admin;
 import com.icia.delivery.dto.admin.CouponEntity;
 import com.icia.delivery.service.admin.CouponService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,7 +28,6 @@ public class UserCouponController {
     /**
      * 사용자 쿠폰 페이지
      */
-    @Transactional
     @GetMapping("/coupon")
     public String getUserCoupons(
             @RequestParam(defaultValue = "0") int page,            // 페이징 시 현재 페이지 번호

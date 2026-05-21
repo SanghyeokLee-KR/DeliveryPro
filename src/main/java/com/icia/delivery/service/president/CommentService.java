@@ -6,9 +6,9 @@ import com.icia.delivery.dto.president.CommentDTO;
 import com.icia.delivery.dto.president.CommentEntity;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class CommentService {
     private final HttpSession session;
 
 
+    @Transactional
     public Optional<CommentDTO> cWrite(CommentDTO comment) {
         Long preMemId = (Long) session.getAttribute("preMem_id");
 
@@ -62,6 +63,7 @@ public class CommentService {
         return dtoList;
     }
 
+    @Transactional
     public Optional<CommentDTO> cDelete(CommentDTO comment) {
 
         // 댓글 삭제
@@ -73,11 +75,13 @@ public class CommentService {
 
     }
 
+    @Transactional(readOnly = true)
     public Optional<CommentDTO> getSingleOwnerComment(Long reviewId) {
         return crepo.findOwnerCommentByReviewId(reviewId)
                 .map(CommentDTO::toDTO);
     }
 
+    @Transactional(readOnly = true)
     public Optional<CommentDTO> singleComment(Long boardId) {
         return crepo.findTopByBoardId(boardId)
                 .map(CommentDTO::toDTO);  // Entity → DTO 변환

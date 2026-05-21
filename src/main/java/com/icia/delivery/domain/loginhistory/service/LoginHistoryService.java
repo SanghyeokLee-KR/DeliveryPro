@@ -27,6 +27,7 @@ public class LoginHistoryService {
      *
      * @return List<LoginHistoryDTO>
      */
+    @Transactional(readOnly = true)
     public List<LoginHistoryDTO> getAllLoginHistories() {
         List<LoginHistoryEntity> entities = loginHistoryRepository.findAll();
         return entities.stream()
@@ -41,6 +42,7 @@ public class LoginHistoryService {
      * @param dto 로그인 내역 DTO
      * @return LoginHistoryDTO
      */
+    @Transactional
     public LoginHistoryDTO saveLoginHistory(LoginHistoryDTO dto) {
         // DTO에 포함된 회원 ID로 회원 엔티티 조회
         MemberEntity member = memberRepository.findById(dto.getHisMid())
