@@ -120,6 +120,43 @@ src/main/java/com/icia/delivery
 
 ---
 
+## 🧪 테스트 실행 방법
+
+테스트는 `test` profile을 사용해 실행됩니다.
+`DeliveryProApplicationTests`는 `@ActiveProfiles("test")`를 통해
+`src/test/resources/application-test.properties` 설정을 로딩합니다.
+
+테스트 profile에서는 Mail, OAuth, Kakao, IP 조회 API 관련 값은
+컨텍스트 로딩용 더미값으로 처리합니다.
+단, 현재 테스트는 Spring Context와 JPA 설정을 함께 로딩하므로
+Oracle DB 연결 정보는 환경 변수로 제공해야 합니다.
+
+### Required Test Environment Variables
+
+* `DB_URL`
+* `DB_USERNAME`
+* `DB_PASSWORD`
+
+### Windows CMD 예시
+
+```cmd
+set DB_URL=jdbc:oracle:thin:@<host>:<port>/<service_name>
+set DB_USERNAME=<oracle_username>
+set DB_PASSWORD=<oracle_password>
+```
+
+실제 비밀번호나 API Key는 README에 작성하지 않고,
+로컬 환경 변수 또는 개인 설정으로만 관리합니다.
+
+### 테스트 실행 명령어
+
+```cmd
+.\gradlew.bat compileJava
+.\gradlew.bat test
+```
+
+---
+
 ## 🧪 Troubleshooting
 
 ### 1. Controller Bean 충돌
