@@ -1,8 +1,8 @@
-package com.icia.delivery.controller.president;
+package com.icia.delivery.domain.president.controller;
 
 
-import com.icia.delivery.dto.president.PreMemberDTO;
-import com.icia.delivery.service.president.PreMemService;
+import com.icia.delivery.domain.president.dto.PreMemberDTO;
+import com.icia.delivery.domain.president.service.PreMemService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
