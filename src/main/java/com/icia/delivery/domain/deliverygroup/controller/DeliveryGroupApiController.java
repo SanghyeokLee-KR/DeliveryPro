@@ -1,9 +1,9 @@
 package com.icia.delivery.domain.deliverygroup.controller;
 
-import com.icia.delivery.dto.member.OrderEntity;
+import com.icia.delivery.domain.order.entity.OrderEntity;
 import com.icia.delivery.domain.deliverygroup.dto.DeliveryGroupDTO;
 import com.icia.delivery.domain.deliverygroup.service.DeliveryGroupService;
-import com.icia.delivery.service.member.OrderService;
+import com.icia.delivery.domain.order.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

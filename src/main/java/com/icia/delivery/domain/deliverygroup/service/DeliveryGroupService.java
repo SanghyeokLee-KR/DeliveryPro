@@ -1,10 +1,10 @@
 package com.icia.delivery.domain.deliverygroup.service;
 
-import com.icia.delivery.dao.member.OrderRepository;
+import com.icia.delivery.domain.order.repository.OrderRepository;
 import com.icia.delivery.domain.deliverygroup.dto.DeliveryGroupDTO;
 import com.icia.delivery.domain.deliverygroup.entity.DeliveryGroupEntity;
 import com.icia.delivery.domain.deliverygroup.repository.DeliveryGroupRepository;
-import com.icia.delivery.dto.member.OrderEntity;
+import com.icia.delivery.domain.order.entity.OrderEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

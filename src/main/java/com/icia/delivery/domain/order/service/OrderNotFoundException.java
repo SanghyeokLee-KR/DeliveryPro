@@ -1,4 +1,4 @@
-package com.icia.delivery.service.member;
+package com.icia.delivery.domain.order.service;
 
 public class OrderNotFoundException extends RuntimeException {
     // 생성자에서 메시지를 받을 수 있게 설정

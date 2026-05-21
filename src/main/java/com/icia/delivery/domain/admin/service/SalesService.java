@@ -1,8 +1,8 @@
 package com.icia.delivery.domain.admin.service;
 
-import com.icia.delivery.dao.member.OrderRepository;
+import com.icia.delivery.domain.order.repository.OrderRepository;
 import com.icia.delivery.domain.store.repository.StoreRepository;
-import com.icia.delivery.dto.member.OrderEntity;
+import com.icia.delivery.domain.order.entity.OrderEntity;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import lombok.RequiredArgsConstructor;

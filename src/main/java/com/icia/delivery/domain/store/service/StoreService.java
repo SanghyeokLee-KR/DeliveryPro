@@ -1,7 +1,7 @@
 package com.icia.delivery.domain.store.service;
 
 import com.icia.delivery.domain.member.repository.MemberRepository;
-import com.icia.delivery.dao.member.OrderRepository;
+import com.icia.delivery.domain.order.repository.OrderRepository;
 import com.icia.delivery.domain.review.entity.ReviewEntity;
 import com.icia.delivery.domain.review.repository.reviewRepository;
 import com.icia.delivery.domain.president.entity.PreMemberEntity;
@@ -13,7 +13,7 @@ import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
 import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
-import com.icia.delivery.dto.member.OrderEntity;
+import com.icia.delivery.domain.order.entity.OrderEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

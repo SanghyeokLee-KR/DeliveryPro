@@ -2,7 +2,7 @@ package com.icia.delivery.domain.member.controller;
 
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.service.MemberService;
-import com.icia.delivery.service.member.OrderService;
+import com.icia.delivery.domain.order.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
