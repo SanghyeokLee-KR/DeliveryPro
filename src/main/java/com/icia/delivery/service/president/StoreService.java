@@ -2,13 +2,13 @@ package com.icia.delivery.service.president;
 
 import com.icia.delivery.dao.member.MemberRepository;
 import com.icia.delivery.dao.member.OrderRepository;
-import com.icia.delivery.dao.member.reviewRepository;
 import com.icia.delivery.dao.president.PreMemRepository;
 import com.icia.delivery.dao.president.StoreMenuRepository;
 import com.icia.delivery.dao.president.StoreRepository;
+import com.icia.delivery.domain.review.entity.ReviewEntity;
+import com.icia.delivery.domain.review.repository.reviewRepository;
 import com.icia.delivery.dto.member.MemberEntity;
 import com.icia.delivery.dto.member.OrderEntity;
-import com.icia.delivery.dto.member.ReviewEntity;
 import com.icia.delivery.dto.president.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

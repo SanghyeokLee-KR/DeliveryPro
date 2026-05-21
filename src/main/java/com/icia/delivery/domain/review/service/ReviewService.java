@@ -1,10 +1,10 @@
-package com.icia.delivery.service.member;
+package com.icia.delivery.domain.review.service;
 
 
-import com.icia.delivery.dao.member.reviewRepository;
 import com.icia.delivery.dao.president.StoreRepository;
-import com.icia.delivery.dto.member.ReviewDTO;
-import com.icia.delivery.dto.member.ReviewEntity;
+import com.icia.delivery.domain.review.dto.ReviewDTO;
+import com.icia.delivery.domain.review.entity.ReviewEntity;
+import com.icia.delivery.domain.review.repository.reviewRepository;
 import com.icia.delivery.dto.president.PreStoreEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
