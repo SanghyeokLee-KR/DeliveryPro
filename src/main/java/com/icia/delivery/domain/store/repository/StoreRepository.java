@@ -1,7 +1,7 @@
-package com.icia.delivery.dao.president;
+package com.icia.delivery.domain.store.repository;
 
 
-import com.icia.delivery.dto.president.PreStoreEntity;
+import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,5 +84,4 @@ public interface StoreRepository extends JpaRepository<PreStoreEntity, Long> {
     @Query("SELECT p FROM PreStoreEntity p WHERE p.preStoStatus = :status AND p.preStoBreakTime IS NOT NULL")
     List<PreStoreEntity> findByPreStoStatusAndPreStoBreakTimeIsNotNull(@Param("status") String status);
 }
-
 

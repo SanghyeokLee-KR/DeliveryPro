@@ -1,11 +1,11 @@
 package com.icia.delivery.domain.review.service;
 
 
-import com.icia.delivery.dao.president.StoreRepository;
+import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.review.dto.ReviewDTO;
 import com.icia.delivery.domain.review.entity.ReviewEntity;
 import com.icia.delivery.domain.review.repository.reviewRepository;
-import com.icia.delivery.dto.president.PreStoreEntity;
+import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

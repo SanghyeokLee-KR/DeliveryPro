@@ -2,12 +2,12 @@ package com.icia.delivery.domain.admin.service;
 
 import com.icia.delivery.dao.member.MemberRepository;
 import com.icia.delivery.dao.member.OrderRepository;
-import com.icia.delivery.dao.president.StoreRepository;
+import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.dto.member.MemberDTO;
 import com.icia.delivery.dto.member.MemberEntity;
 import com.icia.delivery.dto.member.OrderDTO;
 import com.icia.delivery.dto.member.OrderEntity;
-import com.icia.delivery.dto.president.PreStoreDTO;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

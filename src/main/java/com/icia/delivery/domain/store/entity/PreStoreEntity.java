@@ -1,5 +1,6 @@
-package com.icia.delivery.dto.president;
+package com.icia.delivery.domain.store.entity;
 
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

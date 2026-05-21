@@ -1,8 +1,8 @@
-package com.icia.delivery.controller.president;
+package com.icia.delivery.domain.store.controller;
 
-import com.icia.delivery.dto.president.PreStoreDTO;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
-import com.icia.delivery.service.president.StoreService;
+import com.icia.delivery.domain.store.service.StoreService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

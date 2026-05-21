@@ -1,17 +1,19 @@
-package com.icia.delivery.service.president;
+package com.icia.delivery.domain.store.service;
 
 import com.icia.delivery.dao.member.MemberRepository;
 import com.icia.delivery.dao.member.OrderRepository;
 import com.icia.delivery.dao.president.PreMemRepository;
-import com.icia.delivery.dao.president.StoreRepository;
 import com.icia.delivery.domain.review.entity.ReviewEntity;
 import com.icia.delivery.domain.review.repository.reviewRepository;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
+import com.icia.delivery.domain.store.entity.PreStoreEntity;
+import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
 import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
 import com.icia.delivery.dto.member.MemberEntity;
 import com.icia.delivery.dto.member.OrderEntity;
-import com.icia.delivery.dto.president.*;
+import com.icia.delivery.dto.president.PreMemberEntity;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;

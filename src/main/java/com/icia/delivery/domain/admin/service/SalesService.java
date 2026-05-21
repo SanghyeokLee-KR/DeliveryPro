@@ -1,10 +1,10 @@
 package com.icia.delivery.domain.admin.service;
 
 import com.icia.delivery.dao.member.OrderRepository;
-import com.icia.delivery.dao.president.StoreRepository;
+import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.dto.member.OrderEntity;
-import com.icia.delivery.dto.president.PreStoreDTO;
-import com.icia.delivery.dto.president.PreStoreEntity;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
+import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;

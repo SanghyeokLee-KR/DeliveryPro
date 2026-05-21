@@ -1,6 +1,6 @@
 package com.icia.delivery.domain.admin.controller;
 
-import com.icia.delivery.dto.president.PreStoreDTO;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.admin.service.DashboardService;
 import com.icia.delivery.domain.admin.service.MarketingService;
 import com.icia.delivery.domain.admin.service.SalesService;

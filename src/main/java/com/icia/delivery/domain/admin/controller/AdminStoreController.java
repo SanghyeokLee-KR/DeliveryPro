@@ -2,7 +2,7 @@
 package com.icia.delivery.domain.admin.controller;
 
 import com.icia.delivery.domain.admin.service.AdminStoreService;
-import com.icia.delivery.dto.president.PreStoreDTO;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

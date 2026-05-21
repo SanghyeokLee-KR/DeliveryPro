@@ -1,9 +1,9 @@
 // src/main/java/com/icia/delivery/service/admin/AdminStoreService.java
 package com.icia.delivery.domain.admin.service;
 
-import com.icia.delivery.dao.president.StoreRepository;
-import com.icia.delivery.dto.president.PreStoreDTO;
-import com.icia.delivery.dto.president.PreStoreEntity;
+import com.icia.delivery.domain.store.repository.StoreRepository;
+import com.icia.delivery.domain.store.dto.PreStoreDTO;
+import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
