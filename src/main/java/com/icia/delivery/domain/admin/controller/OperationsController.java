@@ -1,6 +1,6 @@
 package com.icia.delivery.domain.admin.controller;
 
-import com.icia.delivery.service.president.StoreService;
+import com.icia.delivery.domain.store.service.StoreService;
 import com.icia.delivery.domain.rider.service.RiderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
