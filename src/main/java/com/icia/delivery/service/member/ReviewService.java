@@ -7,9 +7,9 @@ import com.icia.delivery.dto.member.ReviewDTO;
 import com.icia.delivery.dto.member.ReviewEntity;
 import com.icia.delivery.dto.president.PreStoreEntity;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,6 +31,7 @@ public class ReviewService {
     private final HttpSession session;
     private final StoreRepository srepo;
 
+    @Transactional(readOnly = true)
     public List<ReviewDTO> getReviewsByOrderId(Long orderId) {
         List<ReviewEntity> entities = rvrepo.findByOrderId(orderId);
         return entities.stream()
@@ -39,6 +40,7 @@ public class ReviewService {
     }
 
 
+    @Transactional
     public ModelAndView saveReview(ReviewDTO reviewDTO) {
 
         ModelAndView mav = new ModelAndView();
@@ -84,7 +86,7 @@ public class ReviewService {
         }
         return mav;
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> getReviewsByMemberId(Long memId) {
         List<Object[]> results = rvrepo.getReviewsByMemberId(memId);
         List<Map<String, Object>> reviews = new ArrayList<>();
@@ -106,7 +108,7 @@ public class ReviewService {
         return reviews;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> getReviewsByPreStoId(Long preStoId) {
         List<Object[]> results = rvrepo.getReviewsByPreStoId(preStoId);
         List<Map<String, Object>> reviewsList = new ArrayList<>();
@@ -134,6 +136,7 @@ public class ReviewService {
         // 필요한 비즈니스 로직이 있다면 추가
         srepo.updatePreStoreCount(storeId, reviewCount);
     }
+    @Transactional
     public Float reviewStarCount(Long storeId) {
         // 결과를 저장할 변수
         float totalRating = 0;  // totalRating을 float로 선언

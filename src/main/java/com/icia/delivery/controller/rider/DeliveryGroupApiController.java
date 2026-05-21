@@ -5,7 +5,6 @@ import com.icia.delivery.dto.rider.DeliveryGroupDTO;
 import com.icia.delivery.service.member.OrderService;
 import com.icia.delivery.service.rider.DeliveryGroupService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

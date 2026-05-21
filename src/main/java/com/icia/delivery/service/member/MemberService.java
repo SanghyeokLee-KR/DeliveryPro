@@ -11,10 +11,10 @@ import com.icia.delivery.service.IpService;
 import com.icia.delivery.util.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -102,6 +102,7 @@ public class MemberService {
      * @param userId 사용자 ID
      * @return 존재 여부
      */
+    @Transactional(readOnly = true)
     public boolean isUserIdExists(String userId) {
         return mrepo.existsByUserId(userId);
     }
@@ -176,6 +177,7 @@ public class MemberService {
      * @param mId 회원 고유 번호
      * @return 사용자 이름
      */
+    @Transactional(readOnly = true)
     public String getUserNameById(Long mId) {
         Optional<MemberEntity> entity = mrepo.findById(mId);
         return entity.map(MemberEntity::getUsername).orElse(null);
@@ -322,7 +324,7 @@ public class MemberService {
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public String getAddressByMemId(Long memId) {
         Long memberId = Optional.ofNullable(memId)
                 .orElseThrow(() -> new IllegalArgumentException("🚨 회원 ID가 존재하지 않습니다."));

@@ -7,11 +7,11 @@ import com.icia.delivery.domain.loginhistory.entity.LoginHistoryEntity;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.dto.member.MemberDTO;
 import com.icia.delivery.dto.member.MemberEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -114,13 +114,13 @@ public class OperatorService {
     }
 
     // 추가적인 회원 관리 메서드들...
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<LoginHistoryDTO> searchMemberLogs(String searchQuery, String hisDeviceOs, String hisBrowser, Pageable pageable) {
         Page<LoginHistoryEntity> loginHistoryEntities = loginHistoryRepository.searchMemberLogs(searchQuery, hisDeviceOs, hisBrowser, pageable);
         return loginHistoryEntities.map(LoginHistoryDTO::toDTO);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<LoginHistoryDTO> getAllMemberLogs(Pageable pageable) {
         Page<LoginHistoryEntity> loginHistoryEntities = loginHistoryRepository.findAll(pageable);
         return loginHistoryEntities.map(LoginHistoryDTO::toDTO);

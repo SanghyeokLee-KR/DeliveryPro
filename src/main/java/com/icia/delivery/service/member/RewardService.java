@@ -6,9 +6,9 @@ import com.icia.delivery.dto.member.MemberEntity;
 import com.icia.delivery.dto.member.RewardDTO;
 import com.icia.delivery.dto.member.RewardEntity;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +22,7 @@ public class RewardService {
 
     private final HttpSession session;
 
+    @Transactional(readOnly = true)
     public RewardDTO memberReward() {
 
         Long memId = (Long) session.getAttribute("mem_id");

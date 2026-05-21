@@ -12,10 +12,10 @@ import com.icia.delivery.dto.member.OrderEntity;
 import com.icia.delivery.dto.president.PreMemberEntity;
 import com.icia.delivery.dto.president.PreStoreEntity;
 import com.icia.delivery.dto.rider.RiderEntity;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,7 +32,7 @@ public class DashboardService {
     private final OrderRepository orepo;
     private final BoardRepository brepo;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void dinf(Model model) {
         List<MemberEntity> memberEntities = mrepo.findAll();
         List<RiderEntity> riderEntities = rrepo.findAll();
