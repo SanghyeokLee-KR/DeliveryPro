@@ -1,6 +1,7 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.review.entity;
 
 
+import com.icia.delivery.domain.review.dto.ReviewDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

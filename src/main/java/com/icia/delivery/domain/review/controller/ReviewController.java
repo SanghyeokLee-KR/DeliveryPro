@@ -1,7 +1,7 @@
-package com.icia.delivery.controller.member;
+package com.icia.delivery.domain.review.controller;
 
-import com.icia.delivery.dto.member.ReviewDTO;
-import com.icia.delivery.service.member.ReviewService;
+import com.icia.delivery.domain.review.dto.ReviewDTO;
+import com.icia.delivery.domain.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

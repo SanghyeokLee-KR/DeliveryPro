@@ -1,7 +1,7 @@
 package com.icia.delivery.controller.president;
 
 import com.icia.delivery.dto.president.PreStoreDTO;
-import com.icia.delivery.service.member.ReviewService;
+import com.icia.delivery.domain.review.service.ReviewService;
 import com.icia.delivery.service.president.StoreService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
