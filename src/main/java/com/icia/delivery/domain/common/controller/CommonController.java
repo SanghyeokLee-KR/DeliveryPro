@@ -1,4 +1,4 @@
-package com.icia.delivery.controller.common;
+package com.icia.delivery.domain.common.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
