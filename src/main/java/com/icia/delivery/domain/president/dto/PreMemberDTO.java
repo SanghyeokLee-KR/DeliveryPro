@@ -1,6 +1,7 @@
-package com.icia.delivery.dto.president;
+package com.icia.delivery.domain.president.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.icia.delivery.domain.president.entity.PreMemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

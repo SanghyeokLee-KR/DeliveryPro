@@ -2,7 +2,7 @@ package com.icia.delivery.domain.admin.service;
 
 import com.icia.delivery.dao.member.MemberRepository;
 import com.icia.delivery.dao.member.OrderRepository;
-import com.icia.delivery.dao.president.PreMemRepository;
+import com.icia.delivery.domain.president.repository.PreMemRepository;
 import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.board.entity.BoardEntity;
 import com.icia.delivery.domain.board.repository.BoardRepository;
@@ -10,7 +10,7 @@ import com.icia.delivery.domain.rider.entity.RiderEntity;
 import com.icia.delivery.domain.rider.repository.RiderRepository;
 import com.icia.delivery.dto.member.MemberEntity;
 import com.icia.delivery.dto.member.OrderEntity;
-import com.icia.delivery.dto.president.PreMemberEntity;
+import com.icia.delivery.domain.president.entity.PreMemberEntity;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

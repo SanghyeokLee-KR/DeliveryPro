@@ -1,11 +1,11 @@
-package com.icia.delivery.service.president;
+package com.icia.delivery.domain.president.service;
 
-import com.icia.delivery.dao.president.PreMemRepository;
+import com.icia.delivery.domain.president.repository.PreMemRepository;
 import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
-import com.icia.delivery.dto.president.PreMemberDTO;
-import com.icia.delivery.dto.president.PreMemberEntity;
+import com.icia.delivery.domain.president.dto.PreMemberDTO;
+import com.icia.delivery.domain.president.entity.PreMemberEntity;
 import com.icia.delivery.domain.deliveryaddress.service.DeliveryAddressService;
 import com.icia.delivery.service.IpService;
 import com.icia.delivery.util.UserAgentUtil;
