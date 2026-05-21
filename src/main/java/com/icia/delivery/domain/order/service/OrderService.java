@@ -1,18 +1,20 @@
-package com.icia.delivery.service.member;
+package com.icia.delivery.domain.order.service;
 
 import com.icia.delivery.domain.member.repository.MemberRepository;
-import com.icia.delivery.dao.member.OrderItemRepository;
-import com.icia.delivery.dao.member.OrderRepository;
 import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.deliverygroup.entity.DeliveryGroupEntity;
 import com.icia.delivery.domain.deliverygroup.entity.DeliveryGroupItemEntity;
 import com.icia.delivery.domain.deliverygroup.repository.DeliveryGroupItemRepository;
 import com.icia.delivery.domain.deliverygroup.repository.DeliveryGroupRepository;
 import com.icia.delivery.domain.notification.dto.NotificationDTO;
+import com.icia.delivery.domain.order.dto.OrderDTO;
+import com.icia.delivery.domain.order.entity.OrderEntity;
+import com.icia.delivery.domain.order.entity.OrderItemEntity;
+import com.icia.delivery.domain.order.repository.OrderItemRepository;
+import com.icia.delivery.domain.order.repository.OrderRepository;
 import com.icia.delivery.domain.reward.entity.RewardEntity;
 import com.icia.delivery.domain.reward.repository.RewardRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
-import com.icia.delivery.dto.member.*;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import com.icia.delivery.domain.notification.service.NotificationService;
 import com.icia.delivery.util.KakaoApiUtil;

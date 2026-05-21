@@ -1,6 +1,6 @@
-package com.icia.delivery.dao.member;
+package com.icia.delivery.domain.order.repository;
 
-import com.icia.delivery.dto.member.OrderEntity;
+import com.icia.delivery.domain.order.entity.OrderEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

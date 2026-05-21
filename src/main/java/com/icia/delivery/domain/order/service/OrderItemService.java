@@ -1,9 +1,9 @@
-package com.icia.delivery.service.member;
+package com.icia.delivery.domain.order.service;
 
 
-import com.icia.delivery.dao.member.OrderItemRepository;
-import com.icia.delivery.dto.member.OrderItemDTO;
-import com.icia.delivery.dto.member.OrderItemEntity;
+import com.icia.delivery.domain.order.dto.OrderItemDTO;
+import com.icia.delivery.domain.order.entity.OrderItemEntity;
+import com.icia.delivery.domain.order.repository.OrderItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +25,3 @@ public class OrderItemService {
     }
 
     }
-

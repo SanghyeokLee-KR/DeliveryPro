@@ -1,8 +1,8 @@
-package com.icia.delivery.controller.member;
+package com.icia.delivery.domain.order.controller;
 
 
-import com.icia.delivery.dto.member.OrderItemDTO;
-import com.icia.delivery.service.member.OrderItemService;
+import com.icia.delivery.domain.order.dto.OrderItemDTO;
+import com.icia.delivery.domain.order.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

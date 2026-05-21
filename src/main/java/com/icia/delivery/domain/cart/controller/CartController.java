@@ -2,7 +2,7 @@ package com.icia.delivery.domain.cart.controller;
 
 
 import com.icia.delivery.domain.cart.dto.CartDTO;
-import com.icia.delivery.dto.member.OrderDTO;
+import com.icia.delivery.domain.order.dto.OrderDTO;
 import com.icia.delivery.domain.cart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

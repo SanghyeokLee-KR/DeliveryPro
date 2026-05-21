@@ -1,7 +1,8 @@
-package com.icia.delivery.dto.member;
+package com.icia.delivery.domain.order.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.icia.delivery.domain.order.entity.OrderItemEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
