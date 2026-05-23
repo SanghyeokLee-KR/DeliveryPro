@@ -45,7 +45,6 @@ $env:KAKAO_CLIENT_SECRET="your_kakao_client_secret"
 $env:KAKAO_API_KEY="your_kakao_rest_api_key"
 $env:KAKAO_JAVASCRIPT_KEY="your_kakao_javascript_key"
 
-$env:IPIFY_API_URL="https://api.ipify.org"
 ```
 
 ## Local Run
