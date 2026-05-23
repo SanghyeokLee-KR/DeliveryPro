@@ -72,7 +72,7 @@ public class MemberService {
 
             // IP 설정
             if (memberDTO.getRegisterIp() == null || memberDTO.getRegisterIp().isEmpty()) {
-                String clientIp = ipService.getPublicIp();
+                String clientIp = ipService.getClientIp(request);
                 memberDTO.setRegisterIp(clientIp);
             }
 
@@ -139,14 +139,14 @@ public class MemberService {
 
                 // 로그인 성공 시 마지막 로그인 정보 업데이트
                 entity.setLastLoginDate(LocalDateTime.now());
-                entity.setLastLoginIp(ipService.getPublicIp());
+                entity.setLastLoginIp(ipService.getClientIp(request));
                 mrepo.save(entity); // 업데이트된 정보 저장
 
                 // 로그인 기록 저장
                 try {
                     String deviceOs = UserAgentUtil.getDeviceOs(request);
                     String browser = UserAgentUtil.getBrowser(request);
-                    String clientIp = ipService.getPublicIp();
+                    String clientIp = ipService.getClientIp(request);
 
                     LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
                     loginHistoryDTO.setHisMid(entity.getMId()); // 회원 ID

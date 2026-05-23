@@ -155,7 +155,7 @@ public class AuthService {
      */
     public MemberEntity saveOrUpdate(UserProfile userProfile) {
         Optional<MemberEntity> optionalMember = memberRepository.findByEmail(userProfile.getEmail());
-        String publicIp = ipService.getPublicIp();
+        String publicIp = ipService.getClientIp(request);
         String deviceOs = UserAgentUtil.getDeviceOs(request);
         String browser = UserAgentUtil.getBrowser(request);
 
@@ -346,7 +346,7 @@ public class AuthService {
      */
     public MemberEntity GsaveOrUpdate(UserProfile userProfile) {
         Optional<MemberEntity> optionalMember = memberRepository.findByEmail(userProfile.getEmail());
-        String publicIp = ipService.getPublicIp();
+        String publicIp = ipService.getClientIp(request);
         String deviceOs = UserAgentUtil.getDeviceOs(request);
         String browser = UserAgentUtil.getBrowser(request);
 
@@ -530,7 +530,7 @@ public class AuthService {
      */
     public MemberEntity KsaveOrUpdate(UserProfile userProfile) {
         Optional<MemberEntity> optionalMember = memberRepository.findByEmail(userProfile.getEmail());
-        String publicIp = ipService.getPublicIp();
+        String publicIp = ipService.getClientIp(request);
         String deviceOs = UserAgentUtil.getDeviceOs(request);
         String browser = UserAgentUtil.getBrowser(request);
 
