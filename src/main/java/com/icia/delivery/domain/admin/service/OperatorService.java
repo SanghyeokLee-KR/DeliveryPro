@@ -2,6 +2,7 @@
 package com.icia.delivery.domain.admin.service;
 
 import com.icia.delivery.domain.member.repository.MemberRepository;
+import com.icia.delivery.domain.member.repository.MemberUserIdProjection;
 import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.entity.LoginHistoryEntity;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
@@ -13,7 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class OperatorService {
@@ -24,9 +30,36 @@ public class OperatorService {
     @Autowired
     private LoginHistoryRepository loginHistoryRepository;
 
-    // 회원 ID로 userId만 조회
-    public List<String> getMemberUserIdById(Long memberId) {
-        return memberRepository.findMemberUserIdById(memberId);
+    // 로그인 기록 순서에 맞춰 회원 userId 목록을 조회
+    @Transactional(readOnly = true)
+    public List<String> getMemberUserIdsByLoginHistories(List<LoginHistoryDTO> loginHistories) {
+        if (loginHistories == null || loginHistories.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Long> memberIds = loginHistories.stream()
+                .map(LoginHistoryDTO::getHisMid)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (memberIds.isEmpty()) {
+            return loginHistories.stream()
+                    .map(log -> "")
+                    .collect(Collectors.toList());
+        }
+
+        Map<Long, String> userIdByMemberId = new HashMap<>();
+        for (MemberUserIdProjection projection : memberRepository.findMemberUserIdsByIds(memberIds)) {
+            userIdByMemberId.put(projection.getMId(), projection.getUserId());
+        }
+
+        return loginHistories.stream()
+                .map(log -> {
+                    String userId = userIdByMemberId.get(log.getHisMid());
+                    return userId != null ? userId : "";
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -117,12 +150,16 @@ public class OperatorService {
     @Transactional(readOnly = true)
     public Page<LoginHistoryDTO> searchMemberLogs(String searchQuery, String hisDeviceOs, String hisBrowser, Pageable pageable) {
         Page<LoginHistoryEntity> loginHistoryEntities = loginHistoryRepository.searchMemberLogs(searchQuery, hisDeviceOs, hisBrowser, pageable);
-        return loginHistoryEntities.map(LoginHistoryDTO::toDTO);
+        return toLoginHistoryDTOPage(loginHistoryEntities);
     }
 
     @Transactional(readOnly = true)
     public Page<LoginHistoryDTO> getAllMemberLogs(Pageable pageable) {
         Page<LoginHistoryEntity> loginHistoryEntities = loginHistoryRepository.findAll(pageable);
+        return toLoginHistoryDTOPage(loginHistoryEntities);
+    }
+
+    private Page<LoginHistoryDTO> toLoginHistoryDTOPage(Page<LoginHistoryEntity> loginHistoryEntities) {
         return loginHistoryEntities.map(LoginHistoryDTO::toDTO);
     }
 }

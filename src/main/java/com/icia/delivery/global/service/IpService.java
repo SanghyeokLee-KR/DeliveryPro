@@ -1,27 +1,52 @@
 package com.icia.delivery.global.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class IpService {
-    @Value("${ipify.api.url}")
-    private String apiUrl;
 
-    public String getPublicIp() {
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            String response = restTemplate.getForObject(apiUrl, String.class);
+    private static final String UNKNOWN = "unknown";
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(response);
-            return jsonNode.get("ip").asText();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "IP 가져오기 실패";
+    public String getClientIp(HttpServletRequest request) {
+        if (request == null) {
+            return "";
         }
+
+        String clientIp = getFirstValidIp(request.getHeader("X-Forwarded-For"));
+        if (!isInvalidIp(clientIp)) {
+            return clientIp;
+        }
+
+        clientIp = getFirstValidIp(request.getHeader("X-Real-IP"));
+        if (!isInvalidIp(clientIp)) {
+            return clientIp;
+        }
+
+        clientIp = getFirstValidIp(request.getHeader("Proxy-Client-IP"));
+        if (!isInvalidIp(clientIp)) {
+            return clientIp;
+        }
+
+        clientIp = getFirstValidIp(request.getHeader("WL-Proxy-Client-IP"));
+        if (!isInvalidIp(clientIp)) {
+            return clientIp;
+        }
+
+        clientIp = request.getRemoteAddr();
+        return isInvalidIp(clientIp) ? "" : clientIp.trim();
+    }
+
+    private String getFirstValidIp(String headerValue) {
+        if (isInvalidIp(headerValue)) {
+            return null;
+        }
+
+        String firstIp = headerValue.split(",")[0].trim();
+        return isInvalidIp(firstIp) ? null : firstIp;
+    }
+
+    private boolean isInvalidIp(String ip) {
+        return ip == null || ip.trim().isEmpty() || UNKNOWN.equalsIgnoreCase(ip.trim());
     }
 }

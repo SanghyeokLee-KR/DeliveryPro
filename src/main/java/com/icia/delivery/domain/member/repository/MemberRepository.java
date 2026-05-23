@@ -60,7 +60,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     @Query("SELECT m.address FROM MemberEntity m WHERE m.mId = :memId")
     String findAddressByMemberId(Long memId);
 
-    // 회원 ID로 userId만 조회하는 쿼리
-    @Query("SELECT m.userId FROM MemberEntity m WHERE m.mId = :memberId")
-    List<String> findMemberUserIdById(@Param("memberId") Long memberId);
+    @Query("SELECT m.mId AS mId, m.userId AS userId FROM MemberEntity m WHERE m.mId IN :memberIds")
+    List<MemberUserIdProjection> findMemberUserIdsByIds(@Param("memberIds") List<Long> memberIds);
 }

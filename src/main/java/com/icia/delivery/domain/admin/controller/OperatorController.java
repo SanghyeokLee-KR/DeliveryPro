@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -162,24 +161,15 @@ public class OperatorController {
         Page<LoginHistoryDTO> memberLogPage;
 
         // 검색 및 필터링 조건에 따라 데이터 조회
-        if (searchQuery == null || searchQuery.trim().isEmpty() &&
-                (hisDeviceOs == null || hisDeviceOs.trim().isEmpty()) &&
-                (hisBrowser == null || hisBrowser.trim().isEmpty())) {
-            memberLogPage = operatorService.getAllMemberLogs(pageable);
-        } else {
+        if (hasLoginHistorySearchCondition(searchQuery, hisDeviceOs, hisBrowser)) {
             memberLogPage = operatorService.searchMemberLogs(searchQuery, hisDeviceOs, hisBrowser, pageable);
+        } else {
+            memberLogPage = operatorService.getAllMemberLogs(pageable);
         }
 
 
         // 회원의 userId만 가져와서 model에 담기
-        List<String> userIds = new ArrayList<>();
-        for (LoginHistoryDTO log : memberLogPage.getContent()) {
-            Long memberId = Long.parseLong(String.valueOf(log.getHisMid()));
-            List<String> memberUserIds = operatorService.getMemberUserIdById(memberId);
-            if (!memberUserIds.isEmpty()) {
-                userIds.add(memberUserIds.get(0));  // userId만 가져옴
-            }
-        }
+        List<String> userIds = operatorService.getMemberUserIdsByLoginHistories(memberLogPage.getContent());
 
 
         // 모델에 데이터 추가
@@ -203,5 +193,12 @@ public class OperatorController {
         return "admin/admin";
     }
 
+    private boolean hasLoginHistorySearchCondition(String searchQuery, String hisDeviceOs, String hisBrowser) {
+        return !(searchQuery == null || (!hasText(searchQuery) && !hasText(hisDeviceOs) && !hasText(hisBrowser)));
+    }
+
+    private boolean hasText(String value) {
+        return value != null && !value.trim().isEmpty();
+    }
 
 }
