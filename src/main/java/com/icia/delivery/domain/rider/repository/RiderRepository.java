@@ -1,7 +1,6 @@
 package com.icia.delivery.domain.rider.repository;
 
 import com.icia.delivery.domain.rider.entity.RiderEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,7 +34,6 @@ public interface RiderRepository extends JpaRepository<RiderEntity, Long> {
     Page<RiderEntity> findApprovedRider2(Pageable pageable);
 
     @Modifying
-    @Transactional
     @Query("UPDATE RiderEntity r SET r.isAvailable = '승인' WHERE r.riderNo = :id")
     int updateRiderStatusApprove(@Param("id") Long id);
 

@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -207,6 +208,7 @@ public class RiderService {
         } else { return "실패!"; }
     }
 
+    @Transactional
     public boolean approve(Long id) {
         int result = riderRepository.updateRiderStatusApprove(id);
         return result > 0;  // 수정된 행이 있으면 true 반환

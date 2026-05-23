@@ -194,6 +194,7 @@ public class OrderService {
         return delivery;
     }
 
+    @Transactional
     public List<Map<String, Object>> acceptOrders(Long orderId) {
         List<Object[]> results = orderRepository.findOrderWithStore(orderId);
         List<Map<String, Object>> accept = new ArrayList<>();

@@ -1,7 +1,6 @@
 package com.icia.delivery.domain.order.repository;
 
 import com.icia.delivery.domain.order.entity.OrderEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -50,7 +49,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     List<Object[]> findOrderWithStore(@Param("orderId") Long orderId);
 
     @Modifying
-    @Transactional
     @Query(value = "UPDATE orders SET delivery_status = '배달중' WHERE order_id = :orderId", nativeQuery = true)
     void updateDeliveryStatusToInProgress(@Param("orderId") Long orderId);
 

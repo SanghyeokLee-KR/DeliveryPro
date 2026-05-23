@@ -463,6 +463,7 @@ public class StoreService {
         return null;
     }
 
+    @Transactional
     public boolean approve(Long id) {
         int result = storerepostory.updatePreStoStatusApprove(id);
         return result > 0;  // 수정된 행이 있으면 true 반환

@@ -2,7 +2,6 @@ package com.icia.delivery.domain.store.repository;
 
 
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -64,7 +63,6 @@ public interface StoreRepository extends JpaRepository<PreStoreEntity, Long> {
     Page<PreStoreEntity> findApprovedStores(Pageable pageable);
 
     @Modifying
-    @Transactional
     @Query("UPDATE PreStoreEntity p SET p.preStoStatus = '승인' WHERE p.preStoId = :id")
     int updatePreStoStatusApprove(@Param("id") Long id);
 
