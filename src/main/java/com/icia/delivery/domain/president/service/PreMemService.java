@@ -1,7 +1,6 @@
 package com.icia.delivery.domain.president.service;
 
 import com.icia.delivery.domain.president.repository.PreMemRepository;
-import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
 import com.icia.delivery.domain.president.dto.PreMemberDTO;
@@ -147,14 +146,7 @@ public class PreMemService {
                     String browser = UserAgentUtil.getBrowser(request);
                     String clientIp = ipService.getClientIp(request);
 
-                    LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-                    loginHistoryDTO.setHisMid(entity.getPreMemId()); // 회원 ID
-                    loginHistoryDTO.setHisIpAddress(clientIp); // 클라이언트 IP
-                    loginHistoryDTO.setHisDeviceOs(deviceOs); // OS 정보
-                    loginHistoryDTO.setHisBrowser(browser); // 브라우저 정보
-                    loginHistoryDTO.setHisLoginDate(LocalDateTime.now()); // 로그인 날짜
-
-                    loginHistoryService.saveLoginHistory(loginHistoryDTO); // 로그인 내역 저장
+                    loginHistoryService.recordLoginHistory(entity.getPreMemId(), clientIp, deviceOs, browser); // 로그인 내역 저장
                 } catch (Exception e) {
                     e.printStackTrace(); // 오류 로그 출력
                 }
