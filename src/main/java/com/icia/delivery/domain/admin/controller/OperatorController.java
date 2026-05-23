@@ -194,7 +194,7 @@ public class OperatorController {
     }
 
     private boolean hasLoginHistorySearchCondition(String searchQuery, String hisDeviceOs, String hisBrowser) {
-        return !(searchQuery == null || (!hasText(searchQuery) && !hasText(hisDeviceOs) && !hasText(hisBrowser)));
+        return hasText(searchQuery) || hasText(hisDeviceOs) || hasText(hisBrowser);
     }
 
     private boolean hasText(String value) {
