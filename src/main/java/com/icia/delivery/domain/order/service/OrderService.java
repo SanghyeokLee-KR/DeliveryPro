@@ -109,6 +109,7 @@ public class OrderService {
         return mav;
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> findOrderById(Long orderId) {
         Optional<OrderEntity> orderEntityOpt = orderRepository.findByOrderId(orderId);
         return orderEntityOpt
@@ -117,6 +118,7 @@ public class OrderService {
                 .orElse(List.of());
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> orderList(Long preStoId) {
         List<OrderEntity> orderEntities = orderRepository.findByPreStoId(preStoId);
         return orderEntities.stream()
@@ -124,6 +126,7 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> getOrderSummariesByMemberId(Long memId) {
         List<Object[]> results = orderRepository.findOrderSummariesByMemId(memId);
         List<Map<String, Object>> summaries = new ArrayList<>();
@@ -176,6 +179,7 @@ public class OrderService {
         });
     }
 
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> findOrders(Long orderId) {
         List<Object[]> results = orderRepository.findOrderWithMenuCount(orderId);
         List<Map<String, Object>> delivery = new ArrayList<>();
@@ -213,6 +217,7 @@ public class OrderService {
         return accept;
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> storeOrderList() {
         Long preStoId = (Long) session.getAttribute("pre_store_id");
         List<OrderDTO> dtoList = new ArrayList<>();
@@ -234,6 +239,7 @@ public class OrderService {
         return dtoList;
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> riderOrderList() {
         List<OrderDTO> dtoList = new ArrayList<>();
         // "배차중" 상태의 주문만 조회

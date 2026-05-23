@@ -53,6 +53,7 @@ public class StoreService {
     private final MemberRepository mrepo;
 
 
+    @Transactional(readOnly = true)
     public List<PreStoreDTO> getAllStores() {
         List<PreStoreEntity> entities = storerepostory.findAll();
         return entities.stream()
@@ -61,6 +62,7 @@ public class StoreService {
     }
 
 
+    @Transactional(readOnly = true)
     public List<PreStoreDTO> getStoresByCategory(String category) {
         List<PreStoreEntity> entities = storerepostory.findBypreStoCategory(category);
         return entities.stream()
@@ -121,10 +123,12 @@ public class StoreService {
     }
 
     // 시퀀스를 구현하기 위한 메소드
+    @Transactional(readOnly = true)
     public Long getNextFileSequence() {
         return storerepostory.findMaxPreId() + 1;
     }
 
+    @Transactional(readOnly = true)
     public List<PreStoreDTO> storeList(Long pathValue) {
         List<PreStoreDTO> dto = new ArrayList<>();
 
@@ -218,11 +222,13 @@ public class StoreService {
     }
 
     // 시퀀스를 구현하기 위한 메소드
+    @Transactional(readOnly = true)
     public Long getNextFileSequence2() {
         return smrepo.findMaxPreId() + 1;
     }
 
 
+    @Transactional(readOnly = true)
     public List<PreStoreMenuDTO> getStoreMenuList(Long preStoId) {
 
         List<PreStoreMenuDTO> dtoList = new ArrayList<>();
@@ -239,6 +245,7 @@ public class StoreService {
         return dtoList;
     }
 
+    @Transactional(readOnly = true)
     public List<PreStoreDTO> getstoresBystoreId(Long storeId) {
         List<PreStoreEntity> entities = storerepostory.findBypreStoId(storeId);
         return entities.stream()
@@ -329,6 +336,7 @@ public class StoreService {
         }
     }
 
+    @Transactional(readOnly = true)
     public int storeCount(Long pathValue) {
 
         int result = storerepostory.findStoreCount(pathValue);
@@ -337,6 +345,7 @@ public class StoreService {
     }
 
 
+    @Transactional(readOnly = true)
     public List<PreStoreMenuDTO> searchMenuList(String keyword, String category, Long preStoId) {
 
         List<PreStoreMenuDTO> dtoList = new ArrayList<>();
@@ -749,6 +758,7 @@ public class StoreService {
         return "";
     }
 
+    @Transactional(readOnly = true)
     public String getStoreNamebystoreId(Long preStoId) {
 
         Optional<PreStoreEntity> storeOpt = storerepostory.findById(preStoId);
@@ -760,6 +770,7 @@ public class StoreService {
     }
 
 
+    @Transactional(readOnly = true)
     public Map<String, Object> getStoreInfo(Long preStoId) {
 
         PreStoreEntity store = storerepostory.findById(preStoId)
@@ -782,6 +793,7 @@ public class StoreService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Double> storeSalesData() {
         Long preStoId = (Long) session.getAttribute("pre_store_id");
         List<OrderEntity> orderEntities = orepo.findByPreStoId(preStoId);
@@ -888,6 +900,7 @@ public class StoreService {
         return result;
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Object> storeMenuRank() {
         Long preStoId = (Long) session.getAttribute("pre_store_id");
 

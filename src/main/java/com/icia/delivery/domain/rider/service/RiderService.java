@@ -135,6 +135,7 @@ public class RiderService {
 
     }
 
+    @Transactional(readOnly = true)
     public String riderIdCheck(String rId) {
         String result = "";
         Optional<RiderEntity> entity = riderRepository.findByRiderId(rId);
@@ -182,6 +183,7 @@ public class RiderService {
         return mav;
     }
 
+    @Transactional(readOnly = true)
     public List<RiderAccountDTO> getRiderAccountList() {
 
         List<RiderAccountDTO> dto = new ArrayList<>();
