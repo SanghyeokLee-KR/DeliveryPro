@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Long> {
     @Query("SELECT m.username FROM MemberEntity m WHERE m.mId = :memId")
     String findByUserName(@Param("memId") Long memId);
 
-    @Transactional
     @Modifying
     @Query("UPDATE MemberEntity m SET m.address = :newAddress WHERE m.mId = :memberId")
     void updateMemAddress(@Param("memberId") Long memberId, @Param("newAddress") String newAddress);
