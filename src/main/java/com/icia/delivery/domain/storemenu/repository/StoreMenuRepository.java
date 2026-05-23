@@ -1,7 +1,6 @@
 package com.icia.delivery.domain.storemenu.repository;
 
 import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
-import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +19,6 @@ public interface StoreMenuRepository extends JpaRepository<PreStoreMenuEntity, L
     List<PreStoreMenuEntity> findBypreStoId(Long storeId);
 
     @Modifying
-    @Transactional
     @Query("UPDATE PreStoreMenuEntity m SET m.menuStatus = :newStatus WHERE m.menuId = :menuId")
     int updateMenuStatus(@Param("menuId") Long menuId, @Param("newStatus") String newStatus);
 

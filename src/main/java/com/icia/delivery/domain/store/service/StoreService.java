@@ -247,6 +247,7 @@ public class StoreService {
     }
 
 
+    @Transactional
     public String updateMenuStatus(Long menuId, String newStatus) {
 
         int updateCount = smrepo.updateMenuStatus(menuId, newStatus);
