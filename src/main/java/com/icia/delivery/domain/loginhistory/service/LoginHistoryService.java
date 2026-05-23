@@ -57,6 +57,18 @@ public class LoginHistoryService {
         return LoginHistoryDTO.toDTO(savedEntity);
     }
 
+    @Transactional
+    public LoginHistoryDTO recordLoginHistory(Long memberId, String ipAddress, String deviceOs, String browser) {
+        LoginHistoryDTO dto = new LoginHistoryDTO();
+        dto.setHisMid(memberId);
+        dto.setHisIpAddress(ipAddress);
+        dto.setHisDeviceOs(deviceOs);
+        dto.setHisBrowser(browser);
+        dto.setHisLoginDate(LocalDateTime.now());
+
+        return saveLoginHistory(dto);
+    }
+
     @Transactional(readOnly = true)
     public List<LoginHistoryDTO> getAllLoginHistories(Long mId) {
         return loginHistoryRepository.findLoginHistoriesByMemberId(mId);

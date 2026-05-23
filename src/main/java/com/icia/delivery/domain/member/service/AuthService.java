@@ -3,7 +3,6 @@ package com.icia.delivery.domain.member.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icia.delivery.domain.member.repository.MemberRepository;
-import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.entity.MemberEntity;
@@ -166,13 +165,7 @@ public class AuthService {
             existingMember.setLastLoginIp(publicIp);
 
             // 로그인 기록 추가
-            LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-            loginHistoryDTO.setHisMid(existingMember.getMId());
-            loginHistoryDTO.setHisLoginDate(LocalDateTime.now());
-            loginHistoryDTO.setHisIpAddress(publicIp);
-            loginHistoryDTO.setHisDeviceOs(deviceOs);
-            loginHistoryDTO.setHisBrowser(browser);
-            loginHistoryService.saveLoginHistory(loginHistoryDTO);
+            loginHistoryService.recordLoginHistory(existingMember.getMId(), publicIp, deviceOs, browser);
 
             // 세션 정보 업데이트
             setSessionAttributes(existingMember);
@@ -213,13 +206,7 @@ public class AuthService {
             MemberEntity savedMember = memberRepository.save(entity);
 
             // 신규 사용자 로그인 기록 추가
-            LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-            loginHistoryDTO.setHisMid(savedMember.getMId());
-            loginHistoryDTO.setHisLoginDate(LocalDateTime.now());
-            loginHistoryDTO.setHisIpAddress(publicIp);
-            loginHistoryDTO.setHisDeviceOs(deviceOs);
-            loginHistoryDTO.setHisBrowser(browser);
-            loginHistoryService.saveLoginHistory(loginHistoryDTO);
+            loginHistoryService.recordLoginHistory(savedMember.getMId(), publicIp, deviceOs, browser);
 
             // 세션에 사용자 정보 저장
             setSessionAttributes(savedMember);
@@ -358,13 +345,7 @@ public class AuthService {
             MemberEntity updatedMember = memberRepository.save(existingMember);
 
             // 로그인 기록 추가
-            LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-            loginHistoryDTO.setHisMid(existingMember.getMId());
-            loginHistoryDTO.setHisLoginDate(LocalDateTime.now());
-            loginHistoryDTO.setHisIpAddress(publicIp);
-            loginHistoryDTO.setHisDeviceOs(deviceOs);
-            loginHistoryDTO.setHisBrowser(browser);
-            loginHistoryService.saveLoginHistory(loginHistoryDTO);
+            loginHistoryService.recordLoginHistory(existingMember.getMId(), publicIp, deviceOs, browser);
 
             // 세션 정보 업데이트
             setSessionAttributes(updatedMember);
@@ -405,13 +386,7 @@ public class AuthService {
             MemberEntity savedMember = memberRepository.save(entity);
 
             // 신규 사용자 로그인 기록 추가
-            LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-            loginHistoryDTO.setHisMid(savedMember.getMId());
-            loginHistoryDTO.setHisLoginDate(LocalDateTime.now());
-            loginHistoryDTO.setHisIpAddress(publicIp);
-            loginHistoryDTO.setHisDeviceOs(deviceOs);
-            loginHistoryDTO.setHisBrowser(browser);
-            loginHistoryService.saveLoginHistory(loginHistoryDTO);
+            loginHistoryService.recordLoginHistory(savedMember.getMId(), publicIp, deviceOs, browser);
 
             // 세션에 사용자 정보 저장
             setSessionAttributes(savedMember);
@@ -542,13 +517,7 @@ public class AuthService {
             MemberEntity updatedMember = memberRepository.save(existingMember);
 
             // 로그인 기록 추가
-            LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-            loginHistoryDTO.setHisMid(existingMember.getMId());
-            loginHistoryDTO.setHisLoginDate(LocalDateTime.now());
-            loginHistoryDTO.setHisIpAddress(publicIp);
-            loginHistoryDTO.setHisDeviceOs(deviceOs);
-            loginHistoryDTO.setHisBrowser(browser);
-            loginHistoryService.saveLoginHistory(loginHistoryDTO);
+            loginHistoryService.recordLoginHistory(existingMember.getMId(), publicIp, deviceOs, browser);
 
             // 세션 정보 업데이트
             setSessionAttributes(updatedMember);
@@ -589,13 +558,7 @@ public class AuthService {
             MemberEntity savedMember = memberRepository.save(entity);
 
             // 신규 사용자 로그인 기록 추가
-            LoginHistoryDTO loginHistoryDTO = new LoginHistoryDTO();
-            loginHistoryDTO.setHisMid(savedMember.getMId());
-            loginHistoryDTO.setHisLoginDate(LocalDateTime.now());
-            loginHistoryDTO.setHisIpAddress(publicIp);
-            loginHistoryDTO.setHisDeviceOs(deviceOs);
-            loginHistoryDTO.setHisBrowser(browser);
-            loginHistoryService.saveLoginHistory(loginHistoryDTO);
+            loginHistoryService.recordLoginHistory(savedMember.getMId(), publicIp, deviceOs, browser);
 
             // 세션에 사용자 정보 저장
             setSessionAttributes(savedMember);
