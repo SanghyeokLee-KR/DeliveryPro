@@ -1,11 +1,9 @@
 package com.icia.delivery.domain.president.service;
 
 import com.icia.delivery.domain.president.repository.PreMemRepository;
-import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
 import com.icia.delivery.domain.president.dto.PreMemberDTO;
 import com.icia.delivery.domain.president.entity.PreMemberEntity;
-import com.icia.delivery.domain.deliveryaddress.service.DeliveryAddressService;
 import com.icia.delivery.global.service.IpService;
 import com.icia.delivery.util.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,9 +31,7 @@ public class PreMemService {
     private final IpService ipService; // IpService 주입
     private final BCryptPasswordEncoder pwEnc = new BCryptPasswordEncoder(); // 비밀번호 암호화
     private final HttpSession session; // 세션 객체 주입
-    private final LoginHistoryRepository lrepo; // HisLoginHistoryRepository 주입
     private final LoginHistoryService loginHistoryService; // HisLoginHistoryService 주입
-    private final DeliveryAddressService deliveryAddressService;
 
     Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/upload/BusinessLicense");
 
@@ -94,9 +90,6 @@ public class PreMemService {
             // DTO -> Entity 변환 및 저장
             pmrepo.save(PreMemberEntity.toEntity(preMemDTO));
             pFile.transferTo(new File(savePath));
-
-            // 메인 배송지 추가
-            // deliveryAddressService.addMainAddress(preMember.get(), memberDTO.getAddress());
 
             // 성공 시 메인 페이지로 리다이렉트
             mav.setViewName("redirect:/pLoginForm");
