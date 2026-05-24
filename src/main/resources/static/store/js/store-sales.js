@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     // 클릭 이벤트 핸들러
     $('#sales').on('click', function () {
         // AJAX 요청
@@ -7,6 +14,7 @@ $(document).ready(function () {
             method: 'POST',
             dataType: 'json',
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log('매출 데이터 :', response);
 
                 // 매출 데이터 애니메이션 효과 적용하여 출력
@@ -104,6 +112,7 @@ $(document).ready(function () {
             method: 'POST',
             dataType: 'json',
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log('통계 데이터:', response);
 
                 // 주간 주문 횟수 선 그래프 그리기

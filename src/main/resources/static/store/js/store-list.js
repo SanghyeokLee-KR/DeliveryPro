@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     // URL에서 쿼리 매개변수 가져오기
     const urlParams = new URLSearchParams(window.location.search);
     const selectedCategory = urlParams.get("category");
@@ -52,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
             data: { category: category },
             dataType: 'json',
             success: function (data) {
+                data = unwrapApiResponse(data);
                 document.querySelector("#storelist").innerHTML = data.map((restaurant) => `
                     <div class="item clearfix" style="cursor: pointer;" 
                          data-category="${restaurant.preStoCategory}" 
@@ -109,6 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
             url: `/api/stores/check/${preStoId}`,
             type: "POST",
             success: function (status) {
+                status = unwrapApiResponse(status);
                 // 해당 스토어 항목 내부의 버튼과 오버레이 선택
                 const $storeOverlay = $(storeItem).find(".storeOverlay");
 

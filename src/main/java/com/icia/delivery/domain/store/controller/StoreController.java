@@ -3,6 +3,7 @@ package com.icia.delivery.domain.store.controller;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.review.service.ReviewService;
 import com.icia.delivery.domain.store.service.StoreService;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,35 +23,35 @@ public class StoreController {
     private final ReviewService rsvc;
 
     @PostMapping("/details")
-    public Map<String, Object> getStoreDetails(@RequestParam Long storeId) {
-        return storeservice.getStoreDetails(storeId);
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getStoreDetails(@RequestParam Long storeId) {
+        return ResponseEntity.ok(ApiResponse.success(storeservice.getStoreDetails(storeId)));
     }
 
     @PostMapping
-    public ResponseEntity<List<PreStoreDTO>> getAllStores() {
+    public ResponseEntity<ApiResponse<List<PreStoreDTO>>> getAllStores() {
         List<PreStoreDTO> storeList = storeservice.getAllStores();
-        return ResponseEntity.ok(storeList);
+        return ResponseEntity.ok(ApiResponse.success(storeList));
     }
 
     @PostMapping("/category")
-    public ResponseEntity<List<PreStoreDTO>> getStoresByCategory(@RequestParam String category) {
+    public ResponseEntity<ApiResponse<List<PreStoreDTO>>> getStoresByCategory(@RequestParam String category) {
         List<PreStoreDTO> storeList = storeservice.getStoresByCategory(category);
-        return ResponseEntity.ok(storeList);
+        return ResponseEntity.ok(ApiResponse.success(storeList));
     }
 
     @PostMapping("/{storeId}")
-    public ResponseEntity<List<PreStoreDTO>> getstoresBystoreId(@RequestParam Long storeId) {
+    public ResponseEntity<ApiResponse<List<PreStoreDTO>>> getstoresBystoreId(@PathVariable("storeId") Long storeId) {
         List<PreStoreDTO> storeList = storeservice.getstoresBystoreId(storeId);
         session.setAttribute("preStoId", storeId);
-        return ResponseEntity.ok(storeList);
+        return ResponseEntity.ok(ApiResponse.success(storeList));
     }
     @PostMapping("/reviewStarCount")
-    public Float reviewStarCount(@RequestParam("storeId") Long storeId){
-        return rsvc.reviewStarCount(storeId);
+    public ResponseEntity<ApiResponse<Float>> reviewStarCount(@RequestParam("storeId") Long storeId){
+        return ResponseEntity.ok(ApiResponse.success(rsvc.reviewStarCount(storeId)));
     }
 
     @PostMapping("/statistics")
-    public ResponseEntity<Map<String, Object>> getStatistics() {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getStatistics() {
         Map<String, Object> response = storeservice.getStatistics();
         System.out.println("리수폰 : "  +response);
 
@@ -69,32 +70,32 @@ public class StoreController {
         data.put("starRatings", starRatings);   // 별점별 개수
         data.put("weekOrders", weekOrders);     // 지난 일주일 동안의 주문 수
 
-        return ResponseEntity.ok(data);
+        return ResponseEntity.ok(ApiResponse.success(data));
     }
     @PostMapping("/check")
-    public ResponseEntity<String> checkStoretime() {
+    public ResponseEntity<ApiResponse<String>> checkStoretime() {
         // 서비스에서 가게의 운영 상태를 업데이트하고, 해당 상태("승인" 또는 "차단")를 반환받음
         String storeStatus = storeservice.checkStoretime();
-        return ResponseEntity.ok(storeStatus);
+        return ResponseEntity.ok(ApiResponse.success(storeStatus));
     }
 
 
     @PostMapping("/check/{preStoId}")
-    public ResponseEntity<String> checkStoreStatus(@PathVariable("preStoId") Long preStoId) {
+    public ResponseEntity<ApiResponse<String>> checkStoreStatus(@PathVariable("preStoId") Long preStoId) {
         // 로직
         String storeStatus = storeservice.checkStoreStatus(preStoId);
-        return ResponseEntity.ok(storeStatus);
+        return ResponseEntity.ok(ApiResponse.success(storeStatus));
     }
 
     @PostMapping("/storeName/{preStoId}")
-    public ResponseEntity<String> getStoreNamebystoreId(@PathVariable("preStoId") Long preStoId){
+    public ResponseEntity<ApiResponse<String>> getStoreNamebystoreId(@PathVariable("preStoId") Long preStoId){
         String storeName = storeservice.getStoreNamebystoreId(preStoId);
-        return ResponseEntity.ok(storeName);
+        return ResponseEntity.ok(ApiResponse.success(storeName));
     }
 
     @PostMapping("/info/{preStoId}")
-    public ResponseEntity<Map<String, Object>> getStoreInfo(@PathVariable("preStoId") Long preStoId) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getStoreInfo(@PathVariable("preStoId") Long preStoId) {
         Map<String, Object> dto = storeservice.getStoreInfo(preStoId);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(ApiResponse.success(dto));
     }
 }

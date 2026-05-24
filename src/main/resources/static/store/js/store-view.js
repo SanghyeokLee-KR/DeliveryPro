@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url: `/api/stores/check/${preStoId}`,
             type: "POST",
             success: function (PreStoStatus) {
+                PreStoStatus = unwrapApiResponse(PreStoStatus);
                 // 가게 상태에 따라 주문하기 버튼 업데이트
                 if (PreStoStatus === "중지") {
                     $(".btn-order").text("영업시간이 아닙니다.").prop("disabled", true).css("background-color", "grey"); // 회색으로 변경;
@@ -586,6 +587,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {storeId: preStoId},
             dataType: 'json',
             success: function (data) {
+                data = unwrapApiResponse(data);
                 data.forEach(restaurant => {
                     // 평균 별점 API 호출
                     $.ajax({
@@ -593,6 +595,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         method: 'POST',
                         data: {storeId: restaurant.preStoId},
                         success: function (averageRating) {
+                            averageRating = unwrapApiResponse(averageRating);
                             restaurant.preStoRating = averageRating; // 평균 별점 업데이트
                         },
                         error: function () {
@@ -916,6 +919,7 @@ document.addEventListener('DOMContentLoaded', function () {
             type: "POST",
             dataType: 'json',
             success: function (result) {
+                result = unwrapApiResponse(result);
                 const infoHtml = `
               <div class="main-info-container">
         <!-- 정보 전체 -->
