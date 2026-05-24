@@ -7,13 +7,21 @@ const pathValue = pathWithoutParams.split('/').pop(); // 마지막 슬래시 뒤
 
 console.log(pathValue);
 
+function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 $(document).ready(function() {
     $.ajax({
         type: "POST",
         url: "/store/storeCount",  // 매장 목록을 가져오는 URL
         data: { pathValue: pathValue },
-        dataType: "text",
+        dataType: "json",
         success: function(result) {
+            result = unwrapApiResponse(result);
             const storeCount = parseInt(result);  // 문자열을 정수로 변환
 
             console.log(storeCount)
@@ -42,6 +50,7 @@ $("#store-list-view").click(function() {
         data: { pathValue: pathValue },
         dataType: "json",
         success: function(result) {
+            result = unwrapApiResponse(result);
             // 받은 데이터를 StoreList 함수로 전달하여 화면에 출력
             // 결과 값이 비어있는지 확인
             if (!result || result.length === 0) {
@@ -115,8 +124,9 @@ function StoreList(result) {
         type: "POST",
         url: "/store/storeCount",  // 매장 목록을 가져오는 URL
         data: { pathValue: pathValue },
-        dataType: "text",
+        dataType: "json",
         success: function(result) {
+            result = unwrapApiResponse(result);
             const storeCount = parseInt(result);  // 문자열을 정수로 변환
 
             // storeCount가 3 미만일 경우 HTML 추가
@@ -150,6 +160,7 @@ function StoreList(result) {
             url: "/store/getStoreDetails",  // 매장 상세 정보를 가져오는 URL
             data: { storeId: storeId },  // storeId를 controller로 전달
             success: function(result) {
+                result = unwrapApiResponse(result);
                 console.log(result); // 처리된 결과 확인
                 location.reload();
             },
@@ -212,6 +223,7 @@ $(document).on('click', '#store-menu-list', function() {
         data: { preStoId: preStoId },
         dataType: "json",
         success: function (result) {
+            result = unwrapApiResponse(result);
             console.log(result); // 처리된 결과 확인
 
             // result가 배열이고, 배열의 길이가 0일 경우
@@ -312,6 +324,7 @@ function getStoreMenuList(result) {
                 newStatus: newStatus
             },
             success: function(response) {
+                response = unwrapApiResponse(response);
                 if (response.success) {
                     console.log("상태값 변경 " + response);
                 } else {
@@ -379,6 +392,7 @@ $('#menu-modify-form').submit(function(e) {
         contentType: false,  // 파일 업로드와 같은 경우 자동으로 설정해주는 부분
         processData: false,  // 'formData'는 이미 데이터를 담고 있기 때문에 jQuery에서 자동으로 변환하지 않음
         success: function(response) {
+            response = unwrapApiResponse(response);
             alert('메뉴 ' + response + ' 하였습니다.');
             $(".menu-modify-modal").css("display", "none");
             location.reload(); // 페이지를 새로 고침하여 메뉴 수정 반영
@@ -402,6 +416,7 @@ $(document).on('click', '#menuDelete', function() {
             type: 'POST',  // 요청 방식 (POST)
             data: { menuId: menuId },
             success: function(response) {
+                response = unwrapApiResponse(response);
                 $(`#menu-${menuId}`).remove();
                 alert('메뉴 ' + response);
                 location.reload();
@@ -469,6 +484,7 @@ $(document).on('click', '#menu-list-search-bt', function() {
         },
         dataType: "json",
         success: (result) => {
+            result = unwrapApiResponse(result);
             // result가 null 이거나 빈 데이터일 경우 처리
             if (result == null || result.length === 0) {
                 alert('해당 메뉴는 없습니다');
@@ -596,6 +612,7 @@ function updateStoreDetails(field) {
         contentType: "application/json",
         data: JSON.stringify({field, value}),  // field와 value를 JSON 형태로 전송
         success: function (response) {
+            response = unwrapApiResponse(response);
             if (response.success) {
                 alert(response.message || "업데이트가 성공적으로 완료되었습니다.");
                 closeModal(`modal-${field}`);  // 모달 닫기
@@ -639,6 +656,7 @@ $(document).ready(function() {
                         data: { preStoId: preStoId },  // 매장 ID를 전달
                         dataType: "json",
                         success: function(result) {
+                            result = unwrapApiResponse(result);
                             console.log(result); // 처리된 결과 확인
 
                             // result가 배열이고, 배열의 길이가 0일 경우

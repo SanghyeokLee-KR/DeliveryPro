@@ -33,6 +33,7 @@ $(document).ready(function () {
             method: 'POST',
             dataType: 'json',
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log('받아온 데이터:', response);
 
                 // 남녀 성비 데이터 가져오기
@@ -98,6 +99,7 @@ $(document).ready(function () {
             method: 'POST',
             dataType: 'json',
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log('메뉴 매출 랭킹 데이터 :', response);
 
                 storeMenuList(response);

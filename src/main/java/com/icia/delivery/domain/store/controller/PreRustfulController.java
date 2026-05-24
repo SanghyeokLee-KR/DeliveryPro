@@ -3,12 +3,13 @@ package com.icia.delivery.domain.store.controller;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
 import com.icia.delivery.domain.store.service.StoreService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,59 +24,59 @@ public class PreRustfulController {
     private final StoreService ssvc;
 
     @PostMapping("/storeListBox")
-    public List<PreStoreDTO> storeListBox(@RequestParam("pathValue") Long pathValue) {
+    public ResponseEntity<ApiResponse<List<PreStoreDTO>>> storeListBox(@RequestParam("pathValue") Long pathValue) {
         // pathValue를 사용하여 service에서 데이터를 가져옵니다.
-        return ssvc.storeList(pathValue);
+        return ResponseEntity.ok(ApiResponse.success(ssvc.storeList(pathValue)));
     }
 
     @PostMapping("/getStoreDetails")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getStoreDetails(@RequestParam("storeId") Long storeId) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getStoreDetails(@RequestParam("storeId") Long storeId) {
         Map<String, Object> response = ssvc.getStoreDetails(storeId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 
     // getMenuList
     @PostMapping("/getMenuList")
-    public List<PreStoreMenuDTO> getMenuList(@RequestParam("preStoId") Long preStoId) {
+    public ResponseEntity<ApiResponse<List<PreStoreMenuDTO>>> getMenuList(@RequestParam("preStoId") Long preStoId) {
         // System.out.println("메뉴 리스트 매장 PK : " + preStoId);
-        return ssvc.getStoreMenuList(preStoId);
+        return ResponseEntity.ok(ApiResponse.success(ssvc.getStoreMenuList(preStoId)));
     }
 
     // getSellStatusValue
     @PostMapping("/updateMenuStatus")
-    public String getSellStatusValue(@RequestParam("menuId") Long menuId, @RequestParam("newStatus") String newStatus) {
+    public ResponseEntity<ApiResponse<String>> getSellStatusValue(@RequestParam("menuId") Long menuId, @RequestParam("newStatus") String newStatus) {
         // System.out.println("메뉴 아이디 : " + menuId);
         // System.out.println("메뉴 status 값 : " + newStatus);
-        return ssvc.updateMenuStatus(menuId, newStatus);
+        return ResponseEntity.ok(ApiResponse.success(ssvc.updateMenuStatus(menuId, newStatus)));
     }
 
     // menuModify
     @PostMapping("/menuModify")
-    public String menuModify(@ModelAttribute PreStoreMenuDTO menuDTO) {
+    public ResponseEntity<ApiResponse<String>> menuModify(@ModelAttribute PreStoreMenuDTO menuDTO) {
         System.out.println("메뉴 수정 데이터 : " + menuDTO);
-        return ssvc.menuModify(menuDTO);
+        return ResponseEntity.ok(ApiResponse.success(ssvc.menuModify(menuDTO)));
     }
 
     // menuDelete
     @PostMapping("/menuDelete")
-    public String menuDelete(@RequestParam("menuId") Long menuId) {
+    public ResponseEntity<ApiResponse<String>> menuDelete(@RequestParam("menuId") Long menuId) {
         // System.out.println("삭제할 메뉴 아이디 : " + menuId);
-        return ssvc.menuDelete(menuId);
+        return ResponseEntity.ok(ApiResponse.success(ssvc.menuDelete(menuId)));
     }
 
     // storeCount
     @PostMapping("/storeCount")
-    public int storeCount(@RequestParam("pathValue") Long pathValue) {
-        return ssvc.storeCount(pathValue);
+    public ResponseEntity<ApiResponse<Integer>> storeCount(@RequestParam("pathValue") Long pathValue) {
+        return ResponseEntity.ok(ApiResponse.success(ssvc.storeCount(pathValue)));
     }
 
     // searchMenuList
     @PostMapping("/searchMenuList")
-    public List<PreStoreMenuDTO> searchMenuList(@RequestParam("keyword") String keyword,
-                                                @RequestParam("category") String category,
-                                                @RequestParam("preStoId") Long preStoId) {
+    public ResponseEntity<ApiResponse<List<PreStoreMenuDTO>>> searchMenuList(@RequestParam("keyword") String keyword,
+                                                                             @RequestParam("category") String category,
+                                                                             @RequestParam("preStoId") Long preStoId) {
 
         List<PreStoreMenuDTO> storeMenuDTO = new ArrayList<>();
 
@@ -90,12 +91,12 @@ public class PreRustfulController {
         }
 
         // return storeMenuDTO;
-        return storeMenuDTO;
+        return ResponseEntity.ok(ApiResponse.success(storeMenuDTO));
     }
 
     @PostMapping("/updateStoreDetails")
-    public ResponseEntity<Map<String, Object>> updateStoreDetails(@RequestBody Map<String, String> payload,
-                                                                  HttpSession session) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> updateStoreDetails(@RequestBody Map<String, String> payload,
+                                                                               HttpSession session) {
 
         Map<String, Object> response = new HashMap<>();
 
@@ -106,9 +107,7 @@ public class PreRustfulController {
             Long preStoreId = (Long) session.getAttribute("pre_store_id");
 
             if (field == null || value == null || preStoreId == null) {
-                response.put("success", false);
-                response.put("message", "필수 파라미터가 누락되었습니다.");
-                return ResponseEntity.badRequest().body(response);
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "Required parameter is missing.");
             }
 
             PreStoreDTO storeDTO = new PreStoreDTO();
@@ -138,9 +137,7 @@ public class PreRustfulController {
                         storeDTO.setPreStoMinOrderAmount(minOrderValue);
                     } catch (NumberFormatException e) {
                         // value가 숫자가 아닐 경우 예외 처리
-                        response.put("success", false);
-                        response.put("message", "유효한 최소 주문 금액을 입력해주세요.");
-                        return ResponseEntity.badRequest().body(response);
+                        throw new BusinessException(ErrorCode.BAD_REQUEST, "Invalid minimum order amount.", e);
                     }
                     break;
                 case "deliFee":
@@ -150,15 +147,11 @@ public class PreRustfulController {
                         storeDTO.setPreStoDeliveryFee(deliFeeValue);
                     } catch (NumberFormatException e) {
                         // value가 숫자가 아닐 경우 예외 처리
-                        response.put("success", false);
-                        response.put("message", "유효한 배달 요금을 입력해주세요.");
-                        return ResponseEntity.badRequest().body(response);
+                        throw new BusinessException(ErrorCode.BAD_REQUEST, "Invalid delivery fee.", e);
                     }
                     break;
                 default:
-                    response.put("success", false);
-                    response.put("message", "유효하지 않은 필드입니다.");
-                    return ResponseEntity.badRequest().body(response);
+                    throw new BusinessException(ErrorCode.BAD_REQUEST, "Invalid field.");
             }
 
             // 서비스 메서드 호출하여 회원 정보 업데이트
@@ -167,31 +160,32 @@ public class PreRustfulController {
 
             response.put("success", true);
             response.put("message", "매장 정보가 수정되었습니다.");
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ApiResponse.success(response));
 
         } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "업데이트 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            if (e instanceof BusinessException businessException) {
+                throw businessException;
+            }
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update store details.", e);
         }
     }
 
     @PostMapping("/storeSalesData")
-    public Map<String, Double>  storeSalesData(){
-        return ssvc.storeSalesData();
+    public ResponseEntity<ApiResponse<Map<String, Double>>>  storeSalesData(){
+        return ResponseEntity.ok(ApiResponse.success(ssvc.storeSalesData()));
     }
 
 
     @PostMapping("/storeMemBirthSalesData")
-    public ResponseEntity<Map<String, Object>> storeMemBirthSalesData() {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> storeMemBirthSalesData() {
         Map<String, Object> response = ssvc.storeMemBirthSalesData();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     @PostMapping("/storeMenuRank")
-    public ResponseEntity<Map<String, Object>> storeMenuRank(){
+    public ResponseEntity<ApiResponse<Map<String, Object>>> storeMenuRank(){
         Map<String, Object> response = ssvc.storeMenuRank();
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }
