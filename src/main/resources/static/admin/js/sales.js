@@ -1,3 +1,10 @@
+function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 $(document).ready(function () {
     // 웹 페이지가 로드되자마자 자동으로 AJAX 요청을 보냄
     $.ajax({
@@ -7,7 +14,7 @@ $(document).ready(function () {
         success: function (response) {
             console.log('일별 매출 현황:', response);  // 응답 데이터 확인
             // 응답 데이터를 이용해 차트 그리기
-            salesChart(response);
+            salesChart(unwrapApiResponse(response));
         },
         error: function (xhr, status, error) {
             // 요청 실패 시 처리
@@ -69,7 +76,7 @@ $(document).ready(function () {
         dataType: 'json',  // 서버 응답이 JSON 형식일 경우
         success: function (response) {
             console.log('베스트 매출 매장:', response);  // 응답 데이터 확인
-            bestStore(response);
+            bestStore(unwrapApiResponse(response));
         },
         error: function (xhr, status, error) {
             // 요청 실패 시 처리
@@ -138,4 +145,3 @@ $(document).ready(function () {
         );
     });
 });
-

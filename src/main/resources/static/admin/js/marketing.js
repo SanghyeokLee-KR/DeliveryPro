@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     function fetchGenderRatio() {
         $.ajax({
             url: '/genderRatio',
@@ -6,11 +13,12 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 console.log('남녀 비율 통계:', response);
-                MFChart(response);
-                ratioNumber(response);
+                const data = unwrapApiResponse(response);
+                MFChart(data);
+                ratioNumber(data);
 
-                updateMaleFill(response);
-                updateFemaleFill(response);
+                updateMaleFill(data);
+                updateFemaleFill(data);
             },
             error: function (xhr, status, error) {
                 console.error('AJAX 요청 실패:', status, error);
@@ -25,7 +33,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 console.log('생년월일별 비율 통계:', response);
-                drawChart(response);
+                drawChart(unwrapApiResponse(response));
             },
             error: function (xhr, status, error) {
                 console.error('AJAX 요청 실패:', status, error);
@@ -40,7 +48,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 console.log('주문 많이 한 사람:', response);
-                topOrderMemList(response);
+                topOrderMemList(unwrapApiResponse(response));
             },
             error: function (xhr, status, error) {
                 console.error('AJAX 요청 실패:', status, error);
@@ -55,7 +63,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (response) {
                 console.log('등급표 :', response);
-                rewardGradeFun(response);
+                rewardGradeFun(unwrapApiResponse(response));
             },
             error: function (xhr, status, error) {
                 console.error('AJAX 요청 실패:', status, error);

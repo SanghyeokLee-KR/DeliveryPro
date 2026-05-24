@@ -4,8 +4,10 @@ import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.admin.service.DashboardService;
 import com.icia.delivery.domain.admin.service.MarketingService;
 import com.icia.delivery.domain.admin.service.SalesService;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,26 +28,26 @@ public class DashBoardChartController {
 
     // dashboardChart
     @PostMapping("/dashboardChart")
-    public Map<String, Long> dashboardChart() {
+    public ResponseEntity<ApiResponse<Map<String, Long>>> dashboardChart() {
         // Service에서 카테고리별 주문 수를 집계한 Map을 받아옴
         Map<String, Long> categoryCountMap = dashboardService.dashboardChart();
-        return categoryCountMap;  // Map을 그대로 반환
+        return ResponseEntity.ok(ApiResponse.success(categoryCountMap));
     }
 
     // salesChart
     @PostMapping("/salesChart")
-    public Map<String, Long> salesChart() {
+    public ResponseEntity<ApiResponse<Map<String, Long>>> salesChart() {
         // Service에서 지난 7일 동안의 매출 금액을 집계한 Map을 받아옴
         Map<String, Long> salesData = salesService.getSalesForLastWeek();
-        return salesData;  // Map을 JSON 형식으로 반환
+        return ResponseEntity.ok(ApiResponse.success(salesData));
     }
 
     // topSellingStore
     @PostMapping("/topSellingStore")
-    public Map<Double, PreStoreDTO> topSellingStore() {
+    public ResponseEntity<ApiResponse<Map<Double, PreStoreDTO>>> topSellingStore() {
         // Service에서 매장별 매출 집계를 Map 형식으로 받아옴
         Map<Double, PreStoreDTO> topStore = salesService.topSellingStore();
-        return topStore;
+        return ResponseEntity.ok(ApiResponse.success(topStore));
     }
 
     @PostMapping("/statisticsDateSel")
@@ -56,7 +58,7 @@ public class DashBoardChartController {
 
     // genderRatio_1
     @PostMapping("/genderRatio")
-    public Map<String, Double> genderRatio(HttpSession session){
+    public ResponseEntity<ApiResponse<Map<String, Double>>> genderRatio(HttpSession session){
         // 세션에서 개별 값 가져오기
         Double maleRatio = (Double) session.getAttribute("maleRatio");
         Double femaleRatio = (Double) session.getAttribute("femaleRatio");
@@ -78,26 +80,26 @@ public class DashBoardChartController {
         genderRatio.put("kakaoLogin", kakaoLoginRatio);
         genderRatio.put("googleLogin", googleLoginRatio);
 
-        return genderRatio;
+        return ResponseEntity.ok(ApiResponse.success(genderRatio));
     }
 
     @PostMapping("/birthCategoryRatio")
-    public Map<String, Map<String, Integer>> birthCategoryRatio(){
+    public ResponseEntity<ApiResponse<Map<String, Map<String, Integer>>>> birthCategoryRatio(){
         // Service에서 매장별 매출 집계를 Map 형식으로 받아옴
         Map<String, Map<String, Integer>> sss = marketingService.birthCategoryRatio();
-        return sss;
+        return ResponseEntity.ok(ApiResponse.success(sss));
     }
 
     @PostMapping("/topOrderMemList")
-    public List<Map<String, Object>> topOrderMemList() {
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> topOrderMemList() {
         List<Map<String, Object>> topOM = marketingService.topOrderMemList();
-        return topOM;
+        return ResponseEntity.ok(ApiResponse.success(topOM));
     }
 
     @PostMapping("/rewardGradeData")
-    public Map<String, Long> rewardGradeData() {
+    public ResponseEntity<ApiResponse<Map<String, Long>>> rewardGradeData() {
         Map<String, Long> reward = marketingService.rewardGradeData();
-        return reward;
+        return ResponseEntity.ok(ApiResponse.success(reward));
     }
 
 

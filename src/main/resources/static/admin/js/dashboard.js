@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     // 웹 페이지가 로드되자마자 자동으로 AJAX 요청을 보냄
     $.ajax({
         url: '/dashboardChart',  // 요청을 보낼 URL
@@ -7,7 +14,7 @@ $(document).ready(function () {
         success: function (response) {
             console.log('카테고리별 주문 수:', response);  // 응답 데이터 확인
             // 응답 데이터를 이용해 카테고리 차트 그리기
-            categoryChart(response);
+            categoryChart(unwrapApiResponse(response));
         },
         error: function (xhr, status, error) {
             // 요청 실패 시 처리
@@ -114,5 +121,3 @@ $("#fetchStatistics").click(function() {
         }
     });
 });
-
-
