@@ -1,5 +1,12 @@
 // customer_main_ajaxslider.js
 
+function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     console.log("[AJAX Slider] DOMContentLoaded!");
 
@@ -19,7 +26,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!response.ok) {
             throw new Error(`Server error: ${response.status}`);
         }
-        ads = await response.json();
+        ads = unwrapApiResponse(await response.json());
         console.log("[AJAX Slider] ads=", ads);
         // e.g. [{advId:1, advTitle:"짜장면", advImageUrl:"/admin/img/광고/1번_광고_짜장면.jpg",...},...]
     } catch (error) {

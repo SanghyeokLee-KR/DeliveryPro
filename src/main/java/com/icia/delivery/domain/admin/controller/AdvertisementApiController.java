@@ -2,7 +2,9 @@ package com.icia.delivery.domain.admin.controller;
 
 import com.icia.delivery.domain.admin.dto.AdvertisementDTO;
 import com.icia.delivery.domain.admin.service.AdvertisementService;
+import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +26,7 @@ public class AdvertisementApiController {
      * → JSON 배열: [{advId:..., advTitle:..., advImageUrl:...}, ...]
      */
     @GetMapping
-    public List<AdvertisementDTO> getAllAds() {
-        return advertisementService.getAllAdvertisements();
+    public ResponseEntity<ApiResponse<List<AdvertisementDTO>>> getAllAds() {
+        return ResponseEntity.ok(ApiResponse.success(advertisementService.getAllAdvertisements()));
     }
 }
