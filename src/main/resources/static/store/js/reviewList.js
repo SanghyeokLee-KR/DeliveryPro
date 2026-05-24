@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
 // memId를 동적으로 설정하거나 서버에서 가져옵니다.
     const memId = $("#member-id").val(); /* 여기에 memId 값을 삽입하세요 */
 
@@ -7,6 +14,7 @@ $(document).ready(function () {
         method: 'POST', // 또는 'POST' 등 API에 맞게 설정
         dataType: 'json',
         success: function (data) {
+            data = unwrapApiResponse(data);
             const $reviewContainer = $("#reviewList");
 
             data.forEach(review => {

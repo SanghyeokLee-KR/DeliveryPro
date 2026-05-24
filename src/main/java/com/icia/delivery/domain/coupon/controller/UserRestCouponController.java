@@ -4,9 +4,11 @@ package com.icia.delivery.domain.coupon.controller;
 import com.icia.delivery.domain.coupon.dto.CouponDTO;
 import com.icia.delivery.domain.coupon.entity.CouponEntity;
 import com.icia.delivery.domain.coupon.service.CouponService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,27 +25,28 @@ public class UserRestCouponController {
 
     // 회원별 쿠폰을 조회하는 엔드포인트 (GET 방식 예시)
     @GetMapping("/getCoupons")
-    public List<CouponDTO> getCoupons() {
+    public ResponseEntity<ApiResponse<List<CouponDTO>>> getCoupons() {
         Long currentMemberId = getCurrentMemberId();
         List<CouponEntity> entities = couponService.getCouponsByMemberId(currentMemberId);
 
         // "사용가능" 상태인 쿠폰만 필터링하여 DTO로 변환
-        return entities.stream()
+        List<CouponDTO> coupons = entities.stream()
                 .filter(coupon -> "Y".equals(coupon.getStatus()))
                 .map(CouponDTO::toDTO)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(coupons));
     }
 
 
     @PostMapping("/useCoupon")
-    public ResponseEntity<?> useCoupon(@RequestParam("couponId") Long couponId) {
+    public ResponseEntity<ApiResponse<String>> useCoupon(@RequestParam("couponId") Long couponId) {
         try {
             couponService.useUserCoupon(couponId);
-            return ResponseEntity.ok("쿠폰 사용 완료");
+            return ResponseEntity.ok(ApiResponse.success("Coupon used."));
         } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("쿠폰 업데이트에 실패하였습니다.");
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update coupon.", e);
         }
     }
 
@@ -52,7 +55,7 @@ public class UserRestCouponController {
         if (mId != null) {
             return mId; // 세션에서 가져온 값을 Long 타입으로 변환
         } else {
-            throw new IllegalStateException("로그인한 사용자가 없습니다.");
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "Login is required.");
         }
     }
 }

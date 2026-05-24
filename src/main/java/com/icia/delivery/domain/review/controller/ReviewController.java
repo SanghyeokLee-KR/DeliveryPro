@@ -2,8 +2,10 @@ package com.icia.delivery.domain.review.controller;
 
 import com.icia.delivery.domain.review.dto.ReviewDTO;
 import com.icia.delivery.domain.review.service.ReviewService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,29 +31,28 @@ public class ReviewController {
 
 
         @PostMapping("/{preStoId}")
-        public List<Map<String, Object>> getReviewsByPreStoId(@PathVariable Long preStoId) {
-            return rsvc.getReviewsByPreStoId(preStoId);
+        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getReviewsByPreStoId(@PathVariable Long preStoId) {
+            return ResponseEntity.ok(ApiResponse.success(rsvc.getReviewsByPreStoId(preStoId)));
         }
 
 
         @PostMapping("member/{memId}")
-        public List<Map<String, Object>> getReviewsByMemberId(@PathVariable Long memId) {
-            return rsvc.getReviewsByMemberId(memId);
+        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getReviewsByMemberId(@PathVariable Long memId) {
+            return ResponseEntity.ok(ApiResponse.success(rsvc.getReviewsByMemberId(memId)));
 
         }
 
 
 
         @PostMapping("/updateReviewCount/{storeId}")
-        public ResponseEntity<String> updateReviewCount(
+        public ResponseEntity<ApiResponse<String>> updateReviewCount(
                 @PathVariable Long storeId,
                 @RequestParam int reviewCount) {
             try {
                 rsvc.updateReviewCount(storeId, reviewCount);
-                return ResponseEntity.ok("리뷰 개수가 성공적으로 업데이트되었습니다.");
+                return ResponseEntity.ok(ApiResponse.success("Review count updated."));
             } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body("리뷰 개수 업데이트 중 오류 발생");
+                throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update review count.", e);
             }
         }
     }

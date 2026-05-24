@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dataType: 'json',
             data: JSON.stringify({}), // 필요한 경우 추가 데이터 전송
             success: function (data) {
+                data = unwrapApiResponse(data);
                 console.log("서버에서 받은 데이터:", data);
                 const $reviewCount = $(".store-view-review_num"); // 리뷰 개수를 표시할 요소
 

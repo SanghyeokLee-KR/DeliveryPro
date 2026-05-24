@@ -5,6 +5,13 @@ let productName = "";
 let couponList = [];
 let selectedCoupon = null;
 
+function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 // ------------------------------
 // DOMContentLoaded
 // ------------------------------
@@ -122,6 +129,7 @@ function loadCoupons(orderTotal) {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
+            data = unwrapApiResponse(data);
             couponList = data;
             const couponSelect = $('#couponSelect');
             $.each(data, function(index, coupon) {
@@ -247,6 +255,7 @@ function pay() {
                         type: 'POST',
                         data: { couponId: selectedCoupon.id },
                         success: function(response) {
+                            response = unwrapApiResponse(response);
                             console.log("쿠폰 사용완료 업데이트");
                         },
                         error: function() {

@@ -86,6 +86,7 @@ $(document).ready(function () {
         method: 'POST',  // API에 맞게 설정 (POST 혹은 GET)
         dataType: 'json',
         success: function (result) {
+            result = unwrapApiResponse(result);
             // result: 리뷰 데이터 배열
             list = result;
             pagingList(page, list);  // 초기 페이지네이션 실행
