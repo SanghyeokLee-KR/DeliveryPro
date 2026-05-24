@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,6 +37,7 @@ public class PreMemService {
     Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/upload/BusinessLicense");
 
 
+    @Transactional
     public ModelAndView storeForm(PreMemberDTO preMemDTO) {
         ModelAndView mav = new ModelAndView();
         try {

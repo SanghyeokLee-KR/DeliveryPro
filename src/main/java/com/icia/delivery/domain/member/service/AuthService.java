@@ -21,6 +21,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import java.io.InputStream;
@@ -152,6 +153,7 @@ public class AuthService {
      * @param userProfile 네이버에서 가져온 사용자 프로필 정보
      * @return 저장 또는 업데이트된 사용자 엔티티
      */
+    @Transactional
     public MemberEntity saveOrUpdate(UserProfile userProfile) {
         Optional<MemberEntity> optionalMember = memberRepository.findByEmail(userProfile.getEmail());
         String publicIp = ipService.getClientIp(request);
@@ -331,6 +333,7 @@ public class AuthService {
      * @param userProfile 구글에서 가져온 사용자 프로필 정보
      * @return 저장 또는 업데이트된 사용자 엔티티
      */
+    @Transactional
     public MemberEntity GsaveOrUpdate(UserProfile userProfile) {
         Optional<MemberEntity> optionalMember = memberRepository.findByEmail(userProfile.getEmail());
         String publicIp = ipService.getClientIp(request);
@@ -503,6 +506,7 @@ public class AuthService {
      * @param userProfile 카카오에서 가져온 사용자 프로필 정보
      * @return 저장 또는 업데이트된 사용자 엔티티
      */
+    @Transactional
     public MemberEntity KsaveOrUpdate(UserProfile userProfile) {
         Optional<MemberEntity> optionalMember = memberRepository.findByEmail(userProfile.getEmail());
         String publicIp = ipService.getClientIp(request);

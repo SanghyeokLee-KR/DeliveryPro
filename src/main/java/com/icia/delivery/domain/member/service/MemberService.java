@@ -38,6 +38,7 @@ public class MemberService {
      * @param memberDTO 회원 정보 DTO
      * @return ModelAndView 객체를 반환
      */
+    @Transactional
     public ModelAndView registerMember(MemberDTO memberDTO) {
         ModelAndView mav = new ModelAndView();
         try {
@@ -112,6 +113,7 @@ public class MemberService {
      * @param member 로그인 정보 DTO
      * @return ModelAndView 객체를 반환
      */
+    @Transactional
     public ModelAndView mLogin(MemberDTO member) {
         ModelAndView mav = new ModelAndView();
 
