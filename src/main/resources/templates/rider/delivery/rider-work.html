@@ -85,6 +85,13 @@
 <!-- 분리된 자바스크립트 파일 (haversine_formula.js) -->
 <script src="/rider/js/haversine_formula.js"></script>
 <script>
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     /////////////////////////////////////////////////////////////
     // (참고용) 콜 타임 포맷팅 함수
     function formatCallTime(callTime) {
@@ -312,6 +319,7 @@
                     data: JSON.stringify({ deliveryIds: deliveryIds }),
                     dataType: 'json',
                     success: function(response) {
+                        response = unwrapApiResponse(response);
                         console.log("수락 성공:", response);
                         $card.appendTo("#inProgressBox");
                         $card.find(".delivery-action").remove();
@@ -336,6 +344,7 @@
                     data: JSON.stringify({ deliveryIds: [$card.attr("id")] }),
                     dataType: 'json',
                     success: function(response) {
+                        response = unwrapApiResponse(response);
                         console.log("수락 성공:", response);
                         $card.appendTo("#inProgressBox");
                         $card.find(".delivery-action").remove();
@@ -632,6 +641,7 @@
             type: "POST",
             dataType: "json",
             success: function(response) {
+                response = unwrapApiResponse(response);
                 console.log("주문 상태 업데이트:", response);
                 $segmentSpan.text(statusText);
             },
@@ -649,6 +659,7 @@
             type: "POST",
             dataType: "json",
             success: function(response) {
+                response = unwrapApiResponse(response);
                 console.log("그룹 배달 완료:", response);
                 $card.find(".delivery-header")
                     .append('<span class="final-status" style="color:green;"> 배달완료</span>');

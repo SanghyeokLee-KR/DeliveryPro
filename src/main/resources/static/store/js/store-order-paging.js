@@ -1,5 +1,12 @@
 $(document).ready(function () {
 
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     var preId = $("#preSto-id").val();
     console.log("preSto-id:", preId);
 
@@ -106,6 +113,7 @@ $(document).ready(function () {
         type: 'GET',
         dataType: 'json',
         success: function (data) {
+            data = unwrapApiResponse(data);
             console.log("받은 전체 데이터:", data);
             allData = data; // 전역 변수에 저장
             // 초기에 전체 데이터로 필터링 (전체)

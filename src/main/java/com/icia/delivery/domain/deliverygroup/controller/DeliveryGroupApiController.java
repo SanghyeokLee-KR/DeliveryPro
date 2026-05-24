@@ -1,16 +1,25 @@
 package com.icia.delivery.domain.deliverygroup.controller;
 
-import com.icia.delivery.domain.order.entity.OrderEntity;
 import com.icia.delivery.domain.deliverygroup.dto.DeliveryGroupDTO;
 import com.icia.delivery.domain.deliverygroup.service.DeliveryGroupService;
 import com.icia.delivery.domain.order.service.OrderService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/delivery")
@@ -20,122 +29,97 @@ public class DeliveryGroupApiController {
     private DeliveryGroupService deliveryGroupService;
 
     @Autowired
-    private OrderService orderService;  // 주문 상태 업데이트를 위한 서비스
+    private OrderService orderService;
 
     @GetMapping("/{preId}")
-    public List<DeliveryGroupDTO> getDeliveryData(@PathVariable("preId") Long preId) {
-        // 필요하다면 preId(가게 ID)를 기반으로 필터링할 수 있습니다.
+    public ResponseEntity<ApiResponse<List<DeliveryGroupDTO>>> getDeliveryData(@PathVariable("preId") Long preId) {
         List<DeliveryGroupDTO> groupOrders = deliveryGroupService.getProcessedGroupOrders();
         List<DeliveryGroupDTO> singleOrders = deliveryGroupService.getProcessedSingleOrders();
         List<DeliveryGroupDTO> combined = new ArrayList<>();
         combined.addAll(groupOrders);
         combined.addAll(singleOrders);
-        return combined;
+        return ResponseEntity.ok(ApiResponse.success(combined));
     }
 
     @PostMapping("/accept/{deliveryId}")
-    public ResponseEntity<Map<String, Object>> acceptDelivery(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> acceptDelivery(
             @PathVariable("deliveryId") Long deliveryId, HttpSession session) {
 
-        Long riderNo = (Long) session.getAttribute("rider_no");
-        if (riderNo == null) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "라이더 정보가 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
-
-        deliveryGroupService.acceptDeliveryGroup(deliveryId, riderNo);
+        Long riderNo = getRiderNo(session);
+        acceptDeliveryGroupOrThrow(deliveryId, riderNo);
 
         Map<String, Object> result = new HashMap<>();
         result.put("riderNo", riderNo);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    // --- 그룹(여러 배달ID) 수락 처리 엔드포인트 ---
     @PostMapping("/accept")
-    public ResponseEntity<Map<String, Object>> acceptDeliveryGroup(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> acceptDeliveryGroup(
             @RequestBody Map<String, List<Long>> payload, HttpSession session) {
 
-        Long riderNo = (Long) session.getAttribute("rider_no");
-        if (riderNo == null) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "라이더 정보가 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
-
-        List<Long> deliveryIds = payload.get("deliveryIds");
+        Long riderNo = getRiderNo(session);
+        List<Long> deliveryIds = payload != null ? payload.get("deliveryIds") : null;
         if (deliveryIds == null || deliveryIds.isEmpty()) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "전달된 배달 ID가 없습니다.");
-            return ResponseEntity.badRequest().body(error);
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "Delivery ids are required.");
         }
 
-        // 전달받은 각 배달 ID에 대해 수락 처리
         for (Long id : deliveryIds) {
-            deliveryGroupService.acceptDeliveryGroup(id, riderNo);
+            acceptDeliveryGroupOrThrow(id, riderNo);
         }
 
         Map<String, Object> result = new HashMap<>();
         result.put("riderNo", riderNo);
         result.put("acceptedDeliveryIds", deliveryIds);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    /**
-     * 개별 주문(order)의 배달 상태를 "배달완료"로 업데이트합니다.
-     * 프론트엔드에서 각 구간(각 고객 집 도착 시)에 대해 orderId를 전달하여 호출합니다.
-     */
     @PostMapping("/complete/order/{orderId}")
-    public ResponseEntity<Map<String, Object>> completeOrder(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> completeOrder(
             @PathVariable("orderId") Long orderId, HttpSession session) {
 
-        Long riderNo = (Long) session.getAttribute("rider_no");
-        if (riderNo == null) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "라이더 정보가 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
-
+        Long riderNo = getRiderNo(session);
         try {
             orderService.completeOrder(orderId, riderNo);
         } catch (RuntimeException e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(error);
+            throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
         }
 
         Map<String, Object> result = new HashMap<>();
         result.put("orderId", orderId);
         result.put("deliveryStatus", "배달완료");
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
-    /**
-     * 그룹(묶음 배달)의 배달 상태를 "배달완료"로 업데이트합니다.
-     * 최종 도착 시 호출됩니다.
-     */
     @PostMapping("/complete/group/{deliveryId}")
-    public ResponseEntity<Map<String, Object>> completeDeliveryGroup(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> completeDeliveryGroup(
             @PathVariable("deliveryId") Long deliveryId, HttpSession session) {
 
-        Long riderNo = (Long) session.getAttribute("rider_no");
-        if (riderNo == null) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", "라이더 정보가 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
-
+        Long riderNo = getRiderNo(session);
         try {
             deliveryGroupService.completeDeliveryGroup(deliveryId, riderNo);
         } catch (RuntimeException e) {
-            Map<String, Object> error = new HashMap<>();
-            error.put("message", e.getMessage());
-            return ResponseEntity.badRequest().body(error);
+            throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
         }
 
         Map<String, Object> result = new HashMap<>();
         result.put("deliveryId", deliveryId);
         result.put("deliveryStatus", "배달완료");
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success(result));
+    }
+
+    private Long getRiderNo(HttpSession session) {
+        Long riderNo = (Long) session.getAttribute("rider_no");
+        if (riderNo == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "Rider session is required.");
+        }
+        return riderNo;
+    }
+
+    private void acceptDeliveryGroupOrThrow(Long deliveryId, Long riderNo) {
+        try {
+            deliveryGroupService.acceptDeliveryGroup(deliveryId, riderNo);
+        } catch (RuntimeException e) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 }
