@@ -5,6 +5,7 @@ import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ public class MenuService {
 
     private final StoreMenuRepository ssmrepo;
 
+    @Transactional(readOnly = true)
     public List<PreStoreMenuDTO> getMenuByStoreId(Long storeId) {
 
         // 1) storeId로 MenuEntity 리스트 조회
@@ -27,6 +29,7 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<PreStoreMenuDTO> getMenuBymenuId(Long menuId) {
 
         // 1) storeId로 MenuEntity 리스트 조회

@@ -41,6 +41,7 @@ public class BoardService {
         return mav;
     }
 
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> boardList() {
         // Repository에서 Object[] 배열 결과를 조회
         List<Object[]> rows = brepo.findBoardDTOList();
@@ -64,6 +65,7 @@ public class BoardService {
         return list;
     }
 
+    @Transactional(readOnly = true)
     public List<BoardDTO> searchList(String category, String keyword) {
 
         List<BoardEntity> entityList = new ArrayList<>();
@@ -82,6 +84,7 @@ public class BoardService {
         return dtoList;
     }
 
+    @Transactional(readOnly = true)
     public ModelAndView bView(Long boardId) {
         ModelAndView mav = new ModelAndView();
         Optional<Object[]> resultOpt = brepo.findBoardDetails(boardId);

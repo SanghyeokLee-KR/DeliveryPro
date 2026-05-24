@@ -10,6 +10,7 @@ import com.icia.delivery.domain.order.entity.OrderEntity;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class MarketingService {
     private final OrderRepository orepo;
     private final StoreRepository srepo;
 
+    @Transactional(readOnly = true)
     public List<MemberDTO> getAllMembers() {
         List<MemberEntity> memberEntities = mrepo.findAll();
         return memberEntities.stream()
@@ -33,6 +35,7 @@ public class MarketingService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<OrderDTO> getAllOrders() {
         List<OrderEntity> orderDTOList = orepo.findAll();
         return orderDTOList.stream()
@@ -40,6 +43,7 @@ public class MarketingService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public Map<String, Map<String, Integer>> birthCategoryRatio() {
         List<OrderDTO> orderDTOs = orepo.findAll().stream()
                 .map(OrderDTO::toDTO)
@@ -101,6 +105,7 @@ public class MarketingService {
         return "60대 이상";
     }
 
+    @Transactional(readOnly = true)
     public List<Map<String, Object>> topOrderMemList() {
 
         // 모든 주문 정보와 회원 정보 가져오기
@@ -150,6 +155,7 @@ public class MarketingService {
     }
 
 
+    @Transactional(readOnly = true)
     public Map<String, Long> rewardGradeData() {
         // 모든 회원을 MemberDTO로 변환
         List<MemberDTO> memberDTOs = mrepo.findAll().stream()

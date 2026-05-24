@@ -36,6 +36,7 @@ public class AdminBoardService {
      * @param pageable 페이징 정보
      * @return 페이징된 게시글 리스트 DTO
      */
+    @Transactional(readOnly = true)
     public Page<BoardDTO> getAllBoardsList(Pageable pageable) {
         Page<BoardEntity> boardEntities = boardRepository.findAll(pageable);
         return boardEntities.map(BoardDTO::toDTO);
@@ -48,6 +49,7 @@ public class AdminBoardService {
      * @param pageable    페이징 및 정렬 정보
      * @return 페이징된 검색된 게시글 리스트 DTO
      */
+    @Transactional(readOnly = true)
     public Page<BoardDTO> searchBoards(String searchQuery, Pageable pageable) {
         Page<BoardEntity> boardEntities = boardRepository.findByBoardTitleContainingOrBoardContentContaining(searchQuery, searchQuery, pageable);
         return boardEntities.map(BoardDTO::toDTO);
@@ -59,6 +61,7 @@ public class AdminBoardService {
      * @param id 게시글 ID
      * @return 게시글 DTO 또는 null
      */
+    @Transactional(readOnly = true)
     public BoardDTO getBoardById(Long id) {
         return boardRepository.findById(id)
                 .map(BoardDTO::toDTO)
@@ -104,6 +107,7 @@ public class AdminBoardService {
     /**
      * 게시글 상세정보 조회
      */
+    @Transactional(readOnly = true)
     public BoardDTO getBoardDetail(Long id) {
         return boardRepository.findById(id)
                 .map(BoardDTO::toDTO) // 엔티티를 DTO로 변환
@@ -134,6 +138,7 @@ public class AdminBoardService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public List<CommentDTO> getCommentsByBoardId(Long id) {
         List<CommentEntity> comments = commentRepository.findByBoardId(id);
         return comments.stream().map(CommentDTO::toDTO).collect(Collectors.toList());

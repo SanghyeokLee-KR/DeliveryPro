@@ -105,6 +105,7 @@ public class PreMemService {
     }
 
     // 시퀀스를 구현하기 위한 메소드
+    @Transactional(readOnly = true)
     public Long getNextFileSequence() {
         return pmrepo.findMaxPreMemId() + 1;
     }

@@ -23,12 +23,14 @@ public class AdminStoreService {
      * @return 페이징된 가게 리스트 DTO
      */
     /* 현재는 DB에서 받아오는 값이 '승인'이 아닌 데이터들만 가져옴 */
+    @Transactional(readOnly = true)
     public Page<PreStoreDTO> getAllStores(Pageable pageable) {
         Page<PreStoreEntity> storeEntities = storeRepository.findStatusNone(pageable);
         return storeEntities.map(PreStoreDTO::toDTO);
     }
 
     /* 모든 가게 리스트를 가져오기 위한 메소드 */
+    @Transactional(readOnly = true)
     public Page<PreStoreDTO> getAllStoresList(Pageable pageable) {
         Page<PreStoreEntity> storeEntities = storeRepository.findApprovedStores(pageable);
         return storeEntities.map(PreStoreDTO::toDTO);
@@ -43,6 +45,7 @@ public class AdminStoreService {
      * @param pageable    페이징 및 정렬 정보
      * @return 페이징된 필터링된 가게 리스트 DTO
      */
+    @Transactional(readOnly = true)
     public Page<PreStoreDTO> searchStores(String searchQuery, String category, String status, Pageable pageable) {
         Page<PreStoreEntity> storeEntities = storeRepository.findStores(searchQuery, category, status, pageable);
         return storeEntities.map(PreStoreDTO::toDTO);
@@ -54,6 +57,7 @@ public class AdminStoreService {
      * @param id 가게 ID
      * @return 가게 DTO 또는 null
      */
+    @Transactional(readOnly = true)
     public PreStoreDTO getStoreById(Long id) {
         return storeRepository.findBypreStoIdOptional(id)
                 .map(PreStoreDTO::toDTO)

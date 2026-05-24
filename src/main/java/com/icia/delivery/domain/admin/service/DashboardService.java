@@ -140,6 +140,7 @@ public class DashboardService {
 
 
 
+    @Transactional(readOnly = true)
     public Map<String, Long> dashboardChart() {
         List<OrderEntity> entities = orepo.findAll();
 

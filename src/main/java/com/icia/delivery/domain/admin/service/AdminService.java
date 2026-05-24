@@ -56,6 +56,7 @@ public class AdminService {
         session.invalidate();
     }
 
+    @Transactional(readOnly = true)
     public ModelAndView adminView(Long adminid) {
 
         ModelAndView mav = new ModelAndView();

@@ -17,21 +17,25 @@ public class AdminRiderService {
     @Autowired
     private final RiderRepository repository;
 
+    @Transactional(readOnly = true)
     public Page<RiderDTO> searchRiders(String searchQuery, String status, Pageable pageable) {
         Page<RiderEntity> riderEntities = repository.findStores(searchQuery, status, pageable);
         return riderEntities.map(RiderDTO::toDTO);
     }
 
+    @Transactional(readOnly = true)
     public Page<RiderDTO> getAllRidersList1(Pageable pageable) {
         Page<RiderEntity> riderEntities = repository.findApprovedRider1(pageable);
         return riderEntities.map(RiderDTO::toDTO);
     }
 
+    @Transactional(readOnly = true)
     public Page<RiderDTO> getAllRidersList2(Pageable pageable) {
         Page<RiderEntity> riderEntities = repository.findApprovedRider2(pageable);
         return riderEntities.map(RiderDTO::toDTO);
     }
 
+    @Transactional(readOnly = true)
     public RiderDTO getRiderById(Long id) {
         return repository.findByRiderNoOptional(id)
                 .map(RiderDTO::toDTO)

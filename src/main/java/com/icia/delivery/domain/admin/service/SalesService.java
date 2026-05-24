@@ -7,6 +7,7 @@ import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import java.time.DayOfWeek;
@@ -25,6 +26,7 @@ public class SalesService {
     private final OrderRepository orepo;
     private final StoreRepository srepo;
 
+    @Transactional(readOnly = true)
     public void riso(Model model) {
 
         List<OrderEntity> orderEntities = orepo.findAll();
@@ -74,6 +76,7 @@ public class SalesService {
     }
 
 
+    @Transactional(readOnly = true)
     public Map<String, Long> getSalesForLastWeek() {
         // 현재 날짜와 시간 가져오기
         LocalDateTime now = LocalDateTime.now();
@@ -106,6 +109,7 @@ public class SalesService {
         return salesData;
     }
 
+    @Transactional(readOnly = true)
     public Map<Double, PreStoreDTO> topSellingStore() {
 
         // 1. 주문 데이터 가져오기

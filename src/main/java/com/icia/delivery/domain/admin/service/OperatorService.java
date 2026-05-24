@@ -69,6 +69,7 @@ public class OperatorService {
      * @param pageable 페이징 정보
      * @return 페이징된 회원 리스트 DTO
      */
+    @Transactional(readOnly = true)
     public Page<MemberDTO> getAllMembers(Pageable pageable) {
         Page<MemberEntity> memberEntities = memberRepository.findAll(pageable);
         return memberEntities.map(MemberDTO::toDTO);
@@ -84,6 +85,7 @@ public class OperatorService {
      * @param pageable    페이징 및 정렬 정보
      * @return 페이징된 필터링된 회원 리스트 DTO
      */
+    @Transactional(readOnly = true)
     public Page<MemberDTO> searchMembers(String searchQuery, String gender, String grade, String status, Pageable pageable) {
         Page<MemberEntity> memberEntities = memberRepository.searchMembers(searchQuery, gender, grade, status, pageable);
         return memberEntities.map(MemberDTO::toDTO);
@@ -95,6 +97,7 @@ public class OperatorService {
      * @param id 회원 ID
      * @return 회원 DTO 또는 null
      */
+    @Transactional(readOnly = true)
     public MemberDTO getMemberById(Long id) {
         return memberRepository.findById(id)
                 .map(MemberDTO::toDTO)
