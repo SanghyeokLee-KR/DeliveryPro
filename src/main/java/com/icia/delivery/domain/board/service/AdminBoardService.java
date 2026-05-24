@@ -110,6 +110,7 @@ public class AdminBoardService {
                 .orElse(null); // 게시글이 없으면 null 반환
     }
 
+    @Transactional
     public boolean addComment(Long id, CommentDTO commentDTO) {
         // 이미 댓글이 존재하는 경우 추가 불가
         if (commentRepository.existsByBoardId(id)) {

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,7 @@ public class AdminRiderService {
                 .orElse(null);
     }
 
+    @Transactional
     public boolean updateRiderInfo(Long riderNo, RiderDTO riderForm) {
         return repository.findByRiderNoOptional(riderNo).map(rider -> {
             // 필수 필드 체크 (예: riderName이 null이면 예외 처리)

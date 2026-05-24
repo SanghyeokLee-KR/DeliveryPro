@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AdminStoreService {
@@ -66,6 +67,7 @@ public class AdminStoreService {
      * @param storeForm 수정된 가게 정보가 담긴 PreStoreDTO
      * @return 업데이트 성공 여부
      */
+    @Transactional
     public boolean updateStoreInfo(Long id, PreStoreDTO storeForm) {
         return storeRepository.findBypreStoIdOptional(id).map(store -> {
             // 필수 필드 체크 (예: preStoName이 null이면 예외 처리)

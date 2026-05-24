@@ -6,6 +6,7 @@ import com.icia.delivery.domain.admin.repository.AdminRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class AdminService {
      * @param session  HttpSession 객체
      * @return 로그인 성공 여부
      */
+    @Transactional
     public boolean login(String username, String password, HttpSession session) {
         Optional<AdminEntity> optionalAdmin = adminRepository.findByAdminUsername(username);
         if (optionalAdmin.isPresent()) {

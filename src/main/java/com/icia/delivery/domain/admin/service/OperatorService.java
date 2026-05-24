@@ -108,6 +108,7 @@ public class OperatorService {
      * @param memberForm 수정된 회원 정보가 담긴 MemberDTO
      * @return 업데이트 성공 여부
      */
+    @Transactional
     public boolean updateMemberInfo(Long id, MemberDTO memberForm) {
         return memberRepository.findById(id).map(member -> {
             // 수정 가능한 필드 업데이트
@@ -134,6 +135,7 @@ public class OperatorService {
      * @param newStatus 새로운 상태
      * @return 업데이트 성공 여부
      */
+    @Transactional
     public boolean updateMemberStatus(Long id, String newStatus) {
         if (!"활성".equals(newStatus) && !"정지".equals(newStatus) && !"탈퇴".equals(newStatus)) {
             return false; // 유효하지 않은 상태

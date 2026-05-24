@@ -8,6 +8,7 @@ import com.icia.delivery.domain.member.dto.MemberDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class BoardService {
 
     private final HttpSession session;
 
+    @Transactional
     public ModelAndView bWrite(BoardDTO board) {
 
         ModelAndView mav = new ModelAndView();
@@ -113,6 +115,7 @@ public class BoardService {
         return mav;
     }
 
+    @Transactional
     public ModelAndView bModify(BoardDTO board) {
         System.out.println("[2] controller → service : " + board);
 
@@ -126,6 +129,7 @@ public class BoardService {
         return mav;
     }
 
+    @Transactional
     public ModelAndView bDelete(BoardDTO board) {
         ModelAndView mav = new ModelAndView();
 
