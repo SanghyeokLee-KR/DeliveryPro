@@ -231,6 +231,7 @@
                 },
                 dataType: "json",
                 success: function (response) {
+                    response = unwrapApiResponse(response);
                     let distance = response.distance;
                     // data-seg-index="0" 만 업데이트
                     $card.find("span.segment-info[data-seg-index='0']").text(distance + "m");
@@ -252,6 +253,7 @@
                         },
                         dataType: "json",
                         success: function (res) {
+                            res = unwrapApiResponse(res);
                             let dist = res.distance;
                             // 매장 이후는 index 순서대로
                             let $customerSpan = $card.find("span.segment-info")

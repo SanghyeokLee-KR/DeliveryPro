@@ -1,5 +1,12 @@
 // 계좌 번호 입력 / 출력 관련 JS
 $(document).ready(function() {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     // 계좌 등록 폼 제출 시 유효성 검사
     $("form").on("submit", function(event) {
         var riderBankName = $("#bank").val(); // 은행명
@@ -18,6 +25,7 @@ $(document).ready(function() {
         url: '/getRiderAccountList',
         dataType: "json",
         success: function(result) {
+            result = unwrapApiResponse(result);
             // 받은 데이터를 HTML에 출력
             RiderAccList(result);
             console.log(result);
@@ -101,8 +109,9 @@ function RiderAccList(result) {
                 url: '/riderAccountDelete',
                 type: 'POST',
                 data: { accountId: accountId },
-                dataType: "text",
+                dataType: "json",
                 success: function(response) {
+                    response = unwrapApiResponse(response);
                     alert('계좌 삭제 ' + response);
                     location.reload();
                 },

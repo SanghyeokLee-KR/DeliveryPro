@@ -2,6 +2,7 @@ package com.icia.delivery.domain.rider.controller;
 
 import com.icia.delivery.domain.rider.dto.RiderAccountDTO;
 import com.icia.delivery.domain.rider.service.RiderService;
+import com.icia.delivery.global.response.ApiResponse;
 import com.icia.delivery.util.DistanceUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,24 +22,24 @@ public class RiderRestfulController {
 
     // idCheck : 아이디 중복 체크
     @PostMapping("/riderIdCheck")
-    public String idCheck(@RequestParam("rId") String rId) {
+    public ResponseEntity<ApiResponse<String>> idCheck(@RequestParam("rId") String rId) {
         String result = rsvc.riderIdCheck(rId);
-        return  result;
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 
     @PostMapping("/getRiderAccountList")
-    public List<RiderAccountDTO> getRiderAccountList(){
-        return rsvc.getRiderAccountList();
+    public ResponseEntity<ApiResponse<List<RiderAccountDTO>>> getRiderAccountList(){
+        return ResponseEntity.ok(ApiResponse.success(rsvc.getRiderAccountList()));
     }
 
     @PostMapping("/riderAccountDelete")
-    public String riderAccountDelete(@RequestParam("accountId") Long accountId){
+    public ResponseEntity<ApiResponse<String>> riderAccountDelete(@RequestParam("accountId") Long accountId){
         System.out.println("들어오는 계좌 고유 번호 : " + accountId);
-        return rsvc.deleteAccount(accountId);
+        return ResponseEntity.ok(ApiResponse.success(rsvc.deleteAccount(accountId)));
     }
 
     @PostMapping("/calcDistance")
-    public ResponseEntity<Map<String, Object>> calculateDistance(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> calculateDistance(
             @RequestParam("fromX") double fromX,
             @RequestParam("fromY") double fromY,
             @RequestParam("toX") double toX,
@@ -51,6 +52,6 @@ public class RiderRestfulController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("distance", roundedDistance); // 미터 단위
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(ApiResponse.success(result));
     }
 }

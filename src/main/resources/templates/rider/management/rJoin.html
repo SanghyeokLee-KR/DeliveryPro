@@ -96,6 +96,13 @@
 <script src="/layout/member/js/header.js"></script>
 
 <script>
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     // 아이디 중복체크
     let rId = $('#rider_id');
     let check1 = $('#check1')
@@ -111,8 +118,9 @@
             type: "POST",
             url: "riderIdCheck",
             data: {"rId": rId.val()},
-            dataType: "text",
+            dataType: "json",
             success: function (result) {
+                result = unwrapApiResponse(result);
                 if (result == "OK") {
                     check1.html(rId.val() + "는 사용가능한 아이디");
                     check1.css('color', 'blue');
