@@ -3,6 +3,7 @@ package com.icia.delivery.domain.order.controller;
 
 import com.icia.delivery.domain.order.dto.OrderItemDTO;
 import com.icia.delivery.domain.order.service.OrderItemService;
+import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +23,8 @@ public class OrderItemController {
 
 
     @PostMapping("{orderId}")
-    public ResponseEntity<List<OrderItemDTO>> detailOrder(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<ApiResponse<List<OrderItemDTO>>> detailOrder(@PathVariable("orderId") Long orderId) {
         List<OrderItemDTO> dtoList = oisv.findOrderById(orderId);
-        return ResponseEntity.ok(dtoList);
+        return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
 }

@@ -2,6 +2,13 @@ $(document).ready(function () {
     const preStoId = document.getElementById('preSto-id').value;
     let groupOrderIds = [];
 
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     /***************************************
      * 1. 현재 시각(또는 전달받은 날짜 문자열)을 "YYYY-MM-DD HH:mm:ss" 형식으로 변환하는 함수
      ***************************************/
@@ -244,7 +251,7 @@ $(document).ready(function () {
             $.ajax({url: `/orderItem/${orderId}`, method: "POST"}),
             $.ajax({url: `/api/member/address/${orderId}`, method: "POST", dataType: 'json'})
         ).done(function (orderData, menuResponse, addressResponse) {
-            renderOrderDetails(orderData[0], menuResponse[0]);
+            renderOrderDetails(orderData[0], unwrapApiResponse(menuResponse[0]));
             if (addressResponse[0].status === 'success') {
                 $("#mem-address").text(addressResponse[0].address);
             } else {
@@ -432,5 +439,3 @@ $(document).ready(function () {
         });
     }
 });
-
-
