@@ -3,227 +3,167 @@ package com.icia.delivery.domain.member.controller;
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.service.MemberService;
 import com.icia.delivery.domain.order.service.OrderService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member") // 공통 경로 설정
+@RequestMapping("/api/member")
 public class RestfulController {
 
     private final MemberService msvc;
     private final OrderService osvc;
 
-    /**
-     * 아이디 중복 확인 엔드포인트
-     * GET /api/member/check-id?userId=desiredUserId
-     *
-     * @param userId 확인할 아이디
-     * @return 아이디 존재 여부를 담은 JSON
-     */
     @GetMapping("/check-id")
-    public ResponseEntity<Map<String, Object>> checkUserId(@RequestParam String userId) {
-        boolean exists = msvc.isUserIdExists(userId);
+    public ResponseEntity<ApiResponse<Map<String, Object>>> checkUserId(@RequestParam String userId) {
         Map<String, Object> response = new HashMap<>();
-        response.put("exists", exists);
-        return ResponseEntity.ok(response);
+        response.put("exists", msvc.isUserIdExists(userId));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    /**
-     * 로그인한 사용자의 이름을 반환하는 엔드포인트
-     * POST /api/member/userName
-     *
-     * @param session 현재 세션
-     * @return 사용자 이름 또는 "로그인 필요"
-     */
     @PostMapping("/userName")
-    public ResponseEntity<String> getUserName(HttpSession session) {
-        // 세션에서 mem_id를 Long 타입으로 가져오기
-        Long memId = (Long) session.getAttribute("mem_id");  // Long 타입으로 캐스팅
-        System.out.println("memID : " + memId);
-
-        if (memId != null) {
-            // mem_id를 통해 사용자 이름을 조회
-            String userName = msvc.getUserNameById(memId);  // Long 타입을 전달
-            if (userName != null) {
-                return ResponseEntity.ok(userName);  // 사용자 이름 반환
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
-            }
-        } else {
-            // mem_id가 없으면, 로그인되지 않은 상태로 처리
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+    public ResponseEntity<ApiResponse<String>> getUserName(HttpSession session) {
+        Long memId = (Long) session.getAttribute("mem_id");
+        if (memId == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "Login is required.");
         }
+
+        String userName = msvc.getUserNameById(memId);
+        if (userName == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "Member not found.");
+        }
+
+        return ResponseEntity.ok(ApiResponse.success(userName));
     }
 
-    /**
-     * 회원 정보를 업데이트하는 엔드포인트
-     * POST /api/member/update-modal
-     *
-     * @param payload 요청 본문에 포함된 필드 및 값
-     * @param session 현재 세션
-     * @return 업데이트 성공 여부 및 메시지를 담은 JSON
-     */
     @PostMapping("/update-modal")
-    public ResponseEntity<Map<String, Object>> updateMemberModal(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> updateMemberModal(
             @RequestBody Map<String, String> payload,
             HttpSession session) {
 
-        Map<String, Object> response = new HashMap<>();
+        Long mId = (Long) session.getAttribute("mem_id");
+        String field = payload != null ? payload.get("field") : null;
+        String value = payload != null ? payload.get("value") : null;
+
+        if (field == null || value == null || mId == null) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "Required parameter is missing.");
+        }
+
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setMId(mId);
 
         try {
-            String field = payload.get("field");
-            String value = payload.get("value");
-            // 세션에서 mem_id를 가져오기
-            Long mId = (Long) session.getAttribute("mem_id");
-
-            if (field == null || value == null || mId == null) {
-                response.put("success", false);
-                response.put("message", "필수 파라미터가 누락되었습니다.");
-                return ResponseEntity.badRequest().body(response);
-            }
-
-            // MemberDTO 생성 및 설정
-            MemberDTO memberDTO = new MemberDTO();
-            memberDTO.setMId(mId); // mId 설정
-
-            // field에 따라 적절한 setter 호출
-            switch (field) {
-                case "nickname":
-                    memberDTO.setNickname(value);
-                    break;
-                case "phone":
-                    memberDTO.setPhone(value);
-                    break;
-                case "email":
-                    memberDTO.setEmail(value);
-                    break;
-                case "birthday":
-                    // Parse the birthday string to LocalDate
-                    LocalDate birthDate = LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    memberDTO.setBirthday(birthDate);
-                    break;
-                case "gender":
-                    memberDTO.setGender(value);
-                    break;
-                default:
-                    response.put("success", false);
-                    response.put("message", "유효하지 않은 필드입니다.");
-                    return ResponseEntity.badRequest().body(response);
-            }
-
-            // 서비스 메서드 호출하여 회원 정보 업데이트
+            applyMemberField(memberDTO, field, value);
             msvc.updateMemberModal(mId, memberDTO);
 
+            Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "회원정보가 수정되었습니다.");
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "업데이트 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (BusinessException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update member.", e);
         }
     }
 
-    /**
-     * 회원 탈퇴를 처리하는 엔드포인트
-     * POST /api/member/delete
-     *
-     * @param session 현재 세션
-     * @return 탈퇴 성공 메시지 또는 오류 메시지
-     */
     @PostMapping("/delete")
-    public ResponseEntity<String> delete(HttpSession session) {
-        // 세션에서 mem_id를 가져오기
+    public ResponseEntity<ApiResponse<Map<String, String>>> delete(HttpSession session) {
         Long mId = (Long) session.getAttribute("mem_id");
-
         if (mId == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "Login is required.");
         }
 
         try {
-            // MemberDTO 생성 및 mId 설정
             MemberDTO memberDTO = new MemberDTO();
             memberDTO.setMId(mId);
 
-            String result = msvc.delete(memberDTO);
-            return ResponseEntity.ok(result);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", msvc.delete(memberDTO));
+            response.put("redirectUrl", "/index");
+            return ResponseEntity.ok(ApiResponse.success(response));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
     }
 
-    /**
-     * 회원의 생년월일을 업데이트하는 엔드포인트
-     * POST /api/member/updateBirthday
-     *
-     * @param birthDate 업데이트할 생년월일 (LocalDate 형식: yyyy-MM-dd)
-     * @param session   현재 세션
-     * @return 업데이트 성공 여부 및 메시지를 담은 JSON
-     */
     @PostMapping("/updateBirthday")
-    public ResponseEntity<Map<String, Object>> updateBirthday(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> updateBirthday(
             @RequestParam("birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate birthDate,
             HttpSession session) {
 
-        Map<String, Object> response = new HashMap<>();
+        Long mId = (Long) session.getAttribute("mem_id");
+        if (mId == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "Login is required.");
+        }
 
         try {
-            Long mId = (Long) session.getAttribute("mem_id");
-
-            if (mId == null) {
-                response.put("success", false);
-                response.put("message", "로그인이 필요합니다.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-            }
-
             MemberDTO memberDTO = new MemberDTO();
             memberDTO.setMId(mId);
             memberDTO.setBirthday(birthDate);
-
-            // 서비스 메서드 호출하여 생년월일 업데이트
             msvc.updateMemberModal(mId, memberDTO);
 
+            Map<String, Object> response = new HashMap<>();
             response.put("success", true);
             response.put("message", "생년월일이 수정되었습니다.");
-            return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            response.put("success", false);
-            response.put("message", "업데이트 중 오류가 발생했습니다: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (RuntimeException e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update birthday.", e);
         }
     }
 
-
-
-
     @PostMapping("/address/{orderId}")
-    public ResponseEntity<Map<String, String>> getAddress(@PathVariable("orderId") Long orderId) {
-
-        System.out.println("🔍 요청된 주문 ID: " + orderId);
-
-        // ✅ 주문 ID로 해당 주문의 `memId` 조회
+    public ResponseEntity<ApiResponse<Map<String, String>>> getAddress(@PathVariable("orderId") Long orderId) {
         Long memId = osvc.getMemIdByOrderId(orderId);
-        System.out.println("해당 주문의 사용자 ID: " + memId);
-
-        // ✅ `memId`로 해당 사용자의 주소 조회
         String address = msvc.getAddressByMemId(memId);
 
         Map<String, String> response = new HashMap<>();
         response.put("status", "success");
         response.put("address", String.valueOf(address));
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 
-        return ResponseEntity.ok(response);
+    private void applyMemberField(MemberDTO memberDTO, String field, String value) {
+        switch (field) {
+            case "nickname":
+                memberDTO.setNickname(value);
+                break;
+            case "phone":
+                memberDTO.setPhone(value);
+                break;
+            case "email":
+                memberDTO.setEmail(value);
+                break;
+            case "birthday":
+                try {
+                    memberDTO.setBirthday(LocalDate.parse(value, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                } catch (DateTimeParseException e) {
+                    throw new BusinessException(ErrorCode.BAD_REQUEST, "Invalid birthday format.", e);
+                }
+                break;
+            case "gender":
+                memberDTO.setGender(value);
+                break;
+            default:
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "Invalid field.");
+        }
     }
 }

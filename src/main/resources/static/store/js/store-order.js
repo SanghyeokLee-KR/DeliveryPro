@@ -252,8 +252,9 @@ $(document).ready(function () {
             $.ajax({url: `/api/member/address/${orderId}`, method: "POST", dataType: 'json'})
         ).done(function (orderData, menuResponse, addressResponse) {
             renderOrderDetails(unwrapApiResponse(orderData[0]), unwrapApiResponse(menuResponse[0]));
-            if (addressResponse[0].status === 'success') {
-                $("#mem-address").text(addressResponse[0].address);
+            const addressData = unwrapApiResponse(addressResponse[0]);
+            if (addressData.status === 'success') {
+                $("#mem-address").text(addressData.address);
             } else {
                 console.warn("🚨 주소 응답에 문제가 있습니다:", addressResponse[0]);
                 $("#mem-address").text("주소 정보를 가져올 수 없습니다.");
@@ -430,6 +431,7 @@ $(document).ready(function () {
                 type: 'POST',
                 dataType: 'json',
                 success: function(response) {
+                    response = unwrapApiResponse(response);
                     if(response.status === 'success') {
                         $addressSpan.text(response.address);
                     } else {

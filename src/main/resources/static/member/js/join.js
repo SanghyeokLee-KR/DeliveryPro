@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     const agreeSection = document.getElementById('agreeSection');
     const signupSection = document.getElementById('signupSection');
     const termsContainer = document.getElementById('terms-container');
@@ -315,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            const data = await response.json();
+            const data = unwrapApiResponse(await response.json());
 
             if (data.exists) {
                 showError(idWrapper, idErrorMessage, '⚠ 사용할 수 없는 아이디입니다.');

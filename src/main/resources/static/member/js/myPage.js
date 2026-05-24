@@ -132,6 +132,7 @@ function updateFieldAjax(field) {
         contentType: "application/json",
         data: JSON.stringify({field, value}),
         success: function (response) {
+            response = unwrapApiResponse(response);
             if (response.success) {
                 alert(response.message || "업데이트가 성공적으로 완료되었습니다.");
                 closeModal(`modal-${field}`);
@@ -181,11 +182,15 @@ function Delete() {
 
     // AJAX 요청
     $.ajax({
-        url: "/delete",
+        url: "/api/member/delete",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify({}),
         success: function (response) {
+            response = unwrapApiResponse(response);
+            if (typeof response === "string") {
+                response = {message: response};
+            }
             alert(response.message || "탈퇴가 완료되었습니다.");
             window.location.href = response.redirectUrl || "/index";
         },
