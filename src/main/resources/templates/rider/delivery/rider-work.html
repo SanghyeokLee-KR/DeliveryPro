@@ -296,6 +296,7 @@
             type: "POST",
             dataType: "json",
             success: function (res) {
+                res = unwrapApiResponse(res);
                 console.log("[riderOrderList] result=", res);
                 renderGroupDelivery(res);
                 renderSingleDelivery(res);

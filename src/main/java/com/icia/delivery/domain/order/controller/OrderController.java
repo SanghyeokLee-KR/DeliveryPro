@@ -3,10 +3,19 @@ package com.icia.delivery.domain.order.controller;
 import com.icia.delivery.domain.deliverygroup.dto.GroupRiderCallRequest;
 import com.icia.delivery.domain.order.dto.OrderDTO;
 import com.icia.delivery.domain.order.service.OrderService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Collections;
@@ -14,164 +23,130 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * OrderController
- *  - "/orders" 관련 요청을 처리하는 컨트롤러
- *  - 주문 생성, 상세, 단건 수락/거절, 묶음배달 배치 수락 등
- */
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;  // OrderService 주입
-    private final HttpSession session;        // 세션 사용
+    private final OrderService orderService;
+    private final HttpSession session;
 
-    /**
-     * 1) 주문 생성 (POST /orders)
-     */
     @PostMapping
     public ModelAndView createOrder(@ModelAttribute OrderDTO orderDTO) {
         return orderService.createOrder(orderDTO);
     }
 
-    /**
-     * 2) 주문 상세 조회 (POST /orders/detail/{orderId})
-     */
     @PostMapping("detail/{orderId}")
-    public ResponseEntity<List<OrderDTO>> detailOrder(@PathVariable("orderId") Long orderId) {
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> detailOrder(@PathVariable("orderId") Long orderId) {
         List<OrderDTO> dtoList = orderService.findOrderById(orderId);
         session.setAttribute("orderId", orderId);
-        return ResponseEntity.ok(dtoList);
+        return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
 
-    /**
-     * 3) 특정 가게(preStoId)의 주문 목록 (POST /orders/orderList/{preStoId})
-     */
     @PostMapping("orderList/{preStoId}")
-    public ResponseEntity<List<OrderDTO>> orderList(@PathVariable("preStoId") Long preStoId) {
-        List<OrderDTO> orderList = orderService.orderList(preStoId);
-        return ResponseEntity.ok(orderList);
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> orderList(@PathVariable("preStoId") Long preStoId) {
+        return ResponseEntity.ok(ApiResponse.success(orderService.orderList(preStoId)));
     }
 
-    /**
-     * 4) 회원 마이페이지: 주문 요약 (POST /orders/{memId})
-     */
     @PostMapping("/{memId}")
-    public List<Map<String, Object>> getOrderSummaries(@PathVariable Long memId) {
-        return orderService.getOrderSummariesByMemberId(memId);
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getOrderSummaries(@PathVariable Long memId) {
+        return ResponseEntity.ok(ApiResponse.success(orderService.getOrderSummariesByMemberId(memId)));
     }
 
-    /**
-     * 5) 단건 주문 수락/거절 (POST /orders/{orderId}/{action})
-     */
     @PostMapping("/{orderId}/{action}")
-    public ResponseEntity<Map<String, String>> acceptOrder(
+    public ResponseEntity<ApiResponse<Map<String, String>>> acceptOrder(
             @PathVariable Long orderId,
             @PathVariable String action
     ) {
-        orderService.acceptOrder(orderId, action);
+        runOrderAction(() -> orderService.acceptOrder(orderId, action));
+
         Map<String, String> response = new HashMap<>();
         response.put("status", "success");
         response.put("message", "주문 처리 성공!");
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    /**
-     * 6) 단건 주문 거절 (POST /orders/{orderId}/reject)
-     */
     @PostMapping("/{orderId}/reject")
-    public ResponseEntity<Map<String, String>> rejectOrder(@PathVariable Long orderId) {
-        orderService.rejectOrder(orderId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<ApiResponse<Void>> rejectOrder(@PathVariable Long orderId) {
+        runOrderAction(() -> orderService.rejectOrder(orderId));
+        return ResponseEntity.ok(ApiResponse.success());
     }
 
-    /**
-     * 7) 배달 정보 조회 (POST /orders/delivery/{orderId})
-     */
     @PostMapping("/delivery/{orderId}")
-    public ResponseEntity<?> getOrders(@PathVariable Long orderId) {
+    public ResponseEntity<ApiResponse<Object>> getOrders(@PathVariable Long orderId) {
         List<?> orders = orderService.findOrders(orderId);
-        if (orders.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
-        }
-        return ResponseEntity.ok(Map.of("data", orders));
+        Object response = orders.isEmpty() ? Collections.emptyList() : Map.of("data", orders);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    /**
-     * 8) 배달 수락 후 처리 (POST /orders/accept/{orderId})
-     */
     @PostMapping("/accept/{orderId}")
-    public ResponseEntity<?> accept(@PathVariable Long orderId) {
+    public ResponseEntity<ApiResponse<Object>> accept(@PathVariable Long orderId) {
         List<?> orders = orderService.acceptOrders(orderId);
-        if (orders.isEmpty()) {
-            return ResponseEntity.ok(Collections.emptyList());
-        }
-        return ResponseEntity.ok(Map.of("data", orders));
+        Object response = orders.isEmpty() ? Collections.emptyList() : Map.of("data", orders);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    /**
-     * 9) 가게 측 주문 목록 조회 (POST /orders/storeOrderList)
-     */
     @PostMapping("/storeOrderList")
-    public List<OrderDTO> storeOrderList(){
-        return orderService.storeOrderList();
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> storeOrderList() {
+        return ResponseEntity.ok(ApiResponse.success(orderService.storeOrderList()));
     }
 
-    /**
-     * 10) 단건 주문 라이더 호출 (POST /orders/riderCall)
-     */
     @PostMapping("/riderCall")
-    public String riderCall(@RequestParam("orderId") Long orderId){
-        return orderService.riderCall(orderId);
+    public ResponseEntity<ApiResponse<String>> riderCall(@RequestParam("orderId") Long orderId) {
+        return ResponseEntity.ok(ApiResponse.success(orderService.riderCall(orderId)));
     }
 
-    /**
-     * 11) 라이더가 볼 주문 목록 (POST /orders/riderOrderList)
-     */
     @PostMapping("/riderOrderList")
-    public List<OrderDTO> riderOrderList(){
-        return orderService.riderOrderList();
+    public ResponseEntity<ApiResponse<List<OrderDTO>>> riderOrderList() {
+        return ResponseEntity.ok(ApiResponse.success(orderService.riderOrderList()));
     }
 
-    /**
-     * 12) "그룹(묶음) 라이더 호출" (POST /orders/groupRiderCall)
-     */
     @PostMapping("/groupRiderCall")
-    public ResponseEntity<String> groupRiderCall(@RequestBody GroupRiderCallRequest request) {
-        List<Long> orderIds = request.getOrderIds();
-        String callTime = request.getCallTime();  // 예: "2025-02-02 03:57:12"
+    public ResponseEntity<ApiResponse<String>> groupRiderCall(@RequestBody GroupRiderCallRequest request) {
+        List<Long> orderIds = request != null ? request.getOrderIds() : null;
+        String callTime = request != null ? request.getCallTime() : null;
         if (orderIds == null || orderIds.isEmpty()) {
-            return ResponseEntity.badRequest().body("No orders provided for group rider call.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "No orders provided for group rider call.");
         }
-        orderService.groupRiderCall(orderIds, callTime);
-        return ResponseEntity.ok("Group rider call initiated for orders: " + orderIds + " at " + callTime);
+
+        runOrderAction(() -> orderService.groupRiderCall(orderIds, callTime));
+        return ResponseEntity.ok(ApiResponse.success(
+                "Group rider call initiated for orders: " + orderIds + " at " + callTime
+        ));
     }
 
-    /**
-     * 13) "묶음배달" 한 번에 여러 주문을 하나의 delivery_group에 묶기 (POST /orders/batchAccept)
-     *     Request JSON 예: { "preStoId": 2, "orderIds": [10,11,12] }
-     */
     @PostMapping("/batchAccept")
-    public ResponseEntity<String> acceptBatchOrders(@RequestBody Map<String, Object> requestBody) {
-        Object storeIdObj = requestBody.get("preStoId");
+    public ResponseEntity<ApiResponse<String>> acceptBatchOrders(@RequestBody Map<String, Object> requestBody) {
+        Object storeIdObj = requestBody != null ? requestBody.get("preStoId") : null;
         if (storeIdObj == null) {
-            return ResponseEntity.badRequest().body("No preStoId provided.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "No preStoId provided.");
         }
         Long preStoId = Long.valueOf(storeIdObj.toString());
 
         Object orderIdsObj = requestBody.get("orderIds");
         if (!(orderIdsObj instanceof List)) {
-            return ResponseEntity.badRequest().body("Invalid orderIds format.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "Invalid orderIds format.");
         }
+
         @SuppressWarnings("unchecked")
         List<Long> orderIds = (List<Long>) orderIdsObj;
         if (orderIds.isEmpty()) {
-            return ResponseEntity.badRequest().body("No orderIds to acceptBatch.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "No orderIds to acceptBatch.");
         }
 
-        orderService.acceptBatchOrders(preStoId, orderIds);
-        return ResponseEntity.ok("Batch accept complete for storeId=" + preStoId + ", orders=" + orderIds);
+        runOrderAction(() -> orderService.acceptBatchOrders(preStoId, orderIds));
+        return ResponseEntity.ok(ApiResponse.success(
+                "Batch accept complete for storeId=" + preStoId + ", orders=" + orderIds
+        ));
     }
 
+    private void runOrderAction(Runnable action) {
+        try {
+            action.run();
+        } catch (BusinessException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
 }

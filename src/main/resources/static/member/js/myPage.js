@@ -249,6 +249,7 @@ $(document).ready(function() {
         dataType: 'json',
         success: function (data) {
             // 성공 시 데이터 처리
+            data = unwrapApiResponse(data);
             const $orderContainer = $(".user-info-order-container");
             data.forEach(order => {
                 const orderItem = `

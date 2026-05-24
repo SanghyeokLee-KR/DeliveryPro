@@ -251,7 +251,7 @@ $(document).ready(function () {
             $.ajax({url: `/orderItem/${orderId}`, method: "POST"}),
             $.ajax({url: `/api/member/address/${orderId}`, method: "POST", dataType: 'json'})
         ).done(function (orderData, menuResponse, addressResponse) {
-            renderOrderDetails(orderData[0], unwrapApiResponse(menuResponse[0]));
+            renderOrderDetails(unwrapApiResponse(orderData[0]), unwrapApiResponse(menuResponse[0]));
             if (addressResponse[0].status === 'success') {
                 $("#mem-address").text(addressResponse[0].address);
             } else {
@@ -273,8 +273,9 @@ $(document).ready(function () {
             url: '/orders/riderCall',
             type: 'POST',
             data: {orderId: orderId},
-            dataType: "text",
+            dataType: "json",
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log('배달원 ' + response + " 중!");
                 alert('배달원 ' + response + " 중!");
                 // 처리 완료 내역 테이블에 추가
@@ -311,8 +312,9 @@ $(document).ready(function () {
             type: 'POST',
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({orderIds: groupOrderIds, callTime: callTime}),
-            dataType: "text",
+            dataType: "json",
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log('묶음 배달 라이더 호출 성공: ' + response);
                 alert('묶음 배달 라이더 호출 성공: ' + response);
                 // 호출된 주문들을 처리 완료 테이블에 추가
@@ -352,6 +354,7 @@ $(document).ready(function () {
             type: 'POST',
             dataType: 'json',
             success: function (response) {
+                response = unwrapApiResponse(response);
                 console.log("주문 처리 성공");
                 alert('주문을 ' + (action === 'accept' ? '수락' : '거부') + '하였습니다.');
                 // 필요 시 추가 UI 업데이트 로직 추가
@@ -371,6 +374,7 @@ $(document).ready(function () {
         type: 'POST',
         dataType: 'json',
         success: function (result) {
+            result = unwrapApiResponse(result);
             console.log("storeOrderList 결과:", result);
             renderStoreOrderList(result);
             loadStoreOrderAddresses();
@@ -386,6 +390,7 @@ $(document).ready(function () {
         method: 'POST',
         dataType: 'json',
         success: function (response) {
+            response = unwrapApiResponse(response);
             // 데이터가 없거나 빈 객체인 경우
             if (!response || Object.keys(response).length === 0) {
                 $('#details').html('<p class="no-data">주문서를 선택해주세요.</p>');
