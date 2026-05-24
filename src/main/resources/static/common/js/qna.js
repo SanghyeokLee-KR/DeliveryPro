@@ -5,6 +5,13 @@ let limit = 5      // 한페이지에 출력될 데이터 갯수
 const block = 5    // 한페이지에 출력될 페이지 갯수
 let count = 0      // 전체 데이터 갯수
 
+function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 $(()=>{
     $.ajax({
         url : "boardList",
@@ -12,6 +19,7 @@ $(()=>{
         dataType : "json",
 
         success : (result) => {
+            result = unwrapApiResponse(result)
             list = result
             pagingList(page, list)
 
@@ -112,6 +120,7 @@ $('#searchBtn').click(()=>{
         data : { "searchCategory": category, "searchKeyword" : keyword },
         dataType: "json",
         success : function (result){
+            result = unwrapApiResponse(result)
             list = result
             pagingList(page, list)
         },

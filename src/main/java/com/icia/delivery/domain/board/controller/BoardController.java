@@ -3,7 +3,9 @@ package com.icia.delivery.domain.board.controller;
 
 import com.icia.delivery.domain.board.dto.BoardDTO;
 import com.icia.delivery.domain.board.service.BoardService;
+import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,14 +53,14 @@ public class BoardController {
 
 
         @PostMapping("/boardList")
-        public List<Map<String, Object>> boardList() {
-            return bsvc.boardList();
+        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> boardList() {
+            return ResponseEntity.ok(ApiResponse.success(bsvc.boardList()));
         }
 
         @PostMapping("/searchList")
-        public List<BoardDTO> searchList(@RequestParam("searchCategory") String searchCategory,
-                                         @RequestParam("searchKeyword") String searchKeyword) {
-            return bsvc.searchList(searchCategory, searchKeyword);
+        public ResponseEntity<ApiResponse<List<BoardDTO>>> searchList(@RequestParam("searchCategory") String searchCategory,
+                                                                      @RequestParam("searchKeyword") String searchKeyword) {
+            return ResponseEntity.ok(ApiResponse.success(bsvc.searchList(searchCategory, searchKeyword)));
         }
         // bView : 게시글 상세보기
 
