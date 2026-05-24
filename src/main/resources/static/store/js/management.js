@@ -645,6 +645,7 @@ $(document).ready(function() {
             contentType: false, // 파일을 전송하므로 contentType을 false로 설정
             dataType: "json",   // 응답 데이터 타입 설정
             success: function(response) {
+                response = unwrapApiResponse(response);
                 if (response.status === "success") {
                     // 메뉴 추가 성공 시, 메뉴 목록을 가져옴
                     const preStoId = response.preStoId; // 메뉴 추가가 성공하면 매장 ID를 받음

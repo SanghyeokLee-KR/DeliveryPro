@@ -3,6 +3,8 @@ package com.icia.delivery.domain.store.controller;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
 import com.icia.delivery.domain.store.service.StoreService;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,15 +35,16 @@ public class StoreManagementController {
     }
 
     @PostMapping("/addMenu")
-    public ResponseEntity<Map<String, Object>> addMenu(@ModelAttribute PreStoreMenuDTO smDTO) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> addMenu(@ModelAttribute PreStoreMenuDTO smDTO) {
         Map<String, Object> response = ssvc.addMenu(smDTO);
 
         if ("success".equals(response.get("status"))) {
             // 성공 시, 200 OK 응답과 함께 결과 반환
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(ApiResponse.success(response));
         } else {
             // 실패 시, 500 Internal Server Error 응답과 함께 메시지 반환
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to add menu.", response));
         }
     }
 
