@@ -3,6 +3,7 @@ package com.icia.delivery.domain.comment.controller;
 
 import com.icia.delivery.domain.comment.dto.CommentDTO;
 import com.icia.delivery.domain.comment.service.CommentService;
+import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,37 +18,37 @@ public class CommentController {
     private final CommentService csvc;
 
     @PostMapping("/cWrite")
-    public ResponseEntity<Optional<CommentDTO>> cWrite(@RequestBody CommentDTO comment) {
+    public ResponseEntity<ApiResponse<Optional<CommentDTO>>> cWrite(@RequestBody CommentDTO comment) {
         System.out.println("\n댓글 작성\n[1]html → controller : " + comment);
         Optional<CommentDTO> dtoList = csvc.cWrite(comment);
-        return ResponseEntity.ok(dtoList);
+        return ResponseEntity.ok(ApiResponse.success(dtoList));
     }
 
     // cDelete
     @PostMapping("/cDelete")
-    public ResponseEntity<Optional<CommentDTO>> cDelete(@RequestBody CommentDTO comment) {
+    public ResponseEntity<ApiResponse<Optional<CommentDTO>>> cDelete(@RequestBody CommentDTO comment) {
         System.out.println("\n댓글 삭제\n[1]html → cㅌontroller : " + comment);
         Optional<CommentDTO> commentList = csvc.cDelete(comment);
-        return ResponseEntity.ok(commentList);
+        return ResponseEntity.ok(ApiResponse.success(commentList));
     }
 
     @PostMapping("/cModify")
-    public ResponseEntity<Optional<CommentDTO>> cModify(@RequestBody CommentDTO comment) {
+    public ResponseEntity<ApiResponse<Optional<CommentDTO>>> cModify(@RequestBody CommentDTO comment) {
         System.out.println("\n댓글 수정\n[1]html → controller : " + comment);
         Optional<CommentDTO> commentList = csvc.cModify(comment);
-        return ResponseEntity.ok(commentList);
+        return ResponseEntity.ok(ApiResponse.success(commentList));
     }
 
 
     @GetMapping("/cList")
-    public ResponseEntity<Optional<CommentDTO>> cList(@RequestParam("reviewId") Long reviewId) {
+    public ResponseEntity<ApiResponse<Optional<CommentDTO>>> cList(@RequestParam("reviewId") Long reviewId) {
         System.out.println("\n댓글 목록\n[1]html → controller : " + reviewId);
         Optional<CommentDTO> commentLists = csvc.getSingleOwnerComment(reviewId);
-        return ResponseEntity.ok(commentLists);
+        return ResponseEntity.ok(ApiResponse.success(commentLists));
     }
     @PostMapping("/{boardId}")
-    public Optional<CommentDTO> singleComment(@PathVariable Long boardId) {
-        return csvc.singleComment(boardId);
+    public ResponseEntity<ApiResponse<Optional<CommentDTO>>> singleComment(@PathVariable Long boardId) {
+        return ResponseEntity.ok(ApiResponse.success(csvc.singleComment(boardId)));
     }
 
 

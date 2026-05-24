@@ -1,4 +1,11 @@
 $(document).ready(function () {
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     // Event delegation for quantity increase
     $(document).on('click', '.increase', function () {
         const cartItem = $(this).closest('.cart-item');
@@ -128,6 +135,7 @@ $(document).ready(function () {
             url: '/cartList', // 서버의 장바구니 항목 조회 엔드포인트
             type: 'POST', // 요청 메서드
             success: function (data) {
+                data = unwrapApiResponse(data);
                 let cartHtml = '';
 
                 if (data.length === 0) {
@@ -248,6 +256,4 @@ function pay() {
             }
         })
 }
-
-
 

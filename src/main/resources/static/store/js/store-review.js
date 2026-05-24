@@ -11,6 +11,13 @@ function escapeHtml(text) {
 }
 
 // 댓글 렌더링 함수
+function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 function renderComments(comments, reviewId) {
     let output = "";
     comments.forEach(comment => {
@@ -125,6 +132,7 @@ $(document).ready(function () {
                 }),
                 dataType: "json",
                 success: (comment) => {
+                    comment = unwrapApiResponse(comment);
                     console.log("댓글 등록 성공: ", comment);
 
                     // 모달 닫기
@@ -184,6 +192,7 @@ $(document).ready(function () {
                 }),
                 dataType: "json",
                 success: (updatedComment) => {
+                    updatedComment = unwrapApiResponse(updatedComment);
                     console.log("댓글 수정 성공:", updatedComment);
 
                     // 모달 닫기
@@ -217,6 +226,7 @@ $(document).ready(function () {
                 }),
                 dataType: "json",
                 success: (response) => {
+                    response = unwrapApiResponse(response);
                     console.log("댓글 삭제 성공: ", response);
                     // 댓글 삭제 후 UI에서 제거
                     $commentBlock.remove();
@@ -395,6 +405,7 @@ function loadComments(reviewId) {
         data: {reviewId: reviewId}, // reviewId를 쿼리 파라미터로 전달
         dataType: "json",
         success: (comments) => {
+            comments = unwrapApiResponse(comments);
             if (Array.isArray(comments) && comments.length > 0) {
                 renderComments(comments, reviewId);
                 // 댓글이 존재하면 답글 버튼 숨기기

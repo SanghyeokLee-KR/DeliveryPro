@@ -85,6 +85,13 @@
 <script src="/layout/member/js/header.js"></script>
 
 <script>
+  function unwrapApiResponse(body) {
+    if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+      return body.data;
+    }
+    return body;
+  }
+
   $('#modiForm2').hide();
   $('#modify').click(()=>{
     $('#modiForm2').show();
@@ -103,6 +110,7 @@
       url: `/api/comments/${boardId}`,
       type: "Post",
       success: function (comments) {
+        comments = unwrapApiResponse(comments);
         let commentList = $("#comment-list");
         commentList.empty();  // 기존 목록 초기화
         // 응답이 배열인지 확인 후 변환

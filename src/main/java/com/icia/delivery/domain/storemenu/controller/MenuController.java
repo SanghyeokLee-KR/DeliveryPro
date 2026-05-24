@@ -3,6 +3,7 @@ package com.icia.delivery.domain.storemenu.controller;
 
 import com.icia.delivery.domain.storemenu.service.MenuService;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +25,15 @@ public class MenuController {
      * 특정 가게의 메뉴 리스트 조회
      */
     @PostMapping("/{storeId}")
-    public ResponseEntity<List<PreStoreMenuDTO>> getMenuByStoreId(@PathVariable Long storeId) {
+    public ResponseEntity<ApiResponse<List<PreStoreMenuDTO>>> getMenuByStoreId(@PathVariable Long storeId) {
         System.out.println("대표자 아이디(메뉴) : " + storeId);
         List<PreStoreMenuDTO> menuList = menuService.getMenuByStoreId(storeId);
-        return ResponseEntity.ok(menuList);
+        return ResponseEntity.ok(ApiResponse.success(menuList));
     }
     @PostMapping("menu/{menuId}")
-    public ResponseEntity<List<PreStoreMenuDTO>> getMenuBymenuId(@PathVariable("menuId") Long menuId) {
+    public ResponseEntity<ApiResponse<List<PreStoreMenuDTO>>> getMenuBymenuId(@PathVariable("menuId") Long menuId) {
         List<PreStoreMenuDTO> menuList = menuService.getMenuBymenuId(menuId);
         session.setAttribute("menuId" , menuId);
-        return ResponseEntity.ok(menuList);
+        return ResponseEntity.ok(ApiResponse.success(menuList));
     }
 }

@@ -2,6 +2,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const category = urlParams.get('category');
     const preStoId = urlParams.get('storeId');
+
+    function unwrapApiResponse(body) {
+        if (body && typeof body === "object" && body.success !== undefined && body.data !== undefined) {
+            return body.data;
+        }
+        return body;
+    }
+
     if (preStoId) {
         check(preStoId)
         loadReviewData(preStoId)
@@ -254,6 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data: {reviewId: reviewId}, // 쿼리 파라미터로 전달
             dataType: "json",
             success: function (comments) {
+                comments = unwrapApiResponse(comments);
                 console.log("받은 댓글 데이터:", comments);
 
                 // 댓글 데이터가 배열인지 객체인지 확인
@@ -396,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
             url: `/api/menu/${preStoId}`,
             method: "POST",
             success: function (data) {
-                renderMenu(data, preStoId);
+                renderMenu(unwrapApiResponse(data), preStoId);
 
             },
             error: function () {
@@ -412,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
             method: "POST",
             data: {category: category},
             success: function (data) {
-                renderMenu(data, preStoId);
+                renderMenu(unwrapApiResponse(data), preStoId);
             },
             error: function () {
                 alert("선택한 카테고리의 메뉴 데이터를 불러오지 못했습니다.");
@@ -713,6 +722,7 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             dataType: 'json',
             success: function (items) {
+                items = unwrapApiResponse(items);
                 items.forEach(item => {
                     const orderItem = document.createElement("div");
                     orderItem.classList.add("order-item");
