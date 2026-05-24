@@ -70,6 +70,7 @@ public class StoreService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ModelAndView addStore(PreStoreDTO preDTO) {
 
         ModelAndView mav = new ModelAndView();
@@ -180,6 +181,7 @@ public class StoreService {
     }
 
 
+    @Transactional
     public Map<String, Object> addMenu(PreStoreMenuDTO smDTO) {
         Map<String, Object> response = new HashMap<>();
 
@@ -267,6 +269,7 @@ public class StoreService {
         }
     }
 
+    @Transactional
     public String menuDelete(Long menuId) {
         try {
             smrepo.deleteById(menuId);
@@ -277,6 +280,7 @@ public class StoreService {
         }
     }
 
+    @Transactional
     public String menuModify(PreStoreMenuDTO menuDTO) {
 
         try {
@@ -410,6 +414,7 @@ public class StoreService {
     }
 
 
+    @Transactional
     public String updateStoreDetails(Long preStoreId, PreStoreDTO storeDTO) {
         try {
             // 데이터베이스에서 회원 번호(mId)를 기준으로 회원 정보 조회
@@ -478,6 +483,7 @@ public class StoreService {
         return result > 0;  // 수정된 행이 있으면 true 반환
     }
 
+    @Transactional
     public ModelAndView storeBreakTime(PreStoreDTO dto) {
         ModelAndView mav = new ModelAndView();
 
@@ -542,6 +548,7 @@ public class StoreService {
 
 
     @Scheduled(fixedDelay = 60000) // 60초마다 실행
+    @Transactional
     public void checkStoreBreakTime() {
         // "정지" 상태이며, preStoBreakTime이 설정된 매장 목록을 조회
         List<PreStoreEntity> suspendedStores = storerepostory.findByPreStoStatusAndPreStoBreakTimeIsNotNull("정지");

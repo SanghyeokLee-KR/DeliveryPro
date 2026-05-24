@@ -28,6 +28,7 @@ public class RiderService {
     private final RiderRepository riderRepository;
     private final RiderAccounRepository rarepo;
 
+    @Transactional
     public ModelAndView riderRegister(RiderDTO riderDTO) {
         ModelAndView mav = new ModelAndView();
 
@@ -148,6 +149,7 @@ public class RiderService {
         return result;
     }
 
+    @Transactional
     public ModelAndView addRiderAccount(RiderAccountDTO accDTO) {
         ModelAndView mav = new ModelAndView();
 
@@ -202,6 +204,7 @@ public class RiderService {
         return dto;
     }
 
+    @Transactional
     public String deleteAccount(Long accountId) {
         Optional<RiderAccountEntity> entity = rarepo.findById(accountId);
 

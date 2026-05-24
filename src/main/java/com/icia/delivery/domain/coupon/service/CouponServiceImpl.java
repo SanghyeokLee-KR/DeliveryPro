@@ -436,6 +436,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    @Transactional
     public void useUserCoupon(Long couponId) throws Exception {
         // Optional에서 CouponEntity를 꺼내거나, 없으면 예외 발생
         CouponEntity couponEntity = couponRepository.findById(couponId)
