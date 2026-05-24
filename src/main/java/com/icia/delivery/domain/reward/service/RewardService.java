@@ -5,12 +5,13 @@ import com.icia.delivery.domain.reward.repository.RewardRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.domain.reward.dto.RewardDTO;
 import com.icia.delivery.domain.reward.entity.RewardEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class RewardService {
     @Transactional(readOnly = true)
     public RewardDTO memberReward() {
 
-        Long memId = (Long) session.getAttribute("mem_id");
+        Long memId = getSessionMemberId();
 
         Optional<RewardEntity> rewardEntity = rewardRepository.findBymemId(memId);
 
@@ -44,7 +45,7 @@ public class RewardService {
     @Transactional
     public String updateMemberReward() {
         // 세션에서 memId를 가져옵니다.
-        Long memId = (Long) session.getAttribute("mem_id");
+        Long memId = getSessionMemberId();
 
         // memId에 해당하는 RewardEntity를 조회합니다.
         Optional<RewardEntity> rewardEntityOpt = rewardRepository.findBymemId(memId);
@@ -93,5 +94,12 @@ public class RewardService {
         }
     }
 
+    private Long getSessionMemberId() {
+        Long memId = (Long) session.getAttribute("mem_id");
+        if (memId == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "Login is required.");
+        }
+        return memId;
+    }
 
 }

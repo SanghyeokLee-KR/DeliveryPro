@@ -1,4 +1,20 @@
 $(document).ready(function () {
+    function unwrapApiResponse(body) {
+        let parsedBody = body;
+        if (typeof parsedBody === "string") {
+            try {
+                parsedBody = JSON.parse(parsedBody);
+            } catch (e) {
+                return body;
+            }
+        }
+
+        if (parsedBody && typeof parsedBody === "object" && parsedBody.success !== undefined && parsedBody.data !== undefined) {
+            return parsedBody.data;
+        }
+        return parsedBody;
+    }
+
     // AJAX 요청
     $.ajax({
         url: '/memReward',
@@ -7,7 +23,8 @@ $(document).ready(function () {
         success: function (response) {
             console.log('리워드 데이터 :', response);
 
-            var rewardAmount = response.rewardAmount;
+            var reward = unwrapApiResponse(response);
+            var rewardAmount = reward.rewardAmount;
 
             // 배지 이미지 및 텍스트/배경색 업데이트
             updateBadge(rewardAmount);
@@ -29,7 +46,7 @@ $(document).ready(function () {
         method: 'POST',
         dataType: 'text',
         success: function (response) {
-            console.log(response);
+            console.log(unwrapApiResponse(response));
         },
         error: function (xhr, status, error) {
             console.error('AJAX 요청 실패:', status, error);
