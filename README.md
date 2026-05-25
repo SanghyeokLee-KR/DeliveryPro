@@ -1,319 +1,288 @@
 # 🚚 DeliveryPro
 
-Spring Boot 기반 음식 배달 플랫폼 프로젝트입니다.
-사용자 주문, 라이더 배달, 소셜 로그인, 메일 전송, 지도 기능 등을 포함한 웹 애플리케이션입니다.
+<div align="center">
+
+## 배달 주문부터 라이더 배정, 매장 운영, 관리자 통계까지 연결한 음식 배달 플랫폼
+
+Spring Boot와 Oracle DB를 기반으로 사용자, 매장, 라이더, 관리자 흐름을 구현한 백엔드 중심 웹 서비스입니다.
+
+<br/>
+
+![Java](https://img.shields.io/badge/Java-21-007396?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-59666C?style=for-the-badge&logo=hibernate&logoColor=white)
+![Oracle](https://img.shields.io/badge/Oracle%20DB-F80000?style=for-the-badge&logo=oracle&logoColor=white)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
+
+<br/>
+<br/>
+
+![DeliveryPro 대표 이미지](docs/images/hero.png)
+
+</div>
 
 ---
 
-## ⭐ Project Highlights
+## ✨ 프로젝트 소개
 
-DeliveryPro는 기존 음식 배달 플랫폼의 기능을 유지하면서,
-응답 구조, 예외 처리, 도메인 패키지, 트랜잭션 경계, 테스트 실행 환경을 단계적으로 정리한 리팩토링 프로젝트입니다.
-단순 기능 구현을 넘어 Spring Boot 애플리케이션의 유지보수성과 테스트 가능성을 높이는 데 초점을 맞췄습니다.
+**DeliveryPro**는 음식 배달 서비스의 핵심 흐름을 웹 애플리케이션으로 구현한 프로젝트입니다.
 
-* 공통 `ApiResponse`를 도입해 REST API 응답 형식을 일관되게 표준화했습니다.
-* `BusinessException`, `ErrorCode`, `GlobalExceptionHandler`를 기반으로 예외 처리 흐름을 구조화했습니다.
-* `DeliveryAddress`, `Notification`, `LoginHistory` 3개 도메인을 독립 패키지로 분리해 응집도를 높였습니다.
-* Controller에 있던 트랜잭션 책임을 Service 계층으로 이동해 계층별 역할을 명확히 했습니다.
-* 주요 Service의 `jakarta.transaction.Transactional`을 Spring `@Transactional`로 전환했습니다.
-* 조회 전용 메서드에는 `@Transactional(readOnly = true)`를 적용해 트랜잭션 의도를 명확히 표현했습니다.
-* 10개 이상 Service의 트랜잭션 적용 방식을 점진적으로 정리했습니다.
-* `test` profile을 구축해 테스트 전용 설정을 분리하고, `compileJava`와 `test` 검증이 통과되도록 정리했습니다.
+사용자는 매장을 탐색하고 메뉴를 장바구니에 담아 주문할 수 있습니다. 매장 운영자는 주문 접수, 메뉴 관리, 리뷰 확인, 매출 조회를 처리할 수 있고, 라이더는 배달 업무와 상태를 관리합니다. 관리자는 회원, 매장, 라이더, 쿠폰, 광고, 문의, 통계 데이터를 운영합니다.
 
-포트폴리오용 한 줄 요약:
-
-DeliveryPro는 공통 응답/예외 처리, 도메인 패키지 분리, Service 중심 트랜잭션 관리, 테스트 profile 구축을 통해 유지보수성과 검증 가능성을 개선한 Spring Boot 기반 음식 배달 플랫폼입니다.
+| 사용자 유형 | 주요 흐름 |
+| --- | --- |
+| 일반 사용자 | 회원가입/로그인 → 매장 조회 → 장바구니 → 주문/결제 → 마이페이지 |
+| 매장 운영자 | 매장 등록 → 메뉴 관리 → 주문 접수 → 리뷰/매출 관리 |
+| 라이더 | 라이더 가입 → 관리자 승인 → 배달 상태 관리 → 지도 기반 배달 |
+| 관리자 | 회원/매장/라이더 관리 → 쿠폰/광고 운영 → 문의 답변 → 통계 확인 |
 
 ---
 
-## 📌 Overview
+## ✅ 주요 기능
 
-DeliveryPro는 음식 주문부터 배달까지의 전체 흐름을 구현한 프로젝트입니다.
-회원, 주문, 라이더, 인증, 외부 API 연동 기능을 포함하고 있습니다.
+### 사용자 기능
 
----
+| 기능 | 설명 |
+| --- | --- |
+| 회원가입 / 로그인 | 일반 회원 가입, 로그인, 세션 기반 사용자 흐름 처리 |
+| 소셜 로그인 | Google, Naver, Kakao OAuth 로그인 연동 |
+| 이메일 인증 | 회원가입 및 인증 흐름을 위한 메일 발송 기능 |
+| 매장 조회 | 카테고리별 음식점 탐색과 매장 상세 조회 |
+| 장바구니 | 메뉴 담기, 수량 변경, 주문 전 장바구니 관리 |
+| 주문 / 결제 | 주문 생성, 주문 상세, 주문 상태 확인 |
+| 마이페이지 | 회원 정보, 등급, 포인트, 쿠폰, 주문 내역 관리 |
+| QnA | 사용자 문의 등록 및 답변 조회 |
 
-## 🛠 Tech Stack
+### 매장 기능
 
-### Backend
+| 기능 | 설명 |
+| --- | --- |
+| 매장 등록 | 사장님 계정 기반 매장 등록 요청 |
+| 메뉴 관리 | 메뉴 추가, 수정, 삭제, 품절 처리 |
+| 주문 관리 | 주문 접수와 주문 상태 변경 |
+| 리뷰 관리 | 사용자 리뷰 조회 및 매장 답변 관리 |
+| 매출 관리 | 매장별 매출과 주문 통계 확인 |
+| 쿠폰 관리 | 매장 쿠폰 등록과 운영 |
 
-* Java 21
-* Spring Boot 3.4
-* Spring Data JPA
-* Spring Security
-* Spring Validation
+### 라이더 기능
 
-### Frontend
+| 기능 | 설명 |
+| --- | --- |
+| 라이더 가입 | 라이더 등록 요청 및 관리자 승인 흐름 |
+| 배달 상태 관리 | 배달 가능 여부와 업무 상태 관리 |
+| 배달 화면 | 배달 업무 확인 및 진행 상태 처리 |
+| 지도 기능 | Kakao 지도 API 기반 위치/경로 기능 연동 |
 
-* Thymeleaf
+### 관리자 기능
 
-### Database
-
-* Oracle DB
-
-### Others
-
-* Gradle
-* WebSocket
-* OAuth2 Client (Google / Naver / Kakao)
-* Java Mail Sender
-
----
-
-## ✨ Features
-
-### 👤 User
-
-* 회원가입 / 로그인
-* 소셜 로그인 (Google, Naver, Kakao)
-
-### 🛒 Order
-
-* 음식 주문 생성
-* 주문 내역 조회
-* 주문 상태 관리
-
-### 🏍 Rider
-
-* 배달 상태 관리
-* 라이더 관련 기능
-
-### 📍 Map
-
-* 지도 기반 위치 기능
-
-### 📧 Mail
-
-* 이메일 인증 및 발송
+| 기능 | 설명 |
+| --- | --- |
+| 회원 관리 | 회원 목록, 등급, 상태, 로그인 이력 관리 |
+| 매장 관리 | 매장 등록 요청 승인, 매장 리스트 관리 |
+| 라이더 관리 | 라이더 등록 요청 승인, 라이더 리스트 관리 |
+| 쿠폰 관리 | 쿠폰 생성, 발급, 사용 내역 확인 |
+| 광고 관리 | 관리자 광고 등록과 노출 관리 |
+| 게시판 관리 | QnA 목록 조회, 답변 등록, 답변 상태 변경 |
+| 통계 대시보드 | 매출, 회원 등급, 주문, 마케팅 통계 조회 |
 
 ---
 
-## 📂 Project Structure
+## 🖼 서비스 화면
 
-```
-src/main/java/com/icia/delivery
- ┣ controller
- ┃ ┣ member
- ┃ ┣ rider
- ┃ ┣ map
- ┃ ┗ admin
- ┣ service
- ┣ repository
- ┣ entity
- ┣ dto
- ┗ config
-```
+GitHub README에서 서비스 흐름을 바로 확인할 수 있도록 대표 화면 이미지를 `docs/images` 경로로 구성했습니다.
+
+### 메인 페이지
+
+![main](docs/images/main.png)
+
+### 주문 페이지
+
+![order](docs/images/order.png)
+
+### 마이페이지
+
+![mypage](docs/images/mypage.png)
+
+### 관리자 페이지
+
+![admin](docs/images/admin.png)
+
+### 매장 관리 페이지
+
+![store](docs/images/store.png)
+
+### 라이더 페이지
+
+![rider](docs/images/rider.png)
 
 ---
 
-## 🏗 리팩토링 아키텍처
+## 🏗 시스템 구조
 
-DeliveryPro는 리팩토링을 통해 공통 응답 구조, 예외 처리 흐름,
-Service 중심 트랜잭션 경계, 도메인 패키지 분리를 명확히 했습니다.
-아래 다이어그램은 리팩토링 후 주요 요청 처리 흐름과 계층별 책임을 보여줍니다.
+DeliveryPro는 Spring MVC 기반의 서버 렌더링 웹 애플리케이션입니다. Controller는 요청과 화면 이동을 담당하고, Service는 비즈니스 로직과 트랜잭션 경계를 담당합니다. Repository는 Spring Data JPA를 통해 Oracle DB와 연결됩니다.
 
 ```mermaid
-flowchart TB
-    Client["Client (Browser)"]
-    StaticJS["Static JS<br/>address.js<br/>alarm.js<br/>myPage.js"]
+flowchart LR
+    Client["Browser<br/>User / Store / Rider / Admin"]
+    View["Thymeleaf + JavaScript"]
+    Controller["Spring MVC Controller"]
+    Service["Service Layer<br/>Business Logic"]
+    Repository["Spring Data JPA Repository"]
+    DB[("Oracle DB")]
+    External["External APIs<br/>OAuth / Kakao Map / Mail"]
 
-    subgraph ControllerLayer["Controller Layer"]
-        Controllers["MVC / REST Controllers"]
-        ApiResponse["ApiResponse<br/>Standard Success Response"]
-        GlobalExceptionHandler["GlobalExceptionHandler<br/>REST Exception Response"]
-    end
-
-    subgraph ErrorLayer["Common Error Handling"]
-        BusinessException["BusinessException"]
-        ErrorCode["ErrorCode"]
-    end
-
-    subgraph ServiceLayer["Service Layer"]
-        Services["Business Services<br/>Transactional Boundary"]
-        ReadOnlyTx["Read-only Query Methods<br/>@Transactional(readOnly = true)"]
-        WriteTx["Write Methods<br/>@Transactional"]
-    end
-
-    subgraph DomainPackages["Domain Packages"]
-        DeliveryAddress["deliveryaddress"]
-        Notification["notification"]
-        LoginHistory["loginhistory"]
-    end
-
-    subgraph RepositoryLayer["Repository Layer"]
-        Repositories["Spring Data JPA Repositories"]
-    end
-
-    DB[("Database<br/>Oracle")]
-
-    Client --> StaticJS
-    StaticJS --> Controllers
-    Client --> Controllers
-
-    Controllers --> ApiResponse
-    Controllers --> Services
-    Controllers -. exception .-> GlobalExceptionHandler
-
-    Services --> ReadOnlyTx
-    Services --> WriteTx
-    Services --> DomainPackages
-    Services --> Repositories
-
-    Repositories --> DB
-
-    Services -. throws .-> BusinessException
-    BusinessException --> ErrorCode
-    GlobalExceptionHandler --> ErrorCode
-    GlobalExceptionHandler --> ApiResponse
-```
-
-### 계층별 역할
-
-* **Client / Static JS**
-  * 브라우저 요청과 화면 이벤트를 담당합니다.
-  * `address.js`, `alarm.js`, `myPage.js`는 공통 응답 구조인 `ApiResponse`에 맞춰 응답을 처리합니다.
-
-* **Controller Layer**
-  * 요청을 받고 Service 계층을 호출합니다.
-  * REST 응답은 `ApiResponse`로 표준화하고, 트랜잭션 책임은 Service 계층으로 이동했습니다.
-
-* **Common Error Handling**
-  * 비즈니스 예외는 `BusinessException`과 `ErrorCode`로 표현합니다.
-  * REST 예외 응답은 `GlobalExceptionHandler`에서 일관된 구조로 변환합니다.
-
-* **Service Layer**
-  * 비즈니스 로직과 트랜잭션 경계를 담당합니다.
-  * 조회 메서드는 `@Transactional(readOnly = true)`, 생성/수정/삭제 메서드는 기본 `@Transactional`을 적용해 의도를 명확히 했습니다.
-
-* **Domain Packages**
-  * `deliveryaddress`, `notification`, `loginhistory`를 도메인 단위 패키지로 분리했습니다.
-  * 관련 Controller, Service, Repository, DTO, Entity를 응집도 있게 관리할 수 있도록 구조를 정리했습니다.
-
-* **Repository Layer / Database**
-  * Repository는 Spring Data JPA 기반 데이터 접근을 담당합니다.
-  * 실제 저장소는 Oracle DB를 사용합니다.
-
-### 리팩토링 전후 비교
-
-리팩토링 전에는 응답 형식, 예외 처리, 트랜잭션 경계, 일부 도메인 코드의 위치가 기능별로 흩어져 있어
-유지보수 기준이 명확하지 않았습니다.
-
-리팩토링 후에는 공통 응답과 예외 처리 구조를 도입하고,
-Controller의 트랜잭션 책임을 Service 계층으로 이동했으며,
-핵심 도메인을 패키지 단위로 분리해 계층별 책임과 변경 범위를 명확히 했습니다.
-
-### Portfolio Summary
-
-DeliveryPro는 공통 응답/예외 처리, Service 중심 트랜잭션 관리,
-도메인 패키지 분리를 통해 기존 기능을 유지하면서도 유지보수성과 확장성을 높인
-Spring Boot 기반 음식 배달 플랫폼입니다.
-
----
-
-## ⚙️ Configuration
-
-이 프로젝트는 보안을 위해 민감 정보를 외부 설정으로 분리합니다.
-
-자세한 로컬 실행 환경 설정은 [`docs/setup.md`](docs/setup.md)를 참고하세요.
-
-### Required Environment Variables
-
-* DB_USERNAME
-* DB_URL
-* DB_PASSWORD
-* MAIL_USERNAME
-* MAIL_PASSWORD
-* NAVER_CLIENT_ID / NAVER_CLIENT_SECRET
-* GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET
-* KAKAO_CLIENT_ID / KAKAO_CLIENT_SECRET
-* KAKAO_API_KEY
-* KAKAO_JAVASCRIPT_KEY
-
----
-
-## 🚀 Run
-
-1. JDK 21 설치
-2. Oracle DB 실행
-3. 환경 변수 설정 또는 `application-local.properties` 생성
-4. 실행
-
-```
-./gradlew bootRun
+    Client --> View
+    View --> Controller
+    Controller --> Service
+    Service --> Repository
+    Repository --> DB
+    Service --> External
 ```
 
 ---
 
-## 🧪 테스트 실행 방법
+## 🛠 기술 스택
 
-테스트는 `test` profile을 사용해 실행됩니다.
-`DeliveryProApplicationTests`는 `@ActiveProfiles("test")`를 통해
-`src/test/resources/application-test.properties` 설정을 로딩합니다.
+| 영역 | 기술 |
+| --- | --- |
+| Backend | Java 21, Spring Boot 3.4, Spring MVC, Spring Data JPA, Spring Validation |
+| Frontend | Thymeleaf, HTML, CSS, JavaScript |
+| Database | Oracle DB, JPA Entity, Repository |
+| Auth / External | OAuth2 Client, Kakao API, Java Mail Sender |
+| Build / Test | Gradle Wrapper, JUnit 5, Spring Boot Test |
+| Configuration | Environment Variables, Spring Profiles |
 
-테스트 profile에서는 Mail, OAuth, Kakao, IP 조회 API 관련 값은
-컨텍스트 로딩용 더미값으로 처리합니다.
-단, 현재 테스트는 Spring Context와 JPA 설정을 함께 로딩하므로
-Oracle DB 연결 정보는 환경 변수로 제공해야 합니다.
+---
 
-### Required Test Environment Variables
+## 📁 프로젝트 구조
 
-* `DB_URL`
-* `DB_USERNAME`
-* `DB_PASSWORD`
-
-### Windows CMD 예시
-
-```cmd
-set DB_URL=jdbc:oracle:thin:@<host>:<port>/<service_name>
-set DB_USERNAME=<oracle_username>
-set DB_PASSWORD=<oracle_password>
+```text
+src/main/java/com/icia/delivery
+├─ domain
+│  ├─ admin              # 관리자, 통계, 쿠폰, 광고 운영
+│  ├─ board              # QnA 게시판
+│  ├─ cart               # 장바구니
+│  ├─ coupon             # 쿠폰
+│  ├─ deliveryaddress    # 배송지
+│  ├─ deliverygroup      # 배달 그룹
+│  ├─ member             # 회원, 로그인, 마이페이지
+│  ├─ notification       # 알림
+│  ├─ order              # 주문
+│  ├─ president          # 사장님 계정
+│  ├─ review             # 리뷰
+│  ├─ reward             # 포인트/등급
+│  ├─ rider              # 라이더
+│  ├─ store              # 매장
+│  └─ storemenu          # 메뉴
+├─ global
+│  ├─ exception          # 공통 예외 처리
+│  ├─ response           # 공통 API 응답
+│  └─ service            # 공통 서비스
+└─ util                  # 외부 API 유틸
 ```
 
-실제 비밀번호나 API Key는 README에 작성하지 않고,
-로컬 환경 변수 또는 개인 설정으로만 관리합니다.
+---
 
-### 테스트 실행 명령어
+## 🚀 실행 방법
 
-```cmd
+### 1. JDK 설치
+
+Java 21을 사용합니다.
+
+```powershell
+java -version
+```
+
+### 2. Oracle DB 준비
+
+Oracle DB를 실행한 뒤 `docs/sql` 폴더의 SQL 파일을 참고해 테이블과 제약조건을 구성합니다.
+
+```text
+docs/sql/DDL.sql
+docs/sql/FK_CONSTRAINT.sql
+docs/sql/COMMENT.sql
+```
+
+### 3. 환경 변수 설정
+
+민감 정보는 `application.properties`에 직접 작성하지 않고 환경 변수로 주입합니다.
+
+```powershell
+$env:DB_URL="jdbc:oracle:thin:@localhost:1521/XEPDB1"
+$env:DB_USERNAME="your_db_username"
+$env:DB_PASSWORD="your_db_password"
+
+$env:MAIL_USERNAME="your_mail@example.com"
+$env:MAIL_PASSWORD="your_mail_app_password"
+
+$env:NAVER_CLIENT_ID="your_naver_client_id"
+$env:NAVER_CLIENT_SECRET="your_naver_client_secret"
+
+$env:GOOGLE_CLIENT_ID="your_google_client_id"
+$env:GOOGLE_CLIENT_SECRET="your_google_client_secret"
+
+$env:KAKAO_CLIENT_ID="your_kakao_client_id"
+$env:KAKAO_CLIENT_SECRET="your_kakao_client_secret"
+$env:KAKAO_API_KEY="your_kakao_rest_api_key"
+$env:KAKAO_JAVASCRIPT_KEY="your_kakao_javascript_key"
+```
+
+### 4. 애플리케이션 실행
+
+```powershell
+.\gradlew.bat bootRun
+```
+
+기본 포트는 `9090`입니다.
+
+```text
+http://localhost:9090
+```
+
+### 5. 빌드 및 테스트
+
+```powershell
 .\gradlew.bat compileJava
 .\gradlew.bat test
 ```
 
 ---
 
-## 🧪 Troubleshooting
+## 🔎 구현 포인트
 
-### 1. Controller Bean 충돌
-
-* 동일한 이름의 Controller 클래스가 존재할 경우 충돌 발생
-* 해결: 클래스명 변경 (예: `MapController` → `RiderMapController`)
-
-### 2. Gradle / Spring Boot 버전 충돌
-
-* Spring Boot 3.4 사용 시 Gradle 8.14 이상 필요
-
-### 3. Lombok @Builder 경고
-
-* 기본값 유지 시 `@Builder.Default` 사용 필요
+- 사용자, 매장, 라이더, 관리자 역할별 화면과 처리 흐름 구현
+- Spring MVC + Thymeleaf 기반 서버 렌더링 구조 구성
+- Oracle DB와 JPA Repository를 활용한 도메인 데이터 관리
+- OAuth, 이메일, Kakao 지도 등 외부 연동 기능 구성
+- 관리자 운영 화면에서 승인, 답변, 쿠폰, 광고, 통계 기능 제공
+- 공통 응답/예외 흐름을 정리해 REST API 응답 처리 일관성 확보
 
 ---
 
-## 🔒 Security Notice
+## 💬 포트폴리오 관점에서 설명할 수 있는 부분
 
-비밀번호, API 키, OAuth Secret 등 민감 정보는
-GitHub에 포함되어 있지 않으며, 환경 변수로 관리됩니다.
-
----
-
-## 📌 Future Improvements
-
-* REST API 구조로 리팩토링
-* JWT 기반 인증 적용
-* Docker 및 배포 환경 구성
-* 프론트엔드 분리 (React/Vue)
+- 배달 플랫폼 도메인을 사용자/매장/라이더/관리자로 분리한 설계 기준
+- Controller, Service, Repository 계층의 역할 분리
+- 주문, 장바구니, 매장 관리, 라이더 배달 상태의 데이터 흐름
+- 관리자 화면에서 운영자가 반복적으로 사용하는 업무 흐름 설계
+- Spring Boot 프로젝트에서 환경 변수 기반 설정을 분리한 방식
+- 외부 API 연동 시 서비스 계층과 유틸 클래스를 나누어 관리한 방식
 
 ---
 
-## 👨‍💻 Author
+## 🧭 개선 예정
 
-* Sanghyeok Lee
+- Docker Compose 기반 로컬 실행 환경 구성
+- 화면별 실제 구동 스크린샷 추가
+- 관리자 API 문서화
+- 테스트 커버리지 확대
+- JWT 기반 인증 구조로 확장
+
+---
+
+## 👤 Author
+
+**Sanghyeok Lee**
+
+Backend Developer Portfolio Project
