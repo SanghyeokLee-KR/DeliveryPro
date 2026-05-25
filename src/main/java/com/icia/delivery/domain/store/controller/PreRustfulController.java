@@ -8,6 +8,8 @@ import com.icia.delivery.global.exception.ErrorCode;
 import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +22,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/store") // 공통 경로 설정
 public class PreRustfulController {
+
+    private static final Logger log = LoggerFactory.getLogger(PreRustfulController.class);
 
     private final StoreService ssvc;
 
@@ -40,29 +44,25 @@ public class PreRustfulController {
     // getMenuList
     @PostMapping("/getMenuList")
     public ResponseEntity<ApiResponse<List<PreStoreMenuDTO>>> getMenuList(@RequestParam("preStoId") Long preStoId) {
-        // System.out.println("메뉴 리스트 매장 PK : " + preStoId);
         return ResponseEntity.ok(ApiResponse.success(ssvc.getStoreMenuList(preStoId)));
     }
 
     // getSellStatusValue
     @PostMapping("/updateMenuStatus")
     public ResponseEntity<ApiResponse<String>> getSellStatusValue(@RequestParam("menuId") Long menuId, @RequestParam("newStatus") String newStatus) {
-        // System.out.println("메뉴 아이디 : " + menuId);
-        // System.out.println("메뉴 status 값 : " + newStatus);
         return ResponseEntity.ok(ApiResponse.success(ssvc.updateMenuStatus(menuId, newStatus)));
     }
 
     // menuModify
     @PostMapping("/menuModify")
     public ResponseEntity<ApiResponse<String>> menuModify(@ModelAttribute PreStoreMenuDTO menuDTO) {
-        System.out.println("메뉴 수정 데이터 : " + menuDTO);
+        log.debug("Menu modify request. menuId={}", menuDTO.getMenuId());
         return ResponseEntity.ok(ApiResponse.success(ssvc.menuModify(menuDTO)));
     }
 
     // menuDelete
     @PostMapping("/menuDelete")
     public ResponseEntity<ApiResponse<String>> menuDelete(@RequestParam("menuId") Long menuId) {
-        // System.out.println("삭제할 메뉴 아이디 : " + menuId);
         return ResponseEntity.ok(ApiResponse.success(ssvc.menuDelete(menuId)));
     }
 
@@ -87,7 +87,7 @@ public class PreRustfulController {
             assert keyword != null;
             storeMenuDTO = ssvc.searchMenuList(keyword, category, preStoId);
         } else {
-            System.out.println("오류가 검출 되었습니다.");
+            log.warn("Search menu request has no keyword or category. preStoId={}", preStoId);
         }
 
         // return storeMenuDTO;

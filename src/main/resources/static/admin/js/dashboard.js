@@ -111,7 +111,7 @@ $("#fetchStatistics").click(function() {
     $.ajax({
         type: "POST",
         url: "/statisticsDateSel",
-        contentType: "text",
+        contentType: "application/json",
         data: JSON.stringify({ date: date }), // JSON 형식으로 데이터 전송
         success: function(response) {
 

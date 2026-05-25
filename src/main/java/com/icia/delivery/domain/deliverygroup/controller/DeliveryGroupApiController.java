@@ -80,6 +80,8 @@ public class DeliveryGroupApiController {
         Long riderNo = getRiderNo(session);
         try {
             orderService.completeOrder(orderId, riderNo);
+        } catch (BusinessException e) {
+            throw e;
         } catch (RuntimeException e) {
             throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
         }
@@ -97,6 +99,8 @@ public class DeliveryGroupApiController {
         Long riderNo = getRiderNo(session);
         try {
             deliveryGroupService.completeDeliveryGroup(deliveryId, riderNo);
+        } catch (BusinessException e) {
+            throw e;
         } catch (RuntimeException e) {
             throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
         }
@@ -118,6 +122,8 @@ public class DeliveryGroupApiController {
     private void acceptDeliveryGroupOrThrow(Long deliveryId, Long riderNo) {
         try {
             deliveryGroupService.acceptDeliveryGroup(deliveryId, riderNo);
+        } catch (BusinessException e) {
+            throw e;
         } catch (RuntimeException e) {
             throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage(), e);
         }

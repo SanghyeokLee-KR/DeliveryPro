@@ -17,10 +17,14 @@ import com.icia.delivery.domain.reward.repository.RewardRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
 import com.icia.delivery.domain.notification.service.NotificationService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import com.icia.delivery.util.KakaoApiUtil;
 import com.icia.delivery.util.KakaoGeocoderUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,6 +39,8 @@ import static com.icia.delivery.util.KakaoApiUtil.isSamePoint;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -151,7 +157,7 @@ public class OrderService {
         }
         Optional<OrderEntity> optionalOrder = orderRepository.findByOrderId(orderId);
         if (optionalOrder.isEmpty()) {
-            throw new RuntimeException("주문을 찾을 수 없습니다. orderId=" + orderId);
+            throw new BusinessException(ErrorCode.NOT_FOUND, "주문을 찾을 수 없습니다. orderId=" + orderId);
         }
         OrderEntity order = optionalOrder.get();
         // 주문 상태만 "픽업중"으로 업데이트 (그룹 생성 로직은 제거)
@@ -233,7 +239,7 @@ public class OrderService {
                 dto.setUserAddress(userAddress);
                 dtoList.add(dto);
             } else {
-                System.out.println("memId " + memId + "에 해당하는 회원을 찾을 수 없습니다.");
+                log.debug("Member not found while loading store order list. memId={}", memId);
             }
         }
         return dtoList;
@@ -244,8 +250,8 @@ public class OrderService {
         List<OrderDTO> dtoList = new ArrayList<>();
         // "배차중" 상태의 주문만 조회
         List<OrderEntity> entityList = orderRepository.findByDeliveryStatusTrimmed("배차중");
-        System.out.println("조회된 주문 개수: " + entityList.size());
-        entityList.forEach(o -> System.out.println("주문 deliveryStatus: [" + o.getDeliveryStatus() + "]"));
+        log.debug("Loaded rider order list. count={}", entityList.size());
+        entityList.forEach(o -> log.trace("Rider order deliveryStatus={}", o.getDeliveryStatus()));
 
         for (OrderEntity order : entityList) {
             Long memId = order.getMemId();
@@ -327,13 +333,13 @@ public class OrderService {
         // 매장 주소 설정
         Long preStoId = entity.getPreStoId();
         PreStoreEntity preStore = storeRepository.findById(preStoId)
-                .orElseThrow(() -> new RuntimeException("가게 정보가 없습니다. preStoId=" + preStoId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보가 없습니다. preStoId=" + preStoId));
         groupItem.setStoreAddress(preStore.getPreStoAddress());
 
         // 고객(회원) 주소 정제 후 설정
         Long memId = entity.getMemId();
         MemberEntity member = memberRepository.findById(memId)
-                .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다. memId=" + memId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "회원 정보가 없습니다. memId=" + memId));
         String originalDestination = member.getAddress();
         String cleanedDestination = cleanAddress(originalDestination);
         groupItem.setDestinationAddress(cleanedDestination);
@@ -359,7 +365,7 @@ public class OrderService {
         Long firstOrderId = orderIds.get(0); // getFirst() 대신 index 0 사용
         Optional<OrderEntity> firstOrderOpt = orderRepository.findByOrderId(firstOrderId);
         if (firstOrderOpt.isEmpty()) {
-            throw new RuntimeException("첫 주문을 찾을 수 없습니다. orderId=" + firstOrderId);
+            throw new BusinessException(ErrorCode.NOT_FOUND, "첫 주문을 찾을 수 없습니다. orderId=" + firstOrderId);
         }
         OrderEntity firstOrder = firstOrderOpt.get();
 
@@ -388,12 +394,12 @@ public class OrderService {
 
                 Long preStoId = order.getPreStoId();
                 PreStoreEntity preStore = storeRepository.findById(preStoId)
-                        .orElseThrow(() -> new RuntimeException("가게 정보가 없습니다. preStoId=" + preStoId));
+                        .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보가 없습니다. preStoId=" + preStoId));
                 groupItem.setStoreAddress(preStore.getPreStoAddress());
 
                 Long memId = order.getMemId();
                 MemberEntity member = memberRepository.findById(memId)
-                        .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다. memId=" + memId));
+                        .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "회원 정보가 없습니다. memId=" + memId));
                 String originalDestination = member.getAddress();
                 String cleanedDestination = cleanAddress(originalDestination);
                 groupItem.setDestinationAddress(cleanedDestination);
@@ -407,7 +413,7 @@ public class OrderService {
         savedGroup.setCallTime(callDateTime);
         deliveryGroupRepository.save(savedGroup);
 
-        System.out.println("[groupRiderCall] 새 그룹 생성 완료: deliveryId=" + savedGroup.getDeliveryId());
+        log.debug("Created group rider call. deliveryId={}", savedGroup.getDeliveryId());
 
         // 2. 그룹 내 모든 DeliveryGroupItemEntity의 최적 경로 순서 산출 및 order_sequence 업데이트
         List<DeliveryGroupItemEntity> allGroupItems = deliveryGroupItemRepository.findAllByDeliveryId(savedGroup.getDeliveryId());
@@ -415,22 +421,22 @@ public class OrderService {
             List<String> destinationAddresses = allGroupItems.stream()
                     .map(item -> cleanAddress(item.getDestinationAddress()))
                     .collect(Collectors.toList());
-            System.out.println("[groupRiderCall] 정제된 배송지 목록: " + destinationAddresses);
+            log.debug("Group rider call destination addresses={}", destinationAddresses);
 
             // KakaoGeocoderUtil.geocodeAddresses는 콜백 방식이 일반적이지만,
             // 여기서는 동기식(또는 별도 처리)으로 가정합니다.
             List<KakaoApiUtil.Point> destinationPoints = KakaoGeocoderUtil.geocodeAddresses(destinationAddresses);
-            System.out.println("[groupRiderCall] 배송지 좌표: " + destinationPoints);
+            log.trace("Group rider call destination points={}", destinationPoints);
 
             String storeAddressOriginal = allGroupItems.get(0).getStoreAddress();
             String storeAddress = cleanAddress(storeAddressOriginal);
             KakaoApiUtil.Point storePoint = KakaoGeocoderUtil.geocodeAddress(storeAddress);
-            System.out.println("[groupRiderCall] 매장 주소: " + storeAddressOriginal + " → 정제 후: " + storeAddress);
-            System.out.println("[groupRiderCall] 매장 좌표: " + storePoint);
+            log.debug("Group rider call store address normalized. original={}, cleaned={}", storeAddressOriginal, storeAddress);
+            log.trace("Group rider call store point={}", storePoint);
 
             List<KakaoApiUtil.Point> optimizedOrder =
                     KakaoGeocoderUtil.RouteOptimizer.optimizeRouteOrder(storePoint, destinationPoints);
-            System.out.println("[groupRiderCall] 최적 순서 좌표: " + optimizedOrder);
+            log.trace("Group rider call optimized route={}", optimizedOrder);
 
             // 최적의 배송 순서에 따라 각 그룹 아이템의 orderSequence 업데이트
             for (int seq = 1; seq <= optimizedOrder.size(); seq++) {
@@ -438,26 +444,26 @@ public class OrderService {
                 boolean found = false;
                 for (DeliveryGroupItemEntity item : allGroupItems) {
                     KakaoApiUtil.Point itemPoint = KakaoGeocoderUtil.geocodeAddress(item.getDestinationAddress());
-                    System.out.println("[groupRiderCall] 비교: 최적 좌표 " + p + " vs. 배송지 좌표 " + itemPoint);
+                    log.trace("Group rider call route point compare. optimized={}, destination={}", p, itemPoint);
                     if (isSamePoint(p, itemPoint)) {
                         item.setOrderSequence(seq);
-                        System.out.println("[groupRiderCall] orderId " + item.getOrderId() + "의 order_sequence 업데이트: " + seq);
+                        log.debug("Updated group rider call order sequence. orderId={}, sequence={}", item.getOrderId(), seq);
                         found = true;
                         break;
                     }
                 }
                 if (!found) {
-                    System.out.println("[groupRiderCall] 최적 좌표 " + p + "와 일치하는 배송지가 없음");
+                    log.debug("No matching destination for optimized point. point={}", p);
                 }
             }
             deliveryGroupItemRepository.saveAll(allGroupItems);
-            System.out.println("[groupRiderCall] 묶음배달 처리 완료, 최적 순서 부여됨");
+            log.debug("Completed group rider call route ordering. deliveryId={}", savedGroup.getDeliveryId());
         }
     }
 
     @Transactional
     public void acceptBatchOrders(Long preStoId, List<Long> orderIds) {
-        System.out.println("\n[acceptBatchOrders] 시작 - preStoId=" + preStoId + ", orderIds=" + orderIds);
+        log.debug("Accepting batch orders. preStoId={}, orderIds={}", preStoId, orderIds);
 
         // 항상 새로운 그룹 생성
         DeliveryGroupEntity group = new DeliveryGroupEntity();
@@ -469,13 +475,13 @@ public class OrderService {
         group.setDeliveryFee(0);
         group.setCreatedAt(LocalDateTime.now());
         group = deliveryGroupRepository.save(group);
-        System.out.println("[acceptBatchOrders] 새 묶음배달 그룹 생성: deliveryId=" + group.getDeliveryId());
+        log.debug("Created batch delivery group. deliveryId={}", group.getDeliveryId());
 
         List<DeliveryGroupItemEntity> groupItems = new ArrayList<>();
         for (Long orderId : orderIds) {
             Optional<OrderEntity> opOrder = orderRepository.findById(orderId);
             if (opOrder.isEmpty()) {
-                System.out.println("[acceptBatchOrders] 주문 없음: orderId=" + orderId);
+                log.debug("Order not found during batch accept. orderId={}", orderId);
                 continue;
             }
             OrderEntity ord = opOrder.get();
@@ -488,43 +494,47 @@ public class OrderService {
             item.setOrderSequence(0);
 
             PreStoreEntity preStore = storeRepository.findById(preStoId)
-                    .orElseThrow(() -> new RuntimeException("가게 정보 없음: preStoId=" + preStoId));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보 없음: preStoId=" + preStoId));
             item.setStoreAddress(preStore.getPreStoAddress());
 
             MemberEntity member = memberRepository.findById(ord.getMemId())
-                    .orElseThrow(() -> new RuntimeException("회원 정보 없음: memId=" + ord.getMemId()));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "회원 정보 없음: memId=" + ord.getMemId()));
             String originalDestination = member.getAddress();
             String cleanedDestination = cleanAddress(originalDestination);
             item.setDestinationAddress(cleanedDestination);
-            System.out.println("[acceptBatchOrders] orderId=" + orderId
-                    + ", 배송지 원본: " + originalDestination + ", 정제된 배송지: " + cleanedDestination);
+            log.debug(
+                    "Prepared batch delivery item. orderId={}, originalDestination={}, cleanedDestination={}",
+                    orderId,
+                    originalDestination,
+                    cleanedDestination
+            );
 
             groupItems.add(item);
         }
         deliveryGroupItemRepository.saveAll(groupItems);
-        System.out.println("[acceptBatchOrders] DeliveryGroupItem 저장 완료. 항목 수: " + groupItems.size());
+        log.debug("Saved batch delivery group items. count={}", groupItems.size());
 
         // 배송지 주소 목록과 좌표 산출
         List<String> destinationAddresses = groupItems.stream()
                 .map(DeliveryGroupItemEntity::getDestinationAddress)
                 .collect(Collectors.toList());
-        System.out.println("[acceptBatchOrders] 배송지 목록: " + destinationAddresses);
+        log.debug("Batch delivery destination addresses={}", destinationAddresses);
 
         // KakaoGeocoderUtil 사용 (동기식 처리 가정)
         List<KakaoApiUtil.Point> destinationPoints = KakaoGeocoderUtil.geocodeAddresses(destinationAddresses);
-        System.out.println("[acceptBatchOrders] 배송지 좌표: " + destinationPoints);
+        log.trace("Batch delivery destination points={}", destinationPoints);
 
         PreStoreEntity preStore = storeRepository.findById(preStoId)
-                .orElseThrow(() -> new RuntimeException("가게 정보 없음: preStoId=" + preStoId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보 없음: preStoId=" + preStoId));
         String storeAddressOriginal = preStore.getPreStoAddress();
         String storeAddress = cleanAddress(storeAddressOriginal);
         KakaoApiUtil.Point storePoint = KakaoGeocoderUtil.geocodeAddress(storeAddress);
-        System.out.println("[acceptBatchOrders] 매장 주소: " + storeAddressOriginal + " → 정제 후: " + storeAddress);
-        System.out.println("[acceptBatchOrders] 매장 좌표: " + storePoint);
+        log.debug("Batch delivery store address normalized. original={}, cleaned={}", storeAddressOriginal, storeAddress);
+        log.trace("Batch delivery store point={}", storePoint);
 
         List<KakaoApiUtil.Point> optimizedOrder =
                 KakaoGeocoderUtil.RouteOptimizer.optimizeRouteOrder(storePoint, destinationPoints);
-        System.out.println("[acceptBatchOrders] 최적 순서 좌표: " + optimizedOrder);
+        log.trace("Batch delivery optimized route={}", optimizedOrder);
 
         // 최적의 배송 순서에 따라 각 그룹 아이템의 orderSequence 업데이트
         for (int seq = 1; seq <= optimizedOrder.size(); seq++) {
@@ -532,26 +542,26 @@ public class OrderService {
             boolean found = false;
             for (DeliveryGroupItemEntity item : groupItems) {
                 KakaoApiUtil.Point itemPoint = KakaoGeocoderUtil.geocodeAddress(item.getDestinationAddress());
-                System.out.println("[acceptBatchOrders] 비교: 최적 좌표 " + p + " vs. 배송지 좌표 " + itemPoint);
+                log.trace("Batch delivery route point compare. optimized={}, destination={}", p, itemPoint);
                 if (isSamePoint(p, itemPoint)) {
                     item.setOrderSequence(seq);
-                    System.out.println("[acceptBatchOrders] orderId " + item.getOrderId() + "의 order_sequence 업데이트: " + seq);
+                    log.debug("Updated batch delivery order sequence. orderId={}, sequence={}", item.getOrderId(), seq);
                     found = true;
                     break;
                 }
             }
             if (!found) {
-                System.out.println("[acceptBatchOrders] 최적 좌표 " + p + "와 일치하는 배송지가 없음");
+                log.debug("No matching batch delivery destination for optimized point. point={}", p);
             }
         }
         deliveryGroupItemRepository.saveAll(groupItems);
-        System.out.println("[acceptBatchOrders] 묶음배달 처리 완료, 최적 순서 부여됨");
+        log.debug("Completed batch delivery route ordering. deliveryId={}", group.getDeliveryId());
     }
 
     @Transactional(readOnly = true)
     public Long getMemIdByOrderId(Long orderId) {
         return orderRepository.findMemIdByOrderId(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("🚨 해당 주문 ID의 회원 정보가 없습니다: " + orderId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 주문 ID의 회원 정보가 없습니다: " + orderId));
     }
 
     // Private 메서드: 주소 정제
@@ -570,7 +580,7 @@ public class OrderService {
     @Transactional
     public void completeOrder(Long orderId, Long riderNo) {
         OrderEntity order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("해당 주문을 찾을 수 없습니다. orderId=" + orderId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 주문을 찾을 수 없습니다. orderId=" + orderId));
 
         // (필요하다면) 해당 주문이 현재 라이더가 수행할 수 있는 주문인지 검증
         // 예: order.getDeliveryStatus()가 "배달중"인지 등

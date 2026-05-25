@@ -3,7 +3,11 @@ package com.icia.delivery.domain.admin.service;
 import com.icia.delivery.domain.admin.dto.AdvertisementDTO;
 import com.icia.delivery.domain.admin.entity.AdvertisementEntity;
 import com.icia.delivery.domain.admin.repository.AdvertisementRepository;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +25,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class AdvertisementService {
 
+    private static final Logger log = LoggerFactory.getLogger(AdvertisementService.class);
+
     private final AdvertisementRepository advertisementRepository;
 
     // 광고 최대 개수
@@ -30,32 +36,32 @@ public class AdvertisementService {
      * 광고 등록 (1) 비어있는 advOrder 찾기 → (2) 파일 업로드 → (3) DB 저장
      */
     public void createAdvertisement(String advTitle, MultipartFile file) throws IOException {
-        System.out.println("=== [Service] createAdvertisement() START ===");
+        log.debug("Creating advertisement. title={}", advTitle);
 
         // 1) 아직 사용되지 않은 advOrder(1~5) 찾기
         //    예: 이미 DB에 advOrder=1,2,3 있으면 4가 빈 슬롯
         List<AdvertisementEntity> existingList = advertisementRepository.findAll();
         if (existingList.size() >= MAX_AD_COUNT) {
-            throw new IllegalStateException("광고는 최대 5개까지만 등록 가능합니다.");
+            throw new BusinessException(ErrorCode.CONFLICT, "광고는 최대 5개까지만 등록 가능합니다.");
         }
 
         int foundOrder = findAvailableOrder(existingList);
         if (foundOrder == -1) {
-            throw new IllegalStateException("광고는 최대 5개까지만 등록 가능합니다 (슬롯이 없음).");
+            throw new BusinessException(ErrorCode.CONFLICT, "광고는 최대 5개까지만 등록 가능합니다 (슬롯이 없음).");
         }
 
         // 2) 파일 체크
         if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("파일이 없습니다.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "파일이 없습니다.");
         }
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || originalFilename.isBlank()) {
-            throw new IllegalArgumentException("파일이 없습니다.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "파일이 없습니다.");
         }
         // 확장자
         String ext = getExtension(originalFilename).toLowerCase();
         if (!ext.equals("jpg") && !ext.equals("png")) {
-            throw new IllegalArgumentException("허용되지 않는 파일 형식 (jpg, png만 가능)");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "허용되지 않는 파일 형식 (jpg, png만 가능)");
         }
 
         // 3) 파일명: "광고_{advOrder}번_{원본파일명}"
@@ -82,7 +88,7 @@ public class AdvertisementService {
         entity.setAdvUpdatedAt(LocalDateTime.now());
 
         advertisementRepository.save(entity);
-        System.out.println("=== [Service] createAdvertisement() END ===");
+        log.debug("Created advertisement. advOrder={}, file={}", foundOrder, newFileName);
     }
 
     /**
@@ -103,7 +109,7 @@ public class AdvertisementService {
     @Transactional(readOnly = true)
     public AdvertisementDTO getAdvertisement(Long advId) {
         AdvertisementEntity e = advertisementRepository.findById(advId)
-                .orElseThrow(() -> new IllegalArgumentException("광고가 존재하지 않습니다. ID=" + advId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "광고가 존재하지 않습니다. ID=" + advId));
         return toDTO(e);
     }
 
@@ -112,7 +118,7 @@ public class AdvertisementService {
      */
     public void updateAdvertisement(AdvertisementDTO dto, MultipartFile file) throws IOException {
         AdvertisementEntity e = advertisementRepository.findById(dto.getAdvId())
-                .orElseThrow(() -> new IllegalArgumentException("광고가 존재하지 않습니다. ID=" + dto.getAdvId()));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "광고가 존재하지 않습니다. ID=" + dto.getAdvId()));
 
         // 제목 변경
         e.setAdvTitle(dto.getAdvTitle());
@@ -147,7 +153,7 @@ public class AdvertisementService {
      */
     public void deleteAdvertisement(Long advId) {
         AdvertisementEntity entity = advertisementRepository.findById(advId)
-                .orElseThrow(() -> new IllegalArgumentException("광고가 존재하지 않습니다. ID=" + advId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "광고가 존재하지 않습니다. ID=" + advId));
 
         // 물리 파일 삭제
         deletePhysicalFile(entity.getAdvImageUrl());
@@ -189,10 +195,11 @@ public class AdvertisementService {
         // remove leading "/" to avoid double slash
 
         try {
-            Files.deleteIfExists(filePath);
-            System.out.println("[deletePhysicalFile] Deleted file: " + filePath);
+            if (Files.deleteIfExists(filePath)) {
+                log.debug("Deleted advertisement image file. path={}", filePath);
+            }
         } catch (IOException e) {
-            System.err.println("[deletePhysicalFile] Failed to delete file: " + filePath + " : " + e.getMessage());
+            log.warn("Failed to delete advertisement image file. path={}", filePath, e);
         }
     }
 

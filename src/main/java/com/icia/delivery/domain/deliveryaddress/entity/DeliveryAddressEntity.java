@@ -1,6 +1,8 @@
 package com.icia.delivery.domain.deliveryaddress.entity;
 
 import com.icia.delivery.domain.deliveryaddress.dto.DeliveryAddressDTO;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,7 +42,7 @@ public class DeliveryAddressEntity {
      */
     public static DeliveryAddressEntity toEntity(DeliveryAddressDTO dto) {
         if (dto == null) {
-            throw new IllegalArgumentException("DeliveryAddressDTO는 null일 수 없습니다.");
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "DeliveryAddressDTO는 null일 수 없습니다.");
         }
 
         DeliveryAddressEntity entity = new DeliveryAddressEntity();

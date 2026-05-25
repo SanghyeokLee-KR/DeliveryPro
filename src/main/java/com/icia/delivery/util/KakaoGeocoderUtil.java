@@ -2,6 +2,8 @@
 package com.icia.delivery.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 public class KakaoGeocoderUtil {
 
+    private static final Logger log = LoggerFactory.getLogger(KakaoGeocoderUtil.class);
+
     // Kakao Geocoding API의 기본 URL
     private static final String GEOCODE_URL = "https://dapi.kakao.com/v2/local/search/address.json?query=";
     // Kakao REST API 키는 환경 변수에서 읽습니다.
@@ -31,15 +35,15 @@ public class KakaoGeocoderUtil {
      * @return 주소가 변환된 좌표(Point), 실패하면 null을 반환합니다.
      */
     public static KakaoApiUtil.Point geocodeAddress(String address) {
-        System.out.println("[KakaoGeocoderUtil] Received address: " + address);
+        log.debug("Geocoding address. address={}", address);
         try {
             // 주소를 UTF-8로 인코딩합니다.
             String encodedAddress = URLEncoder.encode(address, "UTF-8");
-            System.out.println("[KakaoGeocoderUtil] Encoded address: " + encodedAddress);
+            log.trace("Encoded address={}", encodedAddress);
 
             // API 요청 URL 구성
             String url = GEOCODE_URL + encodedAddress;
-            System.out.println("[KakaoGeocoderUtil] Request URL: " + url);
+            log.trace("Kakao geocode request url={}", url);
 
             // HttpClient를 사용하여 API 요청 생성 및 전송
             HttpClient client = HttpClient.newHttpClient();
@@ -49,7 +53,7 @@ public class KakaoGeocoderUtil {
                     .GET()
                     .build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("[KakaoGeocoderUtil] API Response: " + response.body());
+            log.trace("Kakao geocode response={}", response.body());
 
             // 응답 JSON을 Map으로 변환
             ObjectMapper mapper = new ObjectMapper();
@@ -62,20 +66,22 @@ public class KakaoGeocoderUtil {
                 java.util.Map<String, Object> doc = documents.get(0);
                 String xStr = (String) doc.get("x");
                 String yStr = (String) doc.get("y");
-                System.out.println("[KakaoGeocoderUtil] Document x: " + xStr + ", y: " + yStr);
+                log.trace("Kakao geocode document x={}, y={}", xStr, yStr);
 
                 // 좌표 값을 double로 변환하여 Point 객체 생성
                 double x = Double.parseDouble(xStr);
                 double y = Double.parseDouble(yStr);
                 KakaoApiUtil.Point point = new KakaoApiUtil.Point(x, y);
-                System.out.println("[KakaoGeocoderUtil] Returning point: " + point);
+                log.debug("Geocoding succeeded. address={}, point={}", address, point);
                 return point;
             } else {
-                System.out.println("[KakaoGeocoderUtil] No documents found for address: " + address);
+                log.debug("No geocode documents found. address={}", address);
             }
         } catch (IOException | InterruptedException e) {
-            System.err.println("[KakaoGeocoderUtil] Exception occurred during geocoding: " + e.getMessage());
-            e.printStackTrace();
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            log.warn("Failed to geocode address. address={}", address, e);
         }
         return null;
     }
@@ -88,16 +94,16 @@ public class KakaoGeocoderUtil {
      */
     public static List<KakaoApiUtil.Point> geocodeAddresses(List<String> addresses) {
         List<KakaoApiUtil.Point> result = new ArrayList<>();
-        System.out.println("[KakaoGeocoderUtil] Geocoding multiple addresses: " + addresses);
+        log.debug("Geocoding multiple addresses. count={}", addresses.size());
         for (String addr : addresses) {
             KakaoApiUtil.Point point = geocodeAddress(addr);
             if (point != null) {
                 result.add(point);
             } else {
-                System.out.println("[KakaoGeocoderUtil] Geocoding failed for address: " + addr);
+                log.debug("Geocoding returned no point. address={}", addr);
             }
         }
-        System.out.println("[KakaoGeocoderUtil] Returning points: " + result);
+        log.debug("Finished geocoding multiple addresses. successCount={}", result.size());
         return result;
     }
 
@@ -114,7 +120,7 @@ public class KakaoGeocoderUtil {
          * @return 최적 방문 순서로 정렬된 좌표 리스트.
          */
         public static List<KakaoApiUtil.Point> optimizeRouteOrder(KakaoApiUtil.Point start, List<KakaoApiUtil.Point> destinations) {
-            System.out.println("[RouteOptimizer] Optimizing route order.");
+            log.debug("Optimizing route order. destinationCount={}", destinations.size());
             List<KakaoApiUtil.Point> remaining = new ArrayList<>(destinations);
             List<KakaoApiUtil.Point> ordered = new ArrayList<>();
             KakaoApiUtil.Point current = start;
@@ -130,12 +136,12 @@ public class KakaoGeocoderUtil {
                     }
                 }
                 KakaoApiUtil.Point nextPoint = remaining.get(nearestIndex);
-                System.out.println("[RouteOptimizer] Selected next point: " + nextPoint + " with distance: " + nearestDist);
+                log.trace("Selected next route point. point={}, distance={}", nextPoint, nearestDist);
                 ordered.add(nextPoint);
                 current = nextPoint;
                 remaining.remove(nearestIndex);
             }
-            System.out.println("[RouteOptimizer] Optimized order: " + ordered);
+            log.debug("Optimized route order. orderedCount={}", ordered.size());
             return ordered;
         }
     }

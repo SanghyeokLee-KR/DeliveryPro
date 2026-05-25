@@ -5,6 +5,8 @@ import com.icia.delivery.domain.rider.service.RiderService;
 import com.icia.delivery.global.response.ApiResponse;
 import com.icia.delivery.util.DistanceUtil;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +19,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class RiderRestfulController {
+
+    private static final Logger log = LoggerFactory.getLogger(RiderRestfulController.class);
 
     private final RiderService rsvc;
 
@@ -34,7 +38,7 @@ public class RiderRestfulController {
 
     @PostMapping("/riderAccountDelete")
     public ResponseEntity<ApiResponse<String>> riderAccountDelete(@RequestParam("accountId") Long accountId){
-        System.out.println("들어오는 계좌 고유 번호 : " + accountId);
+        log.debug("Rider account delete requested. accountId={}", accountId);
         return ResponseEntity.ok(ApiResponse.success(rsvc.deleteAccount(accountId)));
     }
 

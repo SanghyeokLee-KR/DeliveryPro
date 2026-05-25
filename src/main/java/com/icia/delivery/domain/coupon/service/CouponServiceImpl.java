@@ -7,6 +7,8 @@ import com.icia.delivery.domain.coupon.entity.CouponUsageEntity;
 import com.icia.delivery.domain.coupon.repository.CouponRepository;
 import com.icia.delivery.domain.coupon.repository.CouponUsageRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +55,7 @@ public class CouponServiceImpl implements CouponService {
             if (couponDTO.getExpiredDate() != null) {
                 coupon.setExpiredDate(couponDTO.getExpiredDate().atTime(23, 59, 59));
             } else {
-                throw new Exception("만료일이 필요합니다.");
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "만료일이 필요합니다.");
             }
 
             coupon.setStatus(couponDTO.getStatus());
@@ -65,7 +67,7 @@ public class CouponServiceImpl implements CouponService {
             // 쿠폰 코드 중복 확인
             if (couponRepository.findByCode(coupon.getCode()).isPresent()) {
                 logger.warn("이미 존재하는 쿠폰 코드입니다: {}", coupon.getCode());
-                throw new Exception("이미 존재하는 쿠폰 코드입니다.");
+                throw new BusinessException(ErrorCode.CONFLICT, "이미 존재하는 쿠폰 코드입니다.");
             }
 
             // 쿠폰 저장 (@PrePersist에서 createdDate와 modifiedDate가 자동 설정됨)
@@ -90,14 +92,14 @@ public class CouponServiceImpl implements CouponService {
             CouponEntity existingCoupon = couponRepository.findById(couponDTO.getId())
                     .orElseThrow(() -> {
                         logger.warn("수정할 쿠폰을 찾을 수 없습니다. ID: {}", couponDTO.getId());
-                        return new RuntimeException("수정할 쿠폰을 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "수정할 쿠폰을 찾을 수 없습니다.");
                     });
 
             // 쿠폰 코드 중복 확인 (수정 시)
             Optional<CouponEntity> duplicateCoupon = couponRepository.findByCode(couponDTO.getCode());
             if (duplicateCoupon.isPresent() && !duplicateCoupon.get().getId().equals(couponDTO.getId())) {
                 logger.warn("이미 존재하는 쿠폰 코드입니다: {}", couponDTO.getCode());
-                throw new Exception("이미 존재하는 쿠폰 코드입니다.");
+                throw new BusinessException(ErrorCode.CONFLICT, "이미 존재하는 쿠폰 코드입니다.");
             }
 
             // 필드 업데이트
@@ -111,7 +113,7 @@ public class CouponServiceImpl implements CouponService {
             if (couponDTO.getExpiredDate() != null) {
                 existingCoupon.setExpiredDate(couponDTO.getExpiredDate().atTime(23, 59, 59));
             } else {
-                throw new Exception("만료일이 필요합니다.");
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "만료일이 필요합니다.");
             }
 
             existingCoupon.setStatus(couponDTO.getStatus());
@@ -144,7 +146,7 @@ public class CouponServiceImpl implements CouponService {
             CouponEntity coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> {
                         logger.warn("삭제할 쿠폰을 찾을 수 없습니다. ID: {}", couponId);
-                        return new RuntimeException("삭제할 쿠폰을 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "삭제할 쿠폰을 찾을 수 없습니다.");
                     });
 
             // 쿠폰 삭제
@@ -209,13 +211,13 @@ public class CouponServiceImpl implements CouponService {
             CouponEntity coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> {
                         logger.warn("쿠폰을 찾을 수 없습니다. ID: {}", couponId);
-                        return new RuntimeException("쿠폰을 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "쿠폰을 찾을 수 없습니다.");
                     });
 
             // 쿠폰 상태 확인
             if (!"Y".equals(coupon.getStatus())) {
                 logger.warn("사용 불가능한 쿠폰 상태입니다. ID: {}, 상태: {}", couponId, coupon.getStatus());
-                throw new Exception("사용 불가능한 쿠폰입니다.");
+                throw new BusinessException(ErrorCode.CONFLICT, "사용 불가능한 쿠폰입니다.");
             }
 
             // 쿠폰 사용 기록 생성 (관리자 사용 시 member는 null)
@@ -254,7 +256,7 @@ public class CouponServiceImpl implements CouponService {
             CouponEntity coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> {
                         logger.warn("쿠폰을 찾을 수 없습니다. ID: {}", couponId);
-                        return new RuntimeException("쿠폰을 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "쿠폰을 찾을 수 없습니다.");
                     });
 
             // 쿠폰 사용 기록 조회
@@ -311,21 +313,21 @@ public class CouponServiceImpl implements CouponService {
             CouponEntity coupon = couponRepository.findByCode(code)
                     .orElseThrow(() -> {
                         logger.warn("존재하지 않는 쿠폰 코드입니다: {}", code);
-                        return new RuntimeException("존재하지 않는 쿠폰 코드입니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "존재하지 않는 쿠폰 코드입니다.");
                     });
 
             // 이미 사용 중인 쿠폰인지 확인
             boolean alreadyUsed = couponUsageRepository.existsByCouponIdAndMemberId(coupon.getId(), memberId);
             if (alreadyUsed) {
                 logger.warn("사용자가 이미 사용한 쿠폰입니다. 쿠폰 ID: {}, 사용자 ID: {}", coupon.getId(), memberId);
-                throw new Exception("이미 사용한 쿠폰입니다.");
+                throw new BusinessException(ErrorCode.CONFLICT, "이미 사용한 쿠폰입니다.");
             }
 
             // 회원 조회
             MemberEntity member = memberRepository.findById(memberId)
                     .orElseThrow(() -> {
                         logger.warn("회원 정보를 찾을 수 없습니다. 사용자 ID: {}", memberId);
-                        return new RuntimeException("회원 정보를 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "회원 정보를 찾을 수 없습니다.");
                     });
 
             // 쿠폰 사용 기록 생성
@@ -360,27 +362,27 @@ public class CouponServiceImpl implements CouponService {
             CouponEntity coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> {
                         logger.warn("쿠폰을 찾을 수 없습니다. ID: {}", couponId);
-                        return new RuntimeException("쿠폰을 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "쿠폰을 찾을 수 없습니다.");
                     });
 
             // 쿠폰 상태 확인
             if (!"Y".equals(coupon.getStatus())) {
                 logger.warn("사용 불가능한 쿠폰 상태입니다. ID: {}, 상태: {}", couponId, coupon.getStatus());
-                throw new Exception("사용 불가능한 쿠폰입니다.");
+                throw new BusinessException(ErrorCode.CONFLICT, "사용 불가능한 쿠폰입니다.");
             }
 
             // 이미 사용한 쿠폰인지 확인
             boolean alreadyUsed = couponUsageRepository.existsByCouponIdAndMemberId(coupon.getId(), memberId);
             if (alreadyUsed) {
                 logger.warn("사용자가 이미 사용한 쿠폰입니다. 쿠폰 ID: {}, 사용자 ID: {}", couponId, memberId);
-                throw new Exception("이미 사용한 쿠폰입니다.");
+                throw new BusinessException(ErrorCode.CONFLICT, "이미 사용한 쿠폰입니다.");
             }
 
             // 회원 조회
             MemberEntity member = memberRepository.findById(memberId)
                     .orElseThrow(() -> {
                         logger.warn("회원 정보를 찾을 수 없습니다. 사용자 ID: {}", memberId);
-                        return new RuntimeException("회원 정보를 찾을 수 없습니다.");
+                        return new BusinessException(ErrorCode.NOT_FOUND, "회원 정보를 찾을 수 없습니다.");
                     });
 
             // 쿠폰 사용 기록 생성
@@ -440,11 +442,11 @@ public class CouponServiceImpl implements CouponService {
     public void useUserCoupon(Long couponId) throws Exception {
         // Optional에서 CouponEntity를 꺼내거나, 없으면 예외 발생
         CouponEntity couponEntity = couponRepository.findById(couponId)
-                .orElseThrow(() -> new Exception("쿠폰을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "쿠폰을 찾을 수 없습니다."));
 
         // 이미 사용된 쿠폰인지 확인 (쿠폰의 상태 비교)
         if ("N".equals(couponEntity.getStatus())) {
-            throw new IllegalStateException("이미 사용된 쿠폰입니다.");
+            throw new BusinessException(ErrorCode.CONFLICT, "이미 사용된 쿠폰입니다.");
         }
 
         // 쿠폰 상태를 '사용완료'로 변경

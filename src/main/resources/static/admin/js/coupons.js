@@ -1,5 +1,12 @@
 // src/main/resources/static/admin/js/coupons.js
 
+function unwrapApiResponse(body) {
+    if (body && typeof body === 'object' && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 // 모달 열기
 function openCouponModal() {
     console.log("JavaScript: openCouponModal called");
@@ -42,6 +49,7 @@ function openEditModal(couponId) {
             return response.json();
         })
         .then(data => {
+            data = unwrapApiResponse(data);
             console.log("JavaScript: Coupon data fetched:", data);
             if (data) {
                 document.querySelector('#couponModalTitle').innerText = '쿠폰 수정하기';

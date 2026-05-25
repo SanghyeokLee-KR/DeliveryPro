@@ -5,6 +5,8 @@ import com.icia.delivery.domain.deliverygroup.dto.DeliveryGroupDTO;
 import com.icia.delivery.domain.deliverygroup.entity.DeliveryGroupEntity;
 import com.icia.delivery.domain.deliverygroup.repository.DeliveryGroupRepository;
 import com.icia.delivery.domain.order.entity.OrderEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,11 +52,11 @@ public class DeliveryGroupService {
     @Transactional
     public void acceptDeliveryGroup(Long deliveryId, Long riderNo) {
         DeliveryGroupEntity group = deliveryGroupRepository.findById(deliveryId)
-                .orElseThrow(() -> new RuntimeException("해당 배달 그룹을 찾을 수 없습니다. deliveryId=" + deliveryId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 배달 그룹을 찾을 수 없습니다. deliveryId=" + deliveryId));
 
         // 이미 다른 라이더가 수락한 경우 (필요하면 예외 처리)
         if (group.getRiderNo() != null && !group.getRiderNo().equals(riderNo)) {
-            throw new RuntimeException("이미 다른 라이더가 이 배달 그룹을 수락했습니다.");
+            throw new BusinessException(ErrorCode.CONFLICT, "이미 다른 라이더가 이 배달 그룹을 수락했습니다.");
         }
 
         group.setRiderNo(riderNo);
@@ -64,10 +66,10 @@ public class DeliveryGroupService {
     @Transactional
     public void completeDeliveryGroup(Long deliveryId, Long riderNo) {
         DeliveryGroupEntity group = deliveryGroupRepository.findById(deliveryId)
-                .orElseThrow(() -> new RuntimeException("해당 배달 그룹을 찾을 수 없습니다. deliveryId=" + deliveryId));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 배달 그룹을 찾을 수 없습니다. deliveryId=" + deliveryId));
 
         // (필요하다면) 라이더 번호 검증 등 추가
-        // 예: if (!group.getRiderNo().equals(riderNo)) { throw new RuntimeException("권한 없음"); }
+        // 예: if (!group.getRiderNo().equals(riderNo)) { throw new BusinessException(ErrorCode.FORBIDDEN, "권한 없음"); }
 
         group.setDeliveryStatus("배달완료");
         deliveryGroupRepository.save(group);

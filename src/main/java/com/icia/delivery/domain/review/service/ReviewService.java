@@ -6,8 +6,12 @@ import com.icia.delivery.domain.review.dto.ReviewDTO;
 import com.icia.delivery.domain.review.entity.ReviewEntity;
 import com.icia.delivery.domain.review.repository.reviewRepository;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +28,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
+
+    private static final Logger log = LoggerFactory.getLogger(ReviewService.class);
 
     Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/review-img");
 
@@ -82,7 +88,7 @@ public class ReviewService {
             mav.setViewName("redirect:/customer");
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "리뷰 이미지 저장 중 오류가 발생했습니다.", e);
         }
         return mav;
     }
@@ -144,7 +150,7 @@ public class ReviewService {
 
         // 리뷰 목록을 가져온다.
         List<ReviewEntity> entityList = rvrepo.findByPreStoId(storeId);
-        System.out.println("가게 리뷰 정보(e) : " + entityList);
+        log.debug("Loaded store reviews. storeId={}, count={}", storeId, entityList.size());
 
         // 각 리뷰의 별점 값을 더하고 리뷰의 개수를 셈
         for (ReviewEntity entity : entityList) {
@@ -156,9 +162,8 @@ public class ReviewService {
         Float averageRating = (totalReviews > 0) ? (totalRating / totalReviews) : 0.0f;  // 평균 계산 (0.0f로 수정)
 
         // 평균 별점을 가게 테이블에 업데이트
-        Optional<PreStoreEntity> entityOp = srepo.findById(storeId);
-
-        PreStoreEntity entity = entityOp.get();
+        PreStoreEntity entity = srepo.findById(storeId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보를 찾을 수 없습니다. storeId=" + storeId));
 
         entity.setPreStoRating(averageRating);  // 평균 별점 저장
 

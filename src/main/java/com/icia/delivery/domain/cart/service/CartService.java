@@ -9,8 +9,12 @@ import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.domain.order.dto.OrderDTO;
 import com.icia.delivery.domain.order.dto.OrderItemDTO;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +26,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CartService {
+
+    private static final Logger log = LoggerFactory.getLogger(CartService.class);
 
     private final MemberRepository mrepo;
     private final StoreMenuRepository strepo;
@@ -44,14 +50,14 @@ public class CartService {
         Optional<MemberEntity> entity = mrepo.findById(memId);
 
         if (entity.isEmpty()) {
-            System.out.println("Member not found for memId: " + memId);
+            log.debug("Member not found while loading cart. memId={}", memId);
             return dtoList; // 빈 목록 반환
         }
 
         // CartEntity 목록 가져오기
         List<CartEntity> cartItems = crepo.findByMemId(memId);
         if (cartItems.isEmpty()) {
-            System.out.println("No cart items found for memId: " + memId);
+            log.debug("No cart items found. memId={}", memId);
             return dtoList; // 빈 목록 반환
         }
 
@@ -90,7 +96,7 @@ public class CartService {
 
         // 조회된 카트 항목이 없으면 처리
         if (cartList.isEmpty()) {
-            System.out.println("조회된 카트 항목이 없습니다.");
+            log.warn("Cart item not found for quantity update. cartId={}", CartId);
             // 필요한 경우 예외를 던지거나 메시지를 반환할 수 있습니다.
             ModelAndView mav = new ModelAndView();
             mav.setViewName("redirect:/cart");  // 장바구니로 리디렉션
@@ -118,7 +124,7 @@ public class CartService {
         // 메뉴 정보 가져오기
         Optional<PreStoreMenuEntity> menuOpt = strepo.findById(menuId);
         if (menuOpt.isEmpty()) {
-            throw new RuntimeException("해당 메뉴를 찾을 수 없습니다: menuId = " + menuId);
+            throw new BusinessException(ErrorCode.NOT_FOUND, "해당 메뉴를 찾을 수 없습니다: menuId = " + menuId);
         }
 
         PreStoreMenuEntity menu = menuOpt.get();

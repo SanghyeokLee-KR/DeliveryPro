@@ -5,6 +5,8 @@ import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.order.entity.OrderEntity;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,7 +143,7 @@ public class SalesService {
 
             // 매장 정보를 PreStoEntity에서 가져오기
             PreStoreEntity storeEntity = srepo.findById(storeId)
-                    .orElseThrow(() -> new RuntimeException("Store not found"));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보를 찾을 수 없습니다. storeId=" + storeId));
 
             // PreStoDTO로 매장 정보 및 총 매출을 설정
             PreStoreDTO storeDTO = new PreStoreDTO();

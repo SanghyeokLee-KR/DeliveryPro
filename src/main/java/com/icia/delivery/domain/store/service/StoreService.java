@@ -14,8 +14,12 @@ import com.icia.delivery.domain.storemenu.entity.PreStoreMenuEntity;
 import com.icia.delivery.domain.storemenu.repository.StoreMenuRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.domain.order.entity.OrderEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +42,8 @@ import java.time.temporal.TemporalAdjusters;
 @Service
 @RequiredArgsConstructor
 public class StoreService {
+
+    private static final Logger log = LoggerFactory.getLogger(StoreService.class);
 
     Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/store-img/store-main-img");
     Path path_2 = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/store-img/store-menu-img");
@@ -90,21 +96,19 @@ public class StoreService {
 
             // 파일 가져오기
             MultipartFile prePhoto = preDTO.getPrePhoto();
-            String savePath = "";
 
-            if (!prePhoto.isEmpty()) {
+            if (prePhoto != null && !prePhoto.isEmpty()) {
                 String fileName = prePhoto.getOriginalFilename();
                 Long sequence = getNextFileSequence(); // 시퀀스를 가져옵니다.
                 String newFileName = sequence + "_" + fileName;
 
                 preDTO.setPreStoPhoto(newFileName);
 
-                savePath = path + "\\" + newFileName;
+                String savePath = path + "\\" + newFileName;
+                prePhoto.transferTo(new File(savePath));
             } else {
-                preDTO.setPreStoPhone("default.jpg");
+                preDTO.setPreStoPhoto("default.jpg");
             }
-
-            prePhoto.transferTo(new File(savePath));
 
             // DTO -> Entity 변환 및 저장
             PreStoreEntity preEntity = storerepostory.save(PreStoreEntity.toEntity(preDTO)); // 저장
@@ -117,7 +121,7 @@ public class StoreService {
             // 실패 시 회원가입 폼으로 리다이렉트
             mav.setViewName("redirect:/index");
             mav.addObject("error", "회원가입 처리 중 오류가 발생했습니다.");
-            e.printStackTrace(); // 오류 로그 출력
+            log.error("Failed to add store. preMemId={}", preMemId, e);
         }
         return mav;
 
@@ -172,7 +176,7 @@ public class StoreService {
             response.put("storeId", entity.getPreStoId());
 
 
-            System.out.println("클릭 매장 아이디 : " + session.getAttribute("pre_store_status"));
+            log.debug("Selected store status. status={}", session.getAttribute("pre_store_status"));
         } else {
             response.put("error", "Store not found");
         }
@@ -186,27 +190,30 @@ public class StoreService {
         Map<String, Object> response = new HashMap<>();
 
         try {
+            if (smDTO.getPreStoId() == null) {
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "매장 ID가 필요합니다.");
+            }
+
             // 기본값 설정
             smDTO.setMenuPopularity(Optional.ofNullable(smDTO.getMenuPopularity()).orElse(0L));
             smDTO.setMenuCreatedDate(LocalDateTime.now());
 
             // 파일 처리
             MultipartFile mpFile = smDTO.getMpFile();
-            String savePath = "";
 
-            if (!mpFile.isEmpty()) {
+            if (mpFile != null && !mpFile.isEmpty()) {
                 String fileName = mpFile.getOriginalFilename();
                 Long sequence = getNextFileSequence2(); // 시퀀스를 가져옵니다.
                 String newFileName = sequence + "_" + fileName;
 
                 smDTO.setMenuPictureUrl(newFileName);
-                savePath = path_2 + "\\" + newFileName;
+
+                // 파일 저장
+                String savePath = path_2 + "\\" + newFileName;
+                mpFile.transferTo(new File(savePath));
             } else {
                 smDTO.setMenuPictureUrl("default.jpg");
             }
-
-            // 파일 저장
-            mpFile.transferTo(new File(savePath));
 
             // DB에 저장
             smrepo.save(PreStoreMenuEntity.toEntity(smDTO));
@@ -214,13 +221,13 @@ public class StoreService {
             // 응답 설정
             response.put("status", "success");
             response.put("preStoId", smDTO.getPreStoId());
-
+            return response;
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            response.put("status", "error");
-            response.put("message", "메뉴 추가 처리 중 오류가 발생했습니다.");
-            e.printStackTrace(); // 로그 출력
+            log.error("Failed to add menu. preStoId={}", smDTO.getPreStoId(), e);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "메뉴 추가 처리 중 오류가 발생했습니다.", e);
         }
-        return response;
     }
 
     // 시퀀스를 구현하기 위한 메소드
@@ -237,12 +244,10 @@ public class StoreService {
 
 
         List<PreStoreMenuEntity> entityList = smrepo.findByLoginId(preStoId);
-        // System.out.println("리스트  받기 : " + entityList);
 
         for (PreStoreMenuEntity entity : entityList) {
             dtoList.add(PreStoreMenuDTO.toDTO(entity));
         }
-        // System.out.println("리스트 보기 : " + dtoList);
 
         return dtoList;
     }
@@ -261,22 +266,26 @@ public class StoreService {
 
         int updateCount = smrepo.updateMenuStatus(menuId, newStatus);
 
-        // 업데이트가 성공하면 1, 실패하면 0을 반환
         if (updateCount > 0) {
-            return "성공";  // 또는 JSON 형식으로 success: true 를 반환할 수도 있음
-        } else {
-            return "실패";  // 실패 시 처리할 내용
+            return "성공";
         }
+
+        throw new BusinessException(ErrorCode.NOT_FOUND, "메뉴를 찾을 수 없습니다. menuId=" + menuId);
     }
 
     @Transactional
     public String menuDelete(Long menuId) {
         try {
+            if (!smrepo.existsById(menuId)) {
+                throw new BusinessException(ErrorCode.NOT_FOUND, "메뉴를 찾을 수 없습니다. menuId=" + menuId);
+            }
             smrepo.deleteById(menuId);
             return "삭제 성공!";
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            System.out.println("메뉴 삭제 중 오류 발생 : " + e.getMessage());
-            throw new RuntimeException("메뉴 삭제 처리 중 오류 발생했습니다.");
+            log.error("Failed to delete menu. menuId={}", menuId, e);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "메뉴 삭제 처리 중 오류 발생했습니다.", e);
         }
     }
 
@@ -288,7 +297,7 @@ public class StoreService {
 
             // 메뉴가 존재하지 않을 경우
             if (opEntity.isEmpty()) {
-                return "ㅗ^^ㅗ";
+                throw new BusinessException(ErrorCode.NOT_FOUND, "메뉴를 찾을 수 없습니다. menuId=" + menuDTO.getMenuId());
             }
 
             PreStoreMenuEntity entity = opEntity.get();
@@ -334,9 +343,11 @@ public class StoreService {
             smrepo.save(entity);
 
             return "수정이 성공";
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            System.out.println("메뉴 수정 중에 오류 발생 : " + e);
-            throw new RuntimeException("메뉴 수정 처리 중 오류 발생했습니다.");
+            log.error("Failed to modify menu. menuId={}", menuDTO.getMenuId(), e);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "메뉴 수정 처리 중 오류 발생했습니다.", e);
         }
     }
 
@@ -344,7 +355,6 @@ public class StoreService {
     public int storeCount(Long pathValue) {
 
         int result = storerepostory.findStoreCount(pathValue);
-        // System.out.println("가게 갯수 : " + result);
         return result;
     }
 
@@ -378,10 +388,10 @@ public class StoreService {
                 session.setAttribute("pre_store_opening_hours", openingHours);
                 mav.setViewName("redirect:/store-management/" + preMemId);
             } else {
-                System.out.println("업데이트 실행 중에 오류가 났습니다.");
+                log.warn("Failed to update store hours. preStoId={}", preStoId);
             }
         } else {
-            System.out.println("입력 값이 잘못되었습니다.");
+            log.warn("Invalid store hours update request. preStoId={}, operationDays={}, openingHours={}", preStoId, operationDays, openingHours);
         }
 
         return mav;
@@ -404,10 +414,10 @@ public class StoreService {
                 session.setAttribute("pre_store_day_off", preStoDayOff);
                 mav.setViewName("redirect:/store-management/" + preMemId);
             } else {
-                System.out.println("업데이트 실행 중에 오류가 났습니다.");
+                log.warn("Failed to update store holiday cycle. preStoId={}", preStoId);
             }
         } else {
-            System.out.println("입력 값이 잘못되었습니다.");
+            log.warn("Invalid store holiday update request. preStoId={}, holidayWeek={}, dayOff={}", preStoId, preStoHolidayWeek, preStoDayOff);
         }
 
         return mav;
@@ -422,8 +432,7 @@ public class StoreService {
 
             // 사용자가 존재하지 않을 경우 처리
             if (opStoEntity.isEmpty()) {
-
-                return "T,T";
+                throw new BusinessException(ErrorCode.NOT_FOUND, "매장 정보를 찾을 수 없습니다. preStoreId=" + preStoreId);
             }
 
             // 사용자가 존재하면 정보 업데이트
@@ -465,16 +474,13 @@ public class StoreService {
                 session.setAttribute("pre_store_deliFee", storeDTO.getPreStoDeliveryFee());
             }
 
-
+            return "수정 성공";
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            // 오류 발생 시 처리
-//            mav.addObject("status", "error");
-//            mav.addObject("message", "회원정보 수정 중 오류가 발생했습니다.");
-            e.printStackTrace();
-//            mav.setViewName("/member/myPage"); // 오류 시 동일 페이지로 이동
+            log.error("Failed to update store details. preStoreId={}", preStoreId, e);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "매장 정보 수정 중 오류가 발생했습니다.", e);
         }
-
-        return null;
     }
 
     @Transactional
@@ -491,7 +497,7 @@ public class StoreService {
         Long preMemId = (Long) session.getAttribute("preMem_id");
         try {
             Optional<PreStoreEntity> entityOp = storerepostory.findById(dto.getPreStoId());
-            System.out.println("아이디 조회 매장 : " + entityOp);
+            log.debug("Loaded store for break time update. preStoId={}, present={}", dto.getPreStoId(), entityOp.isPresent());
 
             // 사용자가 존재하지 않을 경우 처리
             if (entityOp.isEmpty()) {
@@ -533,7 +539,7 @@ public class StoreService {
             }
             mav.setViewName("redirect:/store-management/" + preMemId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed to update store break time. preStoId={}", dto.getPreStoId(), e);
         }
         return mav;
     }
@@ -573,7 +579,7 @@ public class StoreService {
                     long remainingMillis = expiryTime - currentTime;
                     String formattedRemaining = formatElapsedTime(remainingMillis);
                     // 필요한 경우 이 값을 로깅하거나 화면에 출력합니다.
-                    System.out.println("매장 ID " + store.getPreStoId() + " 남은 휴식 시간: " + formattedRemaining);
+                    log.debug("Store break time remaining. preStoId={}, remaining={}", store.getPreStoId(), formattedRemaining);
                 }
             }
         }
@@ -598,11 +604,15 @@ public class StoreService {
         List<OrderEntity> totalorder = orepo.findByPreStoId(preStoId);
         List<ReviewEntity> totalreview = rrepo.findByPreStoId(preStoId);
 
-        System.out.println(orders);
-        System.out.println(reviews);
-        System.out.println(weekOrders);
-        System.out.println(totalorder);
-        System.out.println(totalreview);
+        log.debug(
+                "Loaded store statistics. preStoId={}, todayOrders={}, todayReviews={}, weekOrders={}, totalOrders={}, totalReviews={}",
+                preStoId,
+                orders.size(),
+                reviews.size(),
+                weekOrders.size(),
+                totalorder.size(),
+                totalreview.size()
+        );
 
 
         Optional<PreStoreEntity> star = storerepostory.findById(preStoId);
@@ -746,7 +756,7 @@ public class StoreService {
                                 }
                             }
                         } catch (Exception e) {
-                            System.err.println("시간 파싱 중 오류: " + e.getMessage());
+                            log.warn("Failed to parse store opening hours. preStoId={}, openingHours={}", store.getPreStoId(), openingHours, e);
                         }
                     }
                 }
@@ -759,7 +769,7 @@ public class StoreService {
         Optional<PreStoreEntity> storeOpt = storerepostory.findById(storeId);
         if (storeOpt.isPresent()) {
             PreStoreEntity store = storeOpt.get();
-            System.out.println("[checkStoreStatus] storeId=" + storeId + ", 상태=" + store.getPreStoStatus());
+            log.debug("Checked store status. storeId={}, status={}", storeId, store.getPreStoStatus());
             return store.getPreStoStatus();
         }
         return "";
@@ -781,13 +791,13 @@ public class StoreService {
     public Map<String, Object> getStoreInfo(Long preStoId) {
 
         PreStoreEntity store = storerepostory.findById(preStoId)
-                .orElseThrow(() -> new RuntimeException("해당 가게를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 가게를 찾을 수 없습니다."));
 
         // 2. 가게와 연관된 사업자(PreMemberEntity) 조회
         //    (예: PreStoreEntity에 preMemberId 필드가 있다고 가정)
         Long preMemberId = store.getPreStoPreMemId(); // 가게 정보에 사업자 ID가 저장되어 있다고 가정합니다.
         PreMemberEntity preMember = pmrepo.findById(preMemberId)
-                .orElseThrow(() -> new RuntimeException("해당 사업자 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 사업자 정보를 찾을 수 없습니다."));
 
         Map<String, Object> result = new HashMap<>();
         result.put("preStoName", store.getPreStoName());

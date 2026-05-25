@@ -6,6 +6,8 @@ import com.icia.delivery.domain.store.service.StoreService;
 import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,8 @@ import java.util.Map;
 @RequestMapping("/api/stores")
 @RequiredArgsConstructor
 public class StoreController {
+
+    private static final Logger log = LoggerFactory.getLogger(StoreController.class);
 
     private final StoreService storeservice;
     private final HttpSession session;
@@ -53,7 +57,7 @@ public class StoreController {
     @PostMapping("/statistics")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getStatistics() {
         Map<String, Object> response = storeservice.getStatistics();
-        System.out.println("리수폰 : "  +response);
+        log.debug("Loaded store statistics response. keys={}", response.keySet());
 
         // 오늘의 주문 수 (단일 값으로 처리)
         Integer todayOrders = (Integer) response.get("todayOrders");

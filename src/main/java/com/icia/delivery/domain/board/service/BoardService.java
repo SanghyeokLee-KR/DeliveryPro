@@ -7,6 +7,8 @@ import com.icia.delivery.domain.board.repository.BoardRepository;
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +19,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class BoardService {
+
+    private static final Logger log = LoggerFactory.getLogger(BoardService.class);
 
     private final BoardRepository brepo;
 
@@ -120,7 +124,7 @@ public class BoardService {
 
     @Transactional
     public ModelAndView bModify(BoardDTO board) {
-        System.out.println("[2] controller → service : " + board);
+        log.debug("Modifying board. boardId={}", board.getBoardId());
 
         ModelAndView mav = new ModelAndView();
 

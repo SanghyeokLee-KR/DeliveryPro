@@ -6,11 +6,15 @@ import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.loginhistory.service.LoginHistoryService;
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.entity.MemberEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import com.icia.delivery.global.service.IpService;
 import com.icia.delivery.util.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +26,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
+    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
 
     private final HttpServletRequest request; // HttpServletRequest 주입
     private final MemberRepository mrepo; // MemberRepository 주입
@@ -90,7 +96,7 @@ public class MemberService {
             // 실패 시 회원가입 폼으로 리다이렉트
             mav.setViewName("redirect:/mJoinForm");
             mav.addObject("error", "회원가입 처리 중 오류가 발생했습니다.");
-            e.printStackTrace(); // 오류 로그 출력
+            log.error("Failed to register member. userId={}", memberDTO.getUserId(), e);
         }
         return mav;
     }
@@ -136,7 +142,7 @@ public class MemberService {
                 session.setAttribute("mem_status", entity.getStatus());
                 session.setAttribute("mem_point", entity.getPoint());
 
-                System.out.println("로그인 후 세션 mem_id: " + session.getAttribute("mem_id"));
+                log.debug("Member login session created. memId={}", session.getAttribute("mem_id"));
 
                 // 로그인 성공 시 마지막 로그인 정보 업데이트
                 entity.setLastLoginDate(LocalDateTime.now());
@@ -151,7 +157,7 @@ public class MemberService {
 
                     loginHistoryService.recordLoginHistory(entity.getMId(), clientIp, deviceOs, browser); // 로그인 내역 저장
                 } catch (Exception e) {
-                    e.printStackTrace(); // 오류 로그 출력
+                    log.warn("Failed to record member login history. memId={}", entity.getMId(), e);
                 }
 
                 mav.setViewName("redirect:/customer"); // 로그인 성공 시 메인 페이지로 이동
@@ -173,8 +179,9 @@ public class MemberService {
      */
     @Transactional(readOnly = true)
     public String getUserNameById(Long mId) {
-        Optional<MemberEntity> entity = mrepo.findById(mId);
-        return entity.map(MemberEntity::getUsername).orElse(null);
+        return mrepo.findById(mId)
+                .map(MemberEntity::getUsername)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "Member not found. memberId=" + mId));
     }
 
     /**
@@ -259,7 +266,7 @@ public class MemberService {
             // 오류 발생 시 처리
             mav.addObject("status", "error");
             mav.addObject("message", "회원정보 수정 중 오류가 발생했습니다.");
-            e.printStackTrace();
+            log.error("Failed to update member. mId={}", mId, e);
             mav.setViewName("/member/myPage"); // 오류 시 동일 페이지로 이동
         }
         return mav;
@@ -293,7 +300,7 @@ public class MemberService {
 
         // 사용자가 존재하지 않으면 예외 발생
         if (mentity.isEmpty()) {
-            throw new RuntimeException("해당 사용자를 찾을 수 없습니다.");
+            throw new BusinessException(ErrorCode.NOT_FOUND, "해당 사용자를 찾을 수 없습니다.");
         }
 
         try {
@@ -312,8 +319,8 @@ public class MemberService {
             return "회원 탈퇴가 완료되었습니다."; // 성공 메시지 반환
         } catch (Exception e) {
             // 오류 발생 시 메시지 출력 및 예외 발생
-            System.err.println("회원 탈퇴 중 오류 발생: " + e.getMessage());
-            throw new RuntimeException("회원 탈퇴 처리 중 문제가 발생했습니다.");
+            log.error("Failed to delete member. mId={}", memberDTO.getMId(), e);
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "회원 탈퇴 처리 중 문제가 발생했습니다.", e);
         }
     }
 
@@ -321,7 +328,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public String getAddressByMemId(Long memId) {
         Long memberId = Optional.ofNullable(memId)
-                .orElseThrow(() -> new IllegalArgumentException("🚨 회원 ID가 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.BAD_REQUEST, "회원 ID가 존재하지 않습니다."));
 
         return Optional.ofNullable(mrepo.findAddressByMemberId(memberId))
                 .orElse("주소 정보 없음");

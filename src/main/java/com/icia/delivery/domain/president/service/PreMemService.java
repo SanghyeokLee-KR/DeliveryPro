@@ -9,6 +9,8 @@ import com.icia.delivery.util.UserAgentUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PreMemService {
+
+    private static final Logger log = LoggerFactory.getLogger(PreMemService.class);
 
     private final HttpServletRequest request; // HttpServletRequest 주입
 
@@ -99,7 +103,7 @@ public class PreMemService {
             // 실패 시 회원가입 폼으로 리다이렉트
             mav.setViewName("redirect:/pJoinForm");
             mav.addObject("error", "회원가입 처리 중 오류가 발생했습니다.");
-            e.printStackTrace(); // 오류 로그 출력
+            log.error("Failed to register president member. userId={}", preMemDTO.getPreMemUserId(), e);
         }
         return mav;
     }
@@ -144,7 +148,7 @@ public class PreMemService {
 
                     loginHistoryService.recordLoginHistory(entity.getPreMemId(), clientIp, deviceOs, browser); // 로그인 내역 저장
                 } catch (Exception e) {
-                    e.printStackTrace(); // 오류 로그 출력
+                    log.warn("Failed to record president login history. preMemId={}", entity.getPreMemId(), e);
                 }
 
                 mav.setViewName("redirect:/president"); // 로그인 성공 시 메인 페이지로 이동

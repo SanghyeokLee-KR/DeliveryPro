@@ -5,10 +5,14 @@ import com.icia.delivery.domain.coupon.dto.CouponDTO;
 import com.icia.delivery.domain.coupon.entity.CouponEntity;
 import com.icia.delivery.domain.coupon.entity.CouponUsageEntity;
 import com.icia.delivery.domain.coupon.service.CouponService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import com.icia.delivery.global.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -111,7 +115,7 @@ public class CouponController {
         logger.info("쿠폰 수정 폼 요청. 쿠폰 ID: {}", id);
         try {
             CouponEntity coupon = couponService.getCouponById(id)
-                    .orElseThrow(() -> new Exception("수정할 쿠폰을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "수정할 쿠폰을 찾을 수 없습니다."));
             logger.info("쿠폰을 성공적으로 조회했습니다. ID: {}", id);
 
             // DTO로 변환
@@ -224,11 +228,11 @@ public class CouponController {
      */
     @GetMapping("/coupons/{id}")
     @ResponseBody
-    public CouponDTO getCoupon(@PathVariable Long id, RedirectAttributes ra) throws Exception {
+    public ResponseEntity<ApiResponse<CouponDTO>> getCoupon(@PathVariable Long id) {
         logger.info("쿠폰 정보 요청 (JSON). 쿠폰 ID: {}", id);
         try {
             CouponEntity coupon = couponService.getCouponById(id)
-                    .orElseThrow(() -> new Exception("쿠폰을 찾을 수 없습니다."));
+                    .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "쿠폰을 찾을 수 없습니다."));
             logger.info("쿠폰을 성공적으로 조회했습니다. ID: {}", id);
 
             // DTO로 변환
@@ -244,11 +248,18 @@ public class CouponController {
             couponDTO.setOrderType(coupon.getOrderType());
             couponDTO.setModifiedDate(coupon.getModifiedDate());
 
-            return couponDTO;
+            return ResponseEntity.ok(ApiResponse.success(couponDTO));
+        } catch (BusinessException e) {
+            ErrorCode errorCode = e.getErrorCode();
+            logger.warn("Failed to load coupon. ID: {}, code={}", id, errorCode.getCode(), e);
+            return ResponseEntity
+                    .status(errorCode.getHttpStatus())
+                    .body(ApiResponse.<CouponDTO>fail(errorCode, e.getMessage(), null));
         } catch (Exception e) {
             logger.error("쿠폰 정보 조회 중 오류 발생: {}", e.getMessage(), e);
-            ra.addFlashAttribute("error", "쿠폰 데이터를 불러오는 중 오류가 발생했습니다.");
-            throw e;
+            return ResponseEntity
+                    .status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
+                    .body(ApiResponse.<CouponDTO>fail(ErrorCode.INTERNAL_SERVER_ERROR, "쿠폰 정보를 불러오는 중 오류가 발생했습니다.", null));
         }
     }
 }

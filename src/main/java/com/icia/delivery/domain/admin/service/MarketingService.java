@@ -117,6 +117,10 @@ public class MarketingService {
                 .map(MemberDTO::toDTO)
                 .collect(Collectors.toList());
 
+        Map<Long, MemberDTO> memberById = memberDTOs.stream()
+                .filter(member -> member.getMId() != null)
+                .collect(Collectors.toMap(MemberDTO::getMId, member -> member, (first, second) -> first));
+
         // 회원별 주문 횟수 계산
         Map<Long, Long> orderCountMap = orderDTOs.stream()
                 .collect(Collectors.groupingBy(OrderDTO::getMemId, Collectors.counting()));
@@ -135,20 +139,18 @@ public class MarketingService {
             Long orderCount = entry.getValue();
 
             // 회원 정보 찾기
-            MemberDTO member = memberDTOs.stream()
-                    .filter(m -> m.getMId().equals(memberId))
-                    .findFirst()
-                    .orElse(null);
-
-            if (member != null) {
-                // 회원 정보를 Map에 저장
-                Map<String, Object> memberData = new HashMap<>();
-                memberData.put("id", memberId);
-                memberData.put("name", member.getUsername());
-                memberData.put("orderCount", orderCount);
-
-                topMembers.add(memberData);
+            MemberDTO member = memberById.get(memberId);
+            if (member == null) {
+                continue;
             }
+
+                // 회원 정보를 Map에 저장
+            Map<String, Object> memberData = new HashMap<>();
+            memberData.put("id", memberId);
+            memberData.put("name", member.getUsername());
+            memberData.put("orderCount", orderCount);
+
+            topMembers.add(memberData);
         }
 
         return topMembers;

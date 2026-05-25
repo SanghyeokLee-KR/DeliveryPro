@@ -5,6 +5,8 @@ import com.icia.delivery.domain.rider.dto.RiderDTO;
 import com.icia.delivery.domain.rider.service.RiderService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 public class RiderController {
+
+    private static final Logger log = LoggerFactory.getLogger(RiderController.class);
 
     private final RiderService rsvc;
     private final HttpSession session;
@@ -82,14 +86,14 @@ public class RiderController {
     // 라이더 회원가입 처리
     @PostMapping("/riderRegister")
     public ModelAndView registerMember(@ModelAttribute RiderDTO riderDTO) {
-        System.out.println("라이더 정보 : " + riderDTO);
+        log.debug("Rider registration requested. riderId={}", riderDTO.getRiderId());
         return rsvc.riderRegister(riderDTO);
     }
 
     // 라이더 로그인 처리
     @PostMapping("/rLogin")
     public ModelAndView rLogin(@ModelAttribute RiderDTO riderDTO) {
-        System.out.println("\n로그인 메소드\n[1] html → controller : " + riderDTO);
+        log.debug("Rider login requested. riderId={}", riderDTO.getRiderId());
         return rsvc.rLogin(riderDTO);
     }
 
@@ -108,12 +112,12 @@ public class RiderController {
     // 라이더 계좌 등록 처리
     @PostMapping("/addRiderAccount")
     public ModelAndView addRiderAccount(@ModelAttribute RiderAccountDTO accDTO) {
-        System.out.println("계좌번호 원본 : " + accDTO.getRiderAccountNumber());
+        log.debug("Rider account registration requested. riderNo={}, bank={}", accDTO.getRiderNo(), accDTO.getRiderBankName());
 
         // 계좌번호 포맷 처리
         String formattedAccountNumber = formatAccountNumber(accDTO.getRiderAccountNumber(), accDTO.getRiderBankName());
         accDTO.setRiderAccountNumber(formattedAccountNumber);
-        System.out.println("수정된 계좌번호 : " + accDTO.getRiderAccountNumber());
+        log.debug("Rider account number formatted. riderNo={}, bank={}", accDTO.getRiderNo(), accDTO.getRiderBankName());
 
         return rsvc.addRiderAccount(accDTO);
     }

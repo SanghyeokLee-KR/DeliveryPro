@@ -43,8 +43,8 @@ public class UserRestCouponController {
         try {
             couponService.useUserCoupon(couponId);
             return ResponseEntity.ok(ApiResponse.success("Coupon used."));
-        } catch (IllegalStateException e) {
-            throw new BusinessException(ErrorCode.BAD_REQUEST, e.getMessage());
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update coupon.", e);
         }

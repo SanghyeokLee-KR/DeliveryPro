@@ -5,6 +5,8 @@ import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.loginhistory.entity.LoginHistoryEntity;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +48,7 @@ public class LoginHistoryService {
     public LoginHistoryDTO saveLoginHistory(LoginHistoryDTO dto) {
         // DTO에 포함된 회원 ID로 회원 엔티티 조회
         MemberEntity member = memberRepository.findById(dto.getHisMid())
-                .orElseThrow(() -> new RuntimeException("해당 회원을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 회원을 찾을 수 없습니다."));
 
         // DTO → Entity 변환 (MemberEntity 포함)
         LoginHistoryEntity entity = LoginHistoryEntity.toEntity(dto, member);

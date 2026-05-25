@@ -4,6 +4,8 @@ package com.icia.delivery.domain.admin.service;
 import com.icia.delivery.domain.store.repository.StoreRepository;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.store.entity.PreStoreEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,13 +57,13 @@ public class AdminStoreService {
      * 특정 ID를 가진 가게를 조회하는 메서드
      *
      * @param id 가게 ID
-     * @return 가게 DTO 또는 null
+     * @return 가게 DTO
      */
     @Transactional(readOnly = true)
     public PreStoreDTO getStoreById(Long id) {
         return storeRepository.findBypreStoIdOptional(id)
                 .map(PreStoreDTO::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보를 찾을 수 없습니다. storeId=" + id));
     }
 
     /**
@@ -73,35 +75,36 @@ public class AdminStoreService {
      */
     @Transactional
     public boolean updateStoreInfo(Long id, PreStoreDTO storeForm) {
-        return storeRepository.findBypreStoIdOptional(id).map(store -> {
-            // 필수 필드 체크 (예: preStoName이 null이면 예외 처리)
-            if (storeForm.getPreStoName() == null || storeForm.getPreStoName().isEmpty()) {
-                throw new IllegalArgumentException("가게 이름은 필수입니다.");
-            }
+        PreStoreEntity store = storeRepository.findBypreStoIdOptional(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "가게 정보를 찾을 수 없습니다. storeId=" + id));
 
-            // 수정 가능한 필드 업데이트 (값이 null인 경우 기본값 처리 또는 기존 값 유지)
-            store.setPreStoName(storeForm.getPreStoName() != null ? storeForm.getPreStoName() : store.getPreStoName());
-            store.setPreStoCategory(storeForm.getPreStoCategory() != null ? storeForm.getPreStoCategory() : store.getPreStoCategory());
-            store.setPreStoAddress(storeForm.getPreStoAddress() != null ? storeForm.getPreStoAddress() : store.getPreStoAddress());
-            store.setPreStoPhone(storeForm.getPreStoPhone() != null ? storeForm.getPreStoPhone() : store.getPreStoPhone());
-            store.setPreStoIntro(storeForm.getPreStoIntro() != null ? storeForm.getPreStoIntro() : store.getPreStoIntro());
-            store.setPreStoMinOrderAmount(storeForm.getPreStoMinOrderAmount() != null ? storeForm.getPreStoMinOrderAmount() : store.getPreStoMinOrderAmount());
-            store.setPreStoDeliveryFee(storeForm.getPreStoDeliveryFee() != null ? storeForm.getPreStoDeliveryFee() : store.getPreStoDeliveryFee());
-            store.setPreStoDeliveryTimeMin(storeForm.getPreStoDeliveryTimeMin() != null ? storeForm.getPreStoDeliveryTimeMin() : store.getPreStoDeliveryTimeMin());
-            store.setPreStoDeliveryTimeMax(storeForm.getPreStoDeliveryTimeMax() != null ? storeForm.getPreStoDeliveryTimeMax() : store.getPreStoDeliveryTimeMax());
-            store.setPreStoRating(storeForm.getPreStoRating() != null ? storeForm.getPreStoRating() : store.getPreStoRating());
-            store.setPreStoReviewCount(storeForm.getPreStoReviewCount() != null ? storeForm.getPreStoReviewCount() : store.getPreStoReviewCount());
-            store.setPreStoStatus(storeForm.getPreStoStatus() != null ? storeForm.getPreStoStatus() : store.getPreStoStatus());
-            store.setPreStoOpeningHours(storeForm.getPreStoOpeningHours() != null ? storeForm.getPreStoOpeningHours() : store.getPreStoOpeningHours());
-            store.setPreStoDayOff(storeForm.getPreStoDayOff() != null ? storeForm.getPreStoDayOff() : store.getPreStoDayOff());
-            store.setPreStoDeliveryArea(storeForm.getPreStoDeliveryArea() != null ? storeForm.getPreStoDeliveryArea() : store.getPreStoDeliveryArea());
-            store.setPreStoOperatingDays(storeForm.getPreStoOperatingDays() != null ? storeForm.getPreStoOperatingDays() : store.getPreStoOperatingDays());
-            store.setPreStoHolidayWeek(storeForm.getPreStoHolidayWeek() != null ? storeForm.getPreStoHolidayWeek() : store.getPreStoHolidayWeek());
+        // 필수 필드 체크 (예: preStoName이 null이면 예외 처리)
+        if (storeForm.getPreStoName() == null || storeForm.getPreStoName().isEmpty()) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "가게 이름은 필수입니다.");
+        }
 
-            // 필요에 따라 추가적인 필드 업데이트
-            storeRepository.save(store);
-            return true;
-        }).orElse(false);
+        // 수정 가능한 필드 업데이트 (값이 null인 경우 기본값 처리 또는 기존 값 유지)
+        store.setPreStoName(storeForm.getPreStoName() != null ? storeForm.getPreStoName() : store.getPreStoName());
+        store.setPreStoCategory(storeForm.getPreStoCategory() != null ? storeForm.getPreStoCategory() : store.getPreStoCategory());
+        store.setPreStoAddress(storeForm.getPreStoAddress() != null ? storeForm.getPreStoAddress() : store.getPreStoAddress());
+        store.setPreStoPhone(storeForm.getPreStoPhone() != null ? storeForm.getPreStoPhone() : store.getPreStoPhone());
+        store.setPreStoIntro(storeForm.getPreStoIntro() != null ? storeForm.getPreStoIntro() : store.getPreStoIntro());
+        store.setPreStoMinOrderAmount(storeForm.getPreStoMinOrderAmount() != null ? storeForm.getPreStoMinOrderAmount() : store.getPreStoMinOrderAmount());
+        store.setPreStoDeliveryFee(storeForm.getPreStoDeliveryFee() != null ? storeForm.getPreStoDeliveryFee() : store.getPreStoDeliveryFee());
+        store.setPreStoDeliveryTimeMin(storeForm.getPreStoDeliveryTimeMin() != null ? storeForm.getPreStoDeliveryTimeMin() : store.getPreStoDeliveryTimeMin());
+        store.setPreStoDeliveryTimeMax(storeForm.getPreStoDeliveryTimeMax() != null ? storeForm.getPreStoDeliveryTimeMax() : store.getPreStoDeliveryTimeMax());
+        store.setPreStoRating(storeForm.getPreStoRating() != null ? storeForm.getPreStoRating() : store.getPreStoRating());
+        store.setPreStoReviewCount(storeForm.getPreStoReviewCount() != null ? storeForm.getPreStoReviewCount() : store.getPreStoReviewCount());
+        store.setPreStoStatus(storeForm.getPreStoStatus() != null ? storeForm.getPreStoStatus() : store.getPreStoStatus());
+        store.setPreStoOpeningHours(storeForm.getPreStoOpeningHours() != null ? storeForm.getPreStoOpeningHours() : store.getPreStoOpeningHours());
+        store.setPreStoDayOff(storeForm.getPreStoDayOff() != null ? storeForm.getPreStoDayOff() : store.getPreStoDayOff());
+        store.setPreStoDeliveryArea(storeForm.getPreStoDeliveryArea() != null ? storeForm.getPreStoDeliveryArea() : store.getPreStoDeliveryArea());
+        store.setPreStoOperatingDays(storeForm.getPreStoOperatingDays() != null ? storeForm.getPreStoOperatingDays() : store.getPreStoOperatingDays());
+        store.setPreStoHolidayWeek(storeForm.getPreStoHolidayWeek() != null ? storeForm.getPreStoHolidayWeek() : store.getPreStoHolidayWeek());
+
+        // 필요에 따라 추가적인 필드 업데이트
+        storeRepository.save(store);
+        return true;
     }
 
 

@@ -4,6 +4,8 @@ import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequiredArgsConstructor
 public class MemberController {
 
+    private static final Logger log = LoggerFactory.getLogger(MemberController.class);
+
     private final MemberService msvc;
     private final HttpSession session;
 
@@ -27,7 +31,7 @@ public class MemberController {
 
     @PostMapping("/mLogin")
     public ModelAndView mLogin(@ModelAttribute MemberDTO member) {
-        System.out.println("\n로그인 메소드\n[1] html → controller : " + member);
+        log.debug("Member login requested. userId={}", member.getUserId());
         return msvc.mLogin(member);
     }
 

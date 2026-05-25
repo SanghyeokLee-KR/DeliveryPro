@@ -6,8 +6,12 @@ import com.icia.delivery.domain.rider.entity.RiderAccountEntity;
 import com.icia.delivery.domain.rider.entity.RiderEntity;
 import com.icia.delivery.domain.rider.repository.RiderAccounRepository;
 import com.icia.delivery.domain.rider.repository.RiderRepository;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +25,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class RiderService {
+
+    private static final Logger log = LoggerFactory.getLogger(RiderService.class);
 
     private final BCryptPasswordEncoder pwEnc = new BCryptPasswordEncoder(); // 비밀번호 암호화
     private final HttpSession session; // 세션 객체 주입
@@ -62,7 +68,7 @@ public class RiderService {
             // 실패 시 회원가입 폼으로 리다이렉트
             mav.setViewName("redirect:/r_JoinForm");
             mav.addObject("error", "회원가입 처리 중 오류가 발생했습니다.");
-            e.printStackTrace(); // 오류 로그 출력
+            log.error("Failed to register rider. riderId={}", riderDTO.getRiderId(), e);
         }
 
 
@@ -85,7 +91,7 @@ public class RiderService {
                 session.setAttribute("rider_id", entity.getRiderId());
                 session.setAttribute("rider_name", entity.getRiderName());
 
-                System.out.println("로그인 후 세션 rider_no: " + session.getAttribute("rider_no"));
+                log.debug("Rider login session created. riderNo={}", session.getAttribute("rider_no"));
 
                 mav.setViewName("redirect:/rider"); // 로그인 성공 시 메인 페이지로 이동
                 return mav;
@@ -156,11 +162,11 @@ public class RiderService {
         try {
             // 계좌의 필수 값 체크
             if (accDTO.getRiderBankName() == null || accDTO.getRiderBankName().isEmpty()) {
-                throw new IllegalArgumentException("은행명을 입력해주세요.");
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "은행명을 입력해주세요.");
             }
 
             if (accDTO.getRiderAccountNumber() == null || accDTO.getRiderAccountNumber().isEmpty()) {
-                throw new IllegalArgumentException("계좌번호를 입력해주세요.");
+                throw new BusinessException(ErrorCode.BAD_REQUEST, "계좌번호를 입력해주세요.");
             }
 
             // DTO -> Entity 변환 및 저장
@@ -170,16 +176,16 @@ public class RiderService {
             // addMenu가 실행되었을 때, 세션에 플래그 설정
             // addMenu 값을 모델에 전달
             mav.setViewName("redirect:/riderAccount");
-        } catch (IllegalArgumentException e) {
+        } catch (BusinessException e) {
             // 필수 값이 누락되었을 때 처리
             mav.setViewName("redirect:/riderAccount");
             mav.addObject("error", e.getMessage()); // 에러 메시지 전달
-            e.printStackTrace();
+            log.warn("Invalid rider account request. riderNo={}", accDTO.getRiderNo(), e);
         } catch (Exception e) {
             // 예외 처리 (기타 예외)
             mav.setViewName("redirect:/index");
             mav.addObject("error", "회원가입 처리 중 오류가 발생했습니다.");
-            e.printStackTrace();
+            log.error("Failed to add rider account. riderNo={}", accDTO.getRiderNo(), e);
         }
 
         return mav;
@@ -194,7 +200,7 @@ public class RiderService {
         Long riderNo = (Long) session.getAttribute("rider_no");
 
         List<RiderAccountEntity> riderAccEntity = rarepo.findByRiderNo(riderNo);
-        System.out.println("라이더 계좌 등록 리스트 : " + riderAccEntity);
+        log.debug("Loaded rider account list. riderNo={}, count={}", riderNo, riderAccEntity.size());
 
 
         for(RiderAccountEntity entity : riderAccEntity){
@@ -206,11 +212,12 @@ public class RiderService {
 
     @Transactional
     public String deleteAccount(Long accountId) {
-        Optional<RiderAccountEntity> entity = rarepo.findById(accountId);
+        if (!rarepo.existsById(accountId)) {
+            throw new BusinessException(ErrorCode.NOT_FOUND, "계좌 정보를 찾을 수 없습니다. accountId=" + accountId);
+        }
 
-        if(entity.isPresent()){
-            rarepo.deleteById(accountId); return "성공!";
-        } else { return "실패!"; }
+        rarepo.deleteById(accountId);
+        return "성공!";
     }
 
     @Transactional

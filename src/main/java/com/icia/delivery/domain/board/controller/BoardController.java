@@ -5,6 +5,8 @@ import com.icia.delivery.domain.board.dto.BoardDTO;
 import com.icia.delivery.domain.board.service.BoardService;
 import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
+
+    private static final Logger log = LoggerFactory.getLogger(BoardController.class);
 
     private final BoardService bsvc;
 
@@ -30,20 +34,20 @@ public class BoardController {
     // bModify : 게시글 수정
     @PostMapping("/bModify")
     public ModelAndView bModify(@ModelAttribute BoardDTO board) {
-        System.out.println("\n게시글 수정 메소드\n[1]html → controller : " + board);
+        log.debug("Board modify requested. boardId={}", board.getBoardId());
         return bsvc.bModify(board);
     }
 
     // bDelete : 게시글 삭제
     @GetMapping("/bDelete")
     public ModelAndView bDelete(@ModelAttribute BoardDTO board) {
-        System.out.println("\n게시글 삭제 메소드\n[1]html → controller : " + board);
+        log.debug("Board delete requested. boardId={}", board.getBoardId());
         return bsvc.bDelete(board);
     }
 
     @GetMapping("/qnaview/{boardId}")
     public ModelAndView bView(@PathVariable Long boardId) {
-        System.out.println("\n게시글 작성 메소드\n[1]html → controller : " + boardId);
+        log.debug("Board view requested. boardId={}", boardId);
         return bsvc.bView(boardId);
     }
 

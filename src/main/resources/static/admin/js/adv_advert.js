@@ -1,3 +1,10 @@
+function unwrapApiResponse(body) {
+    if (body && typeof body === 'object' && body.success !== undefined && body.data !== undefined) {
+        return body.data;
+    }
+    return body;
+}
+
 function openAdCreateModal() {
     console.log("openAdCreateModal called");
     const modal = document.getElementById('advCreateModal');
@@ -16,8 +23,14 @@ function openAdEditModal(advId) {
 
     // 광고 가져오기
     fetch('/admin/advertisements/' + advId)
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Failed to load advertisement.');
+            }
+            return res.json();
+        })
         .then(data => {
+            data = unwrapApiResponse(data);
             document.getElementById('editAdvId').value = data.advId;
             document.getElementById('editAdvTitle').value = data.advTitle;
             document.getElementById('editAdvImageUrl').value = data.advImageUrl || '';

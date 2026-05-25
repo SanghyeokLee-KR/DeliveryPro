@@ -48,37 +48,26 @@ public class RewardService {
         Long memId = getSessionMemberId();
 
         // memId에 해당하는 RewardEntity를 조회합니다.
-        Optional<RewardEntity> rewardEntityOpt = rewardRepository.findBymemId(memId);
+        RewardEntity rewardEntity = rewardRepository.findBymemId(memId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "리워드 정보를 찾을 수 없습니다."));
 
-        if (rewardEntityOpt.isPresent()) {
-            // RewardEntity를 가져옵니다.
-            RewardEntity rewardEntity = rewardEntityOpt.get();
+        // RewardEntity에서 rewardAmount를 가져옵니다.
+        Long rewardAmount = (long) rewardEntity.getRewardAmount();
 
-            // RewardEntity에서 rewardAmount를 가져옵니다.
-            Long rewardAmount = (long) rewardEntity.getRewardAmount();
+        // 등급을 결정합니다.
+        String newGrade = determineGrade(rewardAmount);
 
-            // 등급을 결정합니다.
-            String newGrade = determineGrade(rewardAmount);
+        // MemberEntity를 가져옵니다. (여기서 MemberEntity는 이미 memId와 연결되어 있다고 가정)
+        MemberEntity memberEntity = memberRepository.findById(memId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "해당 회원을 찾을 수 없습니다."));
 
-            // MemberEntity를 가져옵니다. (여기서 MemberEntity는 이미 memId와 연결되어 있다고 가정)
-            Optional<MemberEntity> memberEntityOpt = memberRepository.findById(memId);
+        // 새로운 등급을 업데이트합니다.
+        memberEntity.setGrade(newGrade);
 
-            if (memberEntityOpt.isPresent()) {
-                MemberEntity memberEntity = memberEntityOpt.get();
+        // MemberEntity를 업데이트합니다.
+        memberRepository.save(memberEntity);
 
-                // 새로운 등급을 업데이트합니다.
-                memberEntity.setGrade(newGrade);
-
-                // MemberEntity를 업데이트합니다.
-                memberRepository.save(memberEntity);
-
-                return "등급이 성공적으로 업데이트되었습니다!";
-            } else {
-                return "해당 회원을 찾을 수 없습니다.";
-            }
-        } else {
-            return "리워드 정보를 찾을 수 없습니다.";
-        }
+        return "등급이 성공적으로 업데이트되었습니다!";
     }
 
     // rewardAmount에 따라 등급을 결정하는 메서드

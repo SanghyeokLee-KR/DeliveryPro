@@ -3,10 +3,12 @@ package com.icia.delivery.domain.store.controller;
 import com.icia.delivery.domain.store.dto.PreStoreDTO;
 import com.icia.delivery.domain.storemenu.dto.PreStoreMenuDTO;
 import com.icia.delivery.domain.store.service.StoreService;
+import com.icia.delivery.global.exception.BusinessException;
 import com.icia.delivery.global.exception.ErrorCode;
 import com.icia.delivery.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class StoreManagementController {
 
+    private static final Logger log = LoggerFactory.getLogger(StoreManagementController.class);
+
     private final StoreService ssvc;
 
     @GetMapping("/store-management/{preId}")
@@ -30,21 +34,24 @@ public class StoreManagementController {
 
     @PostMapping("/addStore")
     public ModelAndView addStore(@ModelAttribute PreStoreDTO preDTO) {
-        // System.out.println("스토어 추가 : " + preDTO);
         return ssvc.addStore(preDTO);
     }
 
     @PostMapping("/addMenu")
     public ResponseEntity<ApiResponse<Map<String, Object>>> addMenu(@ModelAttribute PreStoreMenuDTO smDTO) {
-        Map<String, Object> response = ssvc.addMenu(smDTO);
-
-        if ("success".equals(response.get("status"))) {
-            // 성공 시, 200 OK 응답과 함께 결과 반환
+        try {
+            Map<String, Object> response = ssvc.addMenu(smDTO);
             return ResponseEntity.ok(ApiResponse.success(response));
-        } else {
-            // 실패 시, 500 Internal Server Error 응답과 함께 메시지 반환
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to add menu.", response));
+        } catch (BusinessException e) {
+            ErrorCode errorCode = e.getErrorCode();
+            return ResponseEntity
+                    .status(errorCode.getHttpStatus())
+                    .body(ApiResponse.fail(errorCode, e.getMessage(), null));
+        } catch (Exception e) {
+            log.error("Failed to add menu. preStoId={}", smDTO.getPreStoId(), e);
+            return ResponseEntity
+                    .status(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus())
+                    .body(ApiResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to add menu.", null));
         }
     }
 
@@ -52,7 +59,6 @@ public class StoreManagementController {
     public ModelAndView editStoreHours(@RequestParam("preStoId") Long preStoId,
                                        @RequestParam("new-operation-days") String operationDays,
                                        @RequestParam("new-opening-hours") String openingHours){
-        // System.out.println("PK : " + preStoId + ", 영업일 : " + operationDays + ", 영업시간 : " + openingHours);
         return ssvc.editStoreHours(preStoId, operationDays, openingHours);
     }
 
@@ -60,13 +66,12 @@ public class StoreManagementController {
     public ModelAndView editStoreHolidayCycle(@RequestParam("preStoId") Long preStoId,
                                               @RequestParam("preStoHolidayWeek") String preStoHolidayWeek,
                                               @RequestParam("preStoDayOff") String preStoDayOff){
-        // System.out.println("PK : " + preStoId + ", 영업일 : " + preStoHolidayWeek + ", 영업시간 : " + preStoDayOff);
         return ssvc.editStoreHolidayCycle(preStoId, preStoHolidayWeek, preStoDayOff);
     }
 
     @PostMapping("/storeBreakTime")
     public ModelAndView storeBreakTime(@ModelAttribute PreStoreDTO dto) {
-        System.out.println("타이모 스토뿌 : "  + dto);
+        log.debug("Store break time update requested. preStoId={}", dto.getPreStoId());
         return ssvc.storeBreakTime(dto);
     }
 

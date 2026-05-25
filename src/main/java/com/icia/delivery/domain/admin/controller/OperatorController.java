@@ -1,9 +1,12 @@
-// src/main/java/com/icia/delivery/controller/admin/OperatorController.java
 package com.icia.delivery.domain.admin.controller;
 
 import com.icia.delivery.domain.admin.service.OperatorService;
 import com.icia.delivery.domain.loginhistory.dto.LoginHistoryDTO;
 import com.icia.delivery.domain.member.dto.MemberDTO;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,7 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,23 +27,11 @@ import java.util.List;
 @RequestMapping("/admin/members")
 public class OperatorController {
 
+    private static final Logger log = LoggerFactory.getLogger(OperatorController.class);
+
     @Autowired
     private OperatorService operatorService;
 
-    /**
-     * 회원 리스트 페이지를 표시하는 메서드
-     *
-     * @param page        페이지 번호 (기본값: 0)
-     * @param size        페이지당 크기 (기본값: 10)
-     * @param searchQuery 검색어
-     * @param sortField   정렬 필드 (기본값: mId)
-     * @param sortDir     정렬 방향 (asc 또는 desc, 기본값: asc)
-     * @param gender      성별 필터
-     * @param grade       등급 필터
-     * @param status      상태 필터
-     * @param model       Spring의 Model 객체
-     * @return admin.html 템플릿
-     */
     @GetMapping
     public String viewMemberList(
             @RequestParam(defaultValue = "0") int page,
@@ -48,98 +44,69 @@ public class OperatorController {
             @RequestParam(required = false) String status,
             Model model) {
 
-        // 정렬 방향 설정
-        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending()
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortField).ascending()
                 : Sort.by(sortField).descending();
-
-        // 페이징 객체 생성
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<MemberDTO> membersPage;
-
-        // 검색 및 필터링 조건에 따라 데이터 조회
-        if ((searchQuery != null && !searchQuery.trim().isEmpty()) ||
-                (gender != null && !gender.trim().isEmpty()) ||
-                (grade != null && !grade.trim().isEmpty()) ||
-                (status != null && !status.trim().isEmpty())) {
+        if (hasText(searchQuery) || hasText(gender) || hasText(grade) || hasText(status)) {
             membersPage = operatorService.searchMembers(searchQuery, gender, grade, status, pageable);
         } else {
             membersPage = operatorService.getAllMembers(pageable);
         }
 
-        // 모델에 데이터 추가
-        model.addAttribute("membersPage", membersPage); // 페이징 처리된 회원 데이터
-        model.addAttribute("members", membersPage.getContent()); // 현재 페이지 회원 데이터
-        model.addAttribute("currentPage", page); // 현재 페이지 번호
-        model.addAttribute("totalPages", membersPage.getTotalPages()); // 전체 페이지 수
-        model.addAttribute("totalElements", membersPage.getTotalElements()); // 전체 회원 수
+        model.addAttribute("membersPage", membersPage);
+        model.addAttribute("members", membersPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", membersPage.getTotalPages());
+        model.addAttribute("totalElements", membersPage.getTotalElements());
         model.addAttribute("searchQuery", searchQuery);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc"); // 정렬 방향 토글
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("gender", gender);
         model.addAttribute("grade", grade);
         model.addAttribute("status", status);
-
-        // content 속성은 회원 리스트 템플릿을 포함하도록 설정
         model.addAttribute("content", "members");
 
-        // admin.html 렌더링
         return "admin/admin";
     }
 
-    /**
-     * 회원 편집 페이지를 표시하는 메서드
-     *
-     * @param id    회원 ID
-     * @param model Spring의 Model 객체
-     * @return admin.html 템플릿
-     */
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable("id") Long id, Model model) {
-        MemberDTO member = operatorService.getMemberById(id);
-        if (member == null) {
-            // 회원이 존재하지 않을 경우, 에러 페이지로 이동하거나 적절한 처리
+        try {
+            MemberDTO member = operatorService.getMemberById(id);
+            model.addAttribute("member", member);
+            model.addAttribute("content", "member-edit");
+            return "admin/admin";
+        } catch (BusinessException e) {
+            log.warn("Member edit form failed. memberId={}", id, e);
             return "redirect:/admin/members?error=MemberNotFound";
         }
-
-        model.addAttribute("member", member);
-        model.addAttribute("content", "member-edit"); // content 변수 추가
-        return "admin/admin"; // admin.html 템플릿 렌더링
     }
 
-    /**
-     * 회원 정보 수정을 처리하는 메서드
-     *
-     * @param id         회원 ID
-     * @param memberForm 수정된 회원 정보가 담긴 MemberDTO
-     * @param model      Spring의 Model 객체
-     * @return 회원 리스트 페이지로 리다이렉트 또는 편집 페이지로 이동
-     */
     @PostMapping("/{id}/edit")
     public String processEditForm(@PathVariable("id") Long id,
                                   @ModelAttribute("member") MemberDTO memberForm,
                                   Model model) {
-        // 입력값 유효성 검사 (추가적인 검증 로직 필요 시 추가)
-
-        // 회원 정보 업데이트
-        boolean isUpdated = operatorService.updateMemberInfo(id, memberForm);
-        if (!isUpdated) {
-            // 업데이트 실패 시, 에러 메시지와 함께 편집 페이지로 이동
-            model.addAttribute("error", "회원 정보 수정에 실패했습니다.");
-            MemberDTO member = operatorService.getMemberById(id);
-            if (member != null) {
-                model.addAttribute("member", member);
+        try {
+            operatorService.updateMemberInfo(id, memberForm);
+            return "redirect:/admin/members?success=MemberUpdated";
+        } catch (BusinessException e) {
+            log.warn("Member edit failed. memberId={}", id, e);
+            if (ErrorCode.NOT_FOUND.equals(e.getErrorCode())) {
+                return "redirect:/admin/members?error=MemberNotFound";
             }
-            model.addAttribute("content", "member-edit"); // content 변수 추가
-            return "admin/admin"; // admin.html 템플릿 렌더링
-        }
 
-        // 성공 시, 회원 리스트 페이지로 리다이렉트
-        return "redirect:/admin/members?success=MemberUpdated";
+            memberForm.setMId(id);
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("member", memberForm);
+            model.addAttribute("content", "member-edit");
+            return "admin/admin";
+        }
     }
 
-    // 추가적인 회원 관리 메서드들...
     @GetMapping("/logs")
     public String viewMemberLogs(
             @RequestParam(defaultValue = "0") int page,
@@ -151,54 +118,38 @@ public class OperatorController {
             @RequestParam(required = false) String hisBrowser,
             Model model) {
 
-        // 정렬 방향 설정
-        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending()
+        Sort sort = sortDir.equalsIgnoreCase("asc")
+                ? Sort.by(sortField).ascending()
                 : Sort.by(sortField).descending();
-
-        // 페이징 객체 생성
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<LoginHistoryDTO> memberLogPage;
-
-        // 검색 및 필터링 조건에 따라 데이터 조회
-        if (hasLoginHistorySearchCondition(searchQuery, hisDeviceOs, hisBrowser)) {
+        if (hasText(searchQuery) || hasText(hisDeviceOs) || hasText(hisBrowser)) {
             memberLogPage = operatorService.searchMemberLogs(searchQuery, hisDeviceOs, hisBrowser, pageable);
         } else {
             memberLogPage = operatorService.getAllMemberLogs(pageable);
         }
 
-
-        // 회원의 userId만 가져와서 model에 담기
         List<String> userIds = operatorService.getMemberUserIdsByLoginHistories(memberLogPage.getContent());
 
-
-        // 모델에 데이터 추가
-        model.addAttribute("membersPage", memberLogPage); // 페이징 처리된 회원 데이터
-        model.addAttribute("logs", memberLogPage.getContent()); // 현재 페이지 회원 데이터
-        model.addAttribute("userIds", userIds); // 각 회원의 userId 리스트
-        model.addAttribute("currentPage", page); // 현재 페이지 번호
-        model.addAttribute("totalPages", memberLogPage.getTotalPages()); // 전체 페이지 수
-        model.addAttribute("totalElements", memberLogPage.getTotalElements()); // 전체 회원 수
+        model.addAttribute("membersPage", memberLogPage);
+        model.addAttribute("logs", memberLogPage.getContent());
+        model.addAttribute("userIds", userIds);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", memberLogPage.getTotalPages());
+        model.addAttribute("totalElements", memberLogPage.getTotalElements());
         model.addAttribute("searchQuery", searchQuery);
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
-        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc"); // 정렬 방향 토글
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("hisDeviceOs", hisDeviceOs);
         model.addAttribute("hisBrowser", hisBrowser);
-
-        // content 속성은 회원 리스트 템플릿을 포함하도록 설정
         model.addAttribute("content", "logs");
 
-        // admin.html 렌더링
         return "admin/admin";
-    }
-
-    private boolean hasLoginHistorySearchCondition(String searchQuery, String hisDeviceOs, String hisBrowser) {
-        return hasText(searchQuery) || hasText(hisDeviceOs) || hasText(hisBrowser);
     }
 
     private boolean hasText(String value) {
         return value != null && !value.trim().isEmpty();
     }
-
 }

@@ -2,8 +2,12 @@ package com.icia.delivery.domain.coupon.controller;
 
 import com.icia.delivery.domain.coupon.entity.CouponEntity;
 import com.icia.delivery.domain.coupon.service.CouponService;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +25,8 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class UserCouponController {
+
+    private static final Logger log = LoggerFactory.getLogger(UserCouponController.class);
 
     private final CouponService couponService;
     private final HttpSession session;
@@ -61,11 +67,7 @@ public class UserCouponController {
 
 
         // 조회된 쿠폰 목록 로그 출력
-        System.out.println("현재 로그인한 사용자 ID: " + currentMemberId);
-        System.out.println("조회된 쿠폰 개수: " + coupons.size());
-        for (CouponEntity coupon : coupons) {
-            System.out.println("쿠폰 코드: " + coupon.getCode());
-        }
+        log.debug("Loaded user coupons. memberId={}, count={}", currentMemberId, coupons.size());
 
         model.addAttribute("coupons", coupons);
         return "member/coupon"; // Thymeleaf 템플릿 반환
@@ -110,7 +112,7 @@ public class UserCouponController {
         if (mId != null) {
             return mId; // 세션에서 가져온 값을 Long 타입으로 변환
         } else {
-            throw new IllegalStateException("로그인한 사용자가 없습니다.");
+            throw new BusinessException(ErrorCode.UNAUTHORIZED, "로그인한 사용자가 없습니다.");
         }
     }
 }

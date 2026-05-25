@@ -5,6 +5,8 @@ package com.icia.delivery.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icia.delivery.util.kakao.KakaoDirections;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,8 @@ import java.util.List;
 
 @Component
 public class KakaoApiUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(KakaoApiUtil.class);
 
     private final String REST_API_KEY;
 
@@ -90,7 +94,7 @@ public class KakaoApiUtil {
                 .build();
 
         HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Kakao Directions API Response: " + resp.body());
+        log.trace("Kakao directions API response={}", resp.body());
 
         KakaoDirections kd = new ObjectMapper().readValue(resp.body(), KakaoDirections.class);
         if(kd.getRoutes() == null || kd.getRoutes().isEmpty()) return result;
@@ -101,7 +105,7 @@ public class KakaoApiUtil {
         if(route.getSummary() != null) {
             sum.setDistance(route.getSummary().getDistance());
             sum.setDuration(route.getSummary().getDuration());
-            System.out.println("Parsed summary: distance=" + sum.getDistance() + ", duration=" + sum.getDuration());
+            log.debug("Parsed route summary. distance={}, duration={}", sum.getDistance(), sum.getDuration());
         } else {
             double totalDist = 0;
             long totalTime = 0;
@@ -173,7 +177,7 @@ public class KakaoApiUtil {
                 .GET()
                 .build();
         HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
-        System.out.println("Kakao Directions API Response with Waypoints: " + resp.body());
+        log.trace("Kakao directions API response with waypoints={}", resp.body());
 
         KakaoDirections kd = new ObjectMapper().readValue(resp.body(), KakaoDirections.class);
         if(kd.getRoutes() == null || kd.getRoutes().isEmpty()) return result;
@@ -183,7 +187,7 @@ public class KakaoApiUtil {
         if(route.getSummary() != null) {
             sum.setDistance(route.getSummary().getDistance());
             sum.setDuration(route.getSummary().getDuration());
-            System.out.println("Parsed summary (with waypoints): distance=" + sum.getDistance() + ", duration=" + sum.getDuration());
+            log.debug("Parsed route summary with waypoints. distance={}, duration={}", sum.getDistance(), sum.getDuration());
         } else {
             double totalDist = 0;
             long totalTime = 0;
@@ -237,7 +241,7 @@ public class KakaoApiUtil {
          * @return 최적 방문 순서로 정렬된 좌표 리스트.
          */
         public static List<Point> optimizeRouteOrder(Point start, List<Point> destinations) {
-            System.out.println("[RouteOptimizer] Optimizing route order.");
+            log.debug("Optimizing route order. destinationCount={}", destinations.size());
             List<Point> remaining = new ArrayList<>(destinations);
             List<Point> ordered = new ArrayList<>();
             Point current = start;
@@ -253,12 +257,12 @@ public class KakaoApiUtil {
                     }
                 }
                 Point nextPoint = remaining.get(nearestIndex);
-                System.out.println("[RouteOptimizer] Selected next point: " + nextPoint + " with distance: " + nearestDist);
+                log.trace("Selected next route point. point={}, distance={}", nextPoint, nearestDist);
                 ordered.add(nextPoint);
                 current = nextPoint;
                 remaining.remove(nearestIndex);
             }
-            System.out.println("[RouteOptimizer] Optimized order: " + ordered);
+            log.debug("Optimized route order. orderedCount={}", ordered.size());
             return ordered;
         }
     }

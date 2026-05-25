@@ -100,6 +100,8 @@ public class RestfulController {
             response.put("message", msvc.delete(memberDTO));
             response.put("redirectUrl", "/index");
             return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (BusinessException e) {
+            throw e;
         } catch (RuntimeException e) {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
@@ -125,6 +127,8 @@ public class RestfulController {
             response.put("success", true);
             response.put("message", "생년월일이 수정되었습니다.");
             return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (BusinessException e) {
+            throw e;
         } catch (RuntimeException e) {
             throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update birthday.", e);
         }

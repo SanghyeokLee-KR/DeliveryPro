@@ -8,6 +8,8 @@ import com.icia.delivery.domain.loginhistory.entity.LoginHistoryEntity;
 import com.icia.delivery.domain.loginhistory.repository.LoginHistoryRepository;
 import com.icia.delivery.domain.member.dto.MemberDTO;
 import com.icia.delivery.domain.member.entity.MemberEntity;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -101,7 +103,7 @@ public class OperatorService {
     public MemberDTO getMemberById(Long id) {
         return memberRepository.findById(id)
                 .map(MemberDTO::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "회원 정보를 찾을 수 없습니다. memberId=" + id));
     }
 
     /**
@@ -113,22 +115,23 @@ public class OperatorService {
      */
     @Transactional
     public boolean updateMemberInfo(Long id, MemberDTO memberForm) {
-        return memberRepository.findById(id).map(member -> {
-            // 수정 가능한 필드 업데이트
-            member.setUsername(memberForm.getUsername());
-            member.setPhone(memberForm.getPhone());
-            member.setGender(memberForm.getGender());
-            member.setGrade(memberForm.getGrade());
-            member.setStatus(memberForm.getStatus());
-            member.setAddress(memberForm.getAddress());
-            member.setReceiveEmail(memberForm.getReceiveEmail());
-            member.setOpenProfile(memberForm.getOpenProfile());
-            member.setReceiveNotify(memberForm.getReceiveNotify());
-            member.setLoginType(memberForm.getLoginType());
-            // 필요에 따라 추가적인 필드 업데이트
-            memberRepository.save(member);
-            return true;
-        }).orElse(false);
+        MemberEntity member = memberRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "회원 정보를 찾을 수 없습니다. memberId=" + id));
+
+        // 수정 가능한 필드 업데이트
+        member.setUsername(memberForm.getUsername());
+        member.setPhone(memberForm.getPhone());
+        member.setGender(memberForm.getGender());
+        member.setGrade(memberForm.getGrade());
+        member.setStatus(memberForm.getStatus());
+        member.setAddress(memberForm.getAddress());
+        member.setReceiveEmail(memberForm.getReceiveEmail());
+        member.setOpenProfile(memberForm.getOpenProfile());
+        member.setReceiveNotify(memberForm.getReceiveNotify());
+        member.setLoginType(memberForm.getLoginType());
+        // 필요에 따라 추가적인 필드 업데이트
+        memberRepository.save(member);
+        return true;
     }
 
     /**
@@ -141,14 +144,14 @@ public class OperatorService {
     @Transactional
     public boolean updateMemberStatus(Long id, String newStatus) {
         if (!"활성".equals(newStatus) && !"정지".equals(newStatus) && !"탈퇴".equals(newStatus)) {
-            return false; // 유효하지 않은 상태
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "유효하지 않은 회원 상태입니다.");
         }
 
-        return memberRepository.findById(id).map(member -> {
-            member.setStatus(newStatus);
-            memberRepository.save(member);
-            return true;
-        }).orElse(false);
+        MemberEntity member = memberRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND, "회원 정보를 찾을 수 없습니다. memberId=" + id));
+        member.setStatus(newStatus);
+        memberRepository.save(member);
+        return true;
     }
 
     // 추가적인 회원 관리 메서드들...

@@ -6,6 +6,8 @@ import com.icia.delivery.domain.board.repository.BoardRepository;
 import com.icia.delivery.domain.comment.dto.CommentDTO;
 import com.icia.delivery.domain.comment.entity.CommentEntity;
 import com.icia.delivery.domain.comment.repository.CommentRepository;
+import com.icia.delivery.global.exception.BusinessException;
+import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,114 +28,86 @@ public class AdminBoardService {
     @Autowired
     private CommentRepository commentRepository;
 
-
     @Autowired
     private HttpSession session;
 
-    /**
-     * 전체 게시글 목록을 페이징하여 조회하는 메서드
-     *
-     * @param pageable 페이징 정보
-     * @return 페이징된 게시글 리스트 DTO
-     */
     @Transactional(readOnly = true)
     public Page<BoardDTO> getAllBoardsList(Pageable pageable) {
         Page<BoardEntity> boardEntities = boardRepository.findAll(pageable);
         return boardEntities.map(BoardDTO::toDTO);
     }
 
-    /**
-     * 검색어(제목 또는 내용)를 기반으로 게시글을 조회하는 메서드
-     *
-     * @param searchQuery 검색어
-     * @param pageable    페이징 및 정렬 정보
-     * @return 페이징된 검색된 게시글 리스트 DTO
-     */
     @Transactional(readOnly = true)
     public Page<BoardDTO> searchBoards(String searchQuery, Pageable pageable) {
-        Page<BoardEntity> boardEntities = boardRepository.findByBoardTitleContainingOrBoardContentContaining(searchQuery, searchQuery, pageable);
+        Page<BoardEntity> boardEntities =
+                boardRepository.findByBoardTitleContainingOrBoardContentContaining(searchQuery, searchQuery, pageable);
         return boardEntities.map(BoardDTO::toDTO);
     }
 
-    /**
-     * 특정 ID를 가진 게시글을 조회하는 메서드
-     *
-     * @param id 게시글 ID
-     * @return 게시글 DTO 또는 null
-     */
     @Transactional(readOnly = true)
     public BoardDTO getBoardById(Long id) {
         return boardRepository.findById(id)
                 .map(BoardDTO::toDTO)
-                .orElse(null);
+                .orElseThrow(() -> boardNotFound(id));
     }
 
-    /**
-     * 게시글 정보를 업데이트하는 메서드
-     *
-     * @param id        게시글 ID
-     * @param boardForm 수정된 게시글 정보가 담긴 BoardDTO
-     * @return 업데이트 성공 여부
-     */
     @Transactional
     public boolean updateBoardInfo(Long id, BoardDTO boardForm) {
-        return boardRepository.findById(id).map(board -> {
-            // 필수 필드 체크 (예: 제목이 비어있으면 예외 처리)
-            if (boardForm.getBoardTitle() == null || boardForm.getBoardTitle().isEmpty()) {
-                throw new IllegalArgumentException("게시글 제목은 필수입니다.");
-            }
+        BoardEntity board = boardRepository.findById(id)
+                .orElseThrow(() -> boardNotFound(id));
 
-            // 수정 가능한 필드 업데이트 (값이 null인 경우 기존 값 유지)
-            board.setBoardTitle(boardForm.getBoardTitle() != null ? boardForm.getBoardTitle() : board.getBoardTitle());
-            board.setBoardContent(boardForm.getBoardContent() != null ? boardForm.getBoardContent() : board.getBoardContent());
-            board.setBoardUpdatedAt(boardForm.getBoardUpdatedAt() != null ? boardForm.getBoardUpdatedAt() : board.getBoardUpdatedAt());
-            board.setBoardAnswerStatus(boardForm.getBoardAnswerStatus() != null ? boardForm.getBoardAnswerStatus() : board.getBoardAnswerStatus());
+        if (boardForm.getBoardTitle() == null || boardForm.getBoardTitle().isEmpty()) {
+            throw new BusinessException(ErrorCode.BAD_REQUEST, "Board title is required.");
+        }
 
-            boardRepository.save(board);
-            return true;
-        }).orElse(false);
+        board.setBoardTitle(boardForm.getBoardTitle());
+        if (boardForm.getBoardContent() != null) {
+            board.setBoardContent(boardForm.getBoardContent());
+        }
+        if (boardForm.getBoardUpdatedAt() != null) {
+            board.setBoardUpdatedAt(boardForm.getBoardUpdatedAt());
+        }
+        if (boardForm.getBoardAnswerStatus() != null) {
+            board.setBoardAnswerStatus(boardForm.getBoardAnswerStatus());
+        }
+
+        boardRepository.save(board);
+        return true;
     }
 
-    /**
-     * 게시글 삭제 처리
-     *
-     * @param id 게시글 ID
-     */
     @Transactional
     public void deleteBoard(Long id) {
+        if (!boardRepository.existsById(id)) {
+            throw boardNotFound(id);
+        }
         boardRepository.deleteById(id);
     }
 
-    /**
-     * 게시글 상세정보 조회
-     */
     @Transactional(readOnly = true)
     public BoardDTO getBoardDetail(Long id) {
         return boardRepository.findById(id)
-                .map(BoardDTO::toDTO) // 엔티티를 DTO로 변환
-                .orElse(null); // 게시글이 없으면 null 반환
+                .map(BoardDTO::toDTO)
+                .orElseThrow(() -> boardNotFound(id));
     }
 
     @Transactional
     public boolean addComment(Long id, CommentDTO commentDTO) {
-        // 이미 댓글이 존재하는 경우 추가 불가
+        BoardEntity board = boardRepository.findById(id)
+                .orElseThrow(() -> boardNotFound(id));
+
         if (commentRepository.existsByBoardId(id)) {
-            return false;
+            throw new BusinessException(ErrorCode.CONFLICT, "A comment already exists for this board.");
         }
 
         Long adminId = (Long) session.getAttribute("admin_id");
-        // 댓글 저장
         CommentEntity commentEntity = CommentEntity.toEntity(commentDTO);
         commentEntity.setBoardId(id);
         commentEntity.setAdminId(adminId);
         commentEntity.setCommentDate(LocalDateTime.now());
         commentRepository.save(commentEntity);
 
-        // 댓글이 추가되면 게시글의 답변 상태를 "답변완료"로 변경
-        boardRepository.findById(id).ifPresent(board -> {
-            board.setBoardAnswerStatus("답변완료");
-            boardRepository.save(board);
-        });
+        board.setBoardAnswerStatus("답변완료");
+        boardRepository.save(board);
 
         return true;
     }
@@ -142,5 +116,9 @@ public class AdminBoardService {
     public List<CommentDTO> getCommentsByBoardId(Long id) {
         List<CommentEntity> comments = commentRepository.findByBoardId(id);
         return comments.stream().map(CommentDTO::toDTO).collect(Collectors.toList());
+    }
+
+    private BusinessException boardNotFound(Long id) {
+        return new BusinessException(ErrorCode.NOT_FOUND, "Board not found. boardId=" + id);
     }
 }

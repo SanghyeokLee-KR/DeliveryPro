@@ -440,6 +440,7 @@
             data: {fromX, fromY, toX, toY},
             dataType: 'json',
             success: function (routeResult) {
+                routeResult = unwrapApiResponse(routeResult);
                 drawRouteOnMapWithColor(routeResult, color);
                 let path = [];
                 routeResult.segments.forEach(function (segment) {

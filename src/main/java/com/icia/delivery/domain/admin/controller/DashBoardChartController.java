@@ -7,9 +7,11 @@ import com.icia.delivery.domain.admin.service.SalesService;
 import com.icia.delivery.global.response.ApiResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -19,6 +21,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class DashBoardChartController {
+
+    private static final Logger log = LoggerFactory.getLogger(DashBoardChartController.class);
 
     private final DashboardService dashboardService;
     private final SalesService salesService;
@@ -51,9 +55,12 @@ public class DashBoardChartController {
     }
 
     @PostMapping("/statisticsDateSel")
-    public String statisticsDateSel(@RequestParam("date") String date){
-        System.out.println("date : " + date);
-        return null;
+    public ResponseEntity<ApiResponse<Map<String, String>>> statisticsDateSel(@RequestBody Map<String, String> payload) {
+        String date = payload.get("date");
+        log.debug("Statistics date selected. date={}", date);
+        Map<String, String> response = new HashMap<>();
+        response.put("date", date);
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     // genderRatio_1
