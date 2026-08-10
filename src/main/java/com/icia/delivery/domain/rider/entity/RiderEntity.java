@@ -52,6 +52,13 @@ public class RiderEntity {
     @Column(name = "is_available", length = 10, nullable = false)
     private String isAvailable;   // 라이더의 현재 상태 (배달 허용 여부 일듯)
 
+    // 업무 시작 지점. 화면에 좌표를 박아 두면 라이더가 누구든 같은 곳에서 출발한다.
+    @Column(name = "rider_lon")
+    private Double riderLon;      // 마지막으로 보고된 경도
+
+    @Column(name = "rider_lat")
+    private Double riderLat;      // 마지막으로 보고된 위도
+
     // Entity -> DTO 변환
     public static RiderEntity toEntity(RiderDTO dto){
         RiderEntity entity = new RiderEntity();
@@ -67,6 +74,8 @@ public class RiderEntity {
         entity.setRiderCreatedAt(dto.getRiderCreatedAt());
         entity.setTotalDeliveries(dto.getTotalDeliveries());
         entity.setIsAvailable(dto.getIsAvailable());
+        entity.setRiderLon(dto.getRiderLon());
+        entity.setRiderLat(dto.getRiderLat());
 
         return entity;
     }

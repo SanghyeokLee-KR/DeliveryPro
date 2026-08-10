@@ -3,6 +3,7 @@ package com.icia.delivery.domain.rider.controller;
 import com.icia.delivery.domain.rider.dto.RiderAccountDTO;
 import com.icia.delivery.domain.rider.dto.RiderDTO;
 import com.icia.delivery.domain.rider.service.RiderService;
+import com.icia.delivery.domain.routing.GeoPoint;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -78,6 +79,11 @@ public class RiderController {
         model.addAttribute("singleDeliveryHtml", singleDeliveryHtml);
         model.addAttribute("inProgressHtml", inProgressHtml);
         model.addAttribute("completedHtml", completedHtml);
+
+        // 출발 좌표를 화면에 박아 두면 라이더가 누구든 같은 곳에서 출발한다. 서버가 내려준다.
+        GeoPoint origin = rsvc.riderOrigin(rNo);
+        model.addAttribute("riderLon", origin.lon());
+        model.addAttribute("riderLat", origin.lat());
 
         // rider-work.html 뷰로 이동
         return "rider/delivery/rider-work";

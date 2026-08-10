@@ -145,7 +145,9 @@ CREATE TABLE riders (
                         rider_birth DATE,
                         rider_created_at TIMESTAMP,
                         total_deliveries NUMBER,
-                        is_available VARCHAR2(10) NOT NULL
+                        is_available VARCHAR2(10) NOT NULL,
+                        rider_lon NUMBER,
+                        rider_lat NUMBER
 );
 
 CREATE TABLE coupons (

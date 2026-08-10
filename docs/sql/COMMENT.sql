@@ -94,6 +94,8 @@ COMMENT ON COLUMN riders.rider_birth IS '생년월일';
 COMMENT ON COLUMN riders.rider_created_at IS '생성일';
 COMMENT ON COLUMN riders.total_deliveries IS '총 배달 수';
 COMMENT ON COLUMN riders.is_available IS '배달 가능 여부';
+COMMENT ON COLUMN riders.rider_lon IS '마지막 보고 경도';
+COMMENT ON COLUMN riders.rider_lat IS '마지막 보고 위도';
 
 
 /* =========================================================

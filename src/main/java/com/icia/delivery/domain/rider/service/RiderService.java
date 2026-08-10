@@ -6,12 +6,14 @@ import com.icia.delivery.domain.rider.entity.RiderAccountEntity;
 import com.icia.delivery.domain.rider.entity.RiderEntity;
 import com.icia.delivery.domain.rider.repository.RiderAccounRepository;
 import com.icia.delivery.domain.rider.repository.RiderRepository;
+import com.icia.delivery.domain.routing.GeoPoint;
 import com.icia.delivery.global.exception.BusinessException;
 import com.icia.delivery.global.exception.ErrorCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,27 @@ public class RiderService {
 
     private final RiderRepository riderRepository;
     private final RiderAccounRepository rarepo;
+
+    /** 좌표가 아직 없는 라이더의 기본 출발 지점. 화면이 아니라 설정에서 온다. */
+    @Value("${routing.rider-origin.lon:126.6600}")
+    private double fallbackOriginLon;
+
+    @Value("${routing.rider-origin.lat:37.4450}")
+    private double fallbackOriginLat;
+
+    /**
+     * 라이더의 업무 시작 좌표를 돌려준다.
+     *
+     * <p>좌표가 비어 있으면 서비스 구역 기준점으로 대신한다. 화면이 좌표를 못 받으면
+     * 지도 초기화가 통째로 실패해서, 값이 없을 때도 뭔가는 내려가야 한다.
+     */
+    @Transactional(readOnly = true)
+    public GeoPoint riderOrigin(Long riderNo) {
+        return riderRepository.findById(riderNo)
+                .filter(rider -> rider.getRiderLon() != null && rider.getRiderLat() != null)
+                .map(rider -> new GeoPoint(rider.getRiderLon(), rider.getRiderLat()))
+                .orElseGet(() -> new GeoPoint(fallbackOriginLon, fallbackOriginLat));
+    }
 
     @Transactional
     public ModelAndView riderRegister(RiderDTO riderDTO) {

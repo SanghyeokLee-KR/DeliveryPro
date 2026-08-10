@@ -33,6 +33,8 @@ public class RiderDTO {
 
     private Integer totalDeliveries; // 총 배달 횟수
     private String isAvailable;   // 라이더의 현재 상태 (배달 허용 여부 일듯)
+    private Double riderLon;       // 마지막으로 보고된 경도
+    private Double riderLat;       // 마지막으로 보고된 위도
 
     // Entity -> DTO 변환
     public static RiderDTO toDTO(RiderEntity entity){
@@ -49,6 +51,8 @@ public class RiderDTO {
         dto.setRiderCreatedAt(entity.getRiderCreatedAt());
         dto.setTotalDeliveries(entity.getTotalDeliveries());
         dto.setIsAvailable(entity.getIsAvailable());
+        dto.setRiderLon(entity.getRiderLon());
+        dto.setRiderLat(entity.getRiderLat());
 
         return dto;
     }

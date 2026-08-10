@@ -69,6 +69,9 @@
 
     <!-- 메인 콘텐츠 영역 -->
     <main class="main-content">
+        <!-- 라이더 출발 좌표. 서버가 riders 테이블에서 읽어 내려준다 -->
+        <div id="riderOrigin" hidden
+             th:attr="data-lon=${riderLon},data-lat=${riderLat}"></div>
         <!-- 지도 표시 영역 -->
         <div id="main_map"></div>
         <!-- 거리/소요시간 및 액션 버튼 표시 영역 -->
@@ -115,13 +118,6 @@
         });
     });
     /////////////////////////////////////////////////////////////
-    // 두 좌표 비교 (오차 허용치)
-    function isSamePoint(p1, p2) {
-        const threshold = 0.0001;
-        return Math.abs(Number(p1.x) - Number(p2.x)) < threshold &&
-            Math.abs(Number(p1.y) - Number(p2.y)) < threshold;
-    }
-    /////////////////////////////////////////////////////////////
     // 주소 정리: 앞쪽 숫자(지번) 제거
     function cleanAddress(address) {
         if (typeof address !== "string") {
@@ -157,42 +153,43 @@
         geocodeAddresses: function (addresses, callback) {
             let addressStrings = addresses.map(addr =>
                 (typeof addr === "string") ? addr : (addr.address || ""));
-            let results = [];
+            let results = new Array(addressStrings.length).fill(null);
             let count = addressStrings.length;
+            if (count === 0) {
+                callback(results);
+                return;
+            }
+            // 성공한 개수가 아니라 끝난 개수를 센다. 성공만 세면 주소 하나가 실패했을 때
+            // 콜백이 영영 불리지 않아 경로 계산 자체가 시작되지 않는다.
+            let finished = 0;
             addressStrings.forEach(function (addr, idx) {
                 KakaoGeocoderUtil.geocodeAddress(addr, function (coords) {
-                    results[idx] = coords;
-                    if (results.filter(r => r !== null && r !== undefined).length === count) {
+                    results[idx] = coords || null;
+                    finished++;
+                    if (finished === count) {
                         console.log("[KakaoGeocoderUtil] 모든 주소의 좌표:", results);
                         callback(results);
                     }
                 });
             });
         },
-        RouteOptimizer: {
-            // 근사 알고리즘 (최근접 이웃)
-            optimizeRouteOrder: function (start, destinations) {
-                let remaining = destinations.slice();
-                let ordered = [];
-                let current = start;
-                while (remaining.length > 0) {
-                    let nearestIndex = 0;
-                    let nearestDist = Number.MAX_VALUE;
-                    for (let i = 0; i < remaining.length; i++) {
-                        let d = Math.hypot(Number(current.x) - Number(remaining[i].x),
-                            Number(current.y) - Number(remaining[i].y));
-                        if (d < nearestDist) {
-                            nearestDist = d;
-                            nearestIndex = i;
-                        }
-                    }
-                    let nextPoint = remaining[nearestIndex];
-                    ordered.push(nextPoint);
-                    current = nextPoint;
-                    remaining.splice(nearestIndex, 1);
+        // 방문 순서 계산은 서버가 한다. 화면에서 직선 거리로 다시 정하면
+        // 서버가 저장한 order_sequence 와 화면에 그려지는 순서가 어긋난다.
+        planRoute: function (start, destinations, callback) {
+            $.ajax({
+                url: "/rider/route/plan",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({start: start, destinations: destinations}),
+                dataType: "json",
+                success: function (response) {
+                    callback(unwrapApiResponse(response));
+                },
+                error: function (xhr) {
+                    console.error("[RoutePlan] 경로 계획 실패", xhr && xhr.status);
+                    callback(null);
                 }
-                return ordered;
-            }
+            });
         }
     };
     /////////////////////////////////////////////////////////////
@@ -200,8 +197,10 @@
     let map1;
     let polylines = [];
     let riderOverlays = [];
-    const driverX = 126.675113024566; // 라이더 초기 X
-    const driverY = 37.4388938204128; // 라이더 초기 Y
+    // 출발 좌표는 서버가 라이더 레코드에서 읽어 내려준다.
+    const riderOriginEl = document.getElementById("riderOrigin");
+    const driverX = Number(riderOriginEl.dataset.lon);
+    const driverY = Number(riderOriginEl.dataset.lat);
     let storeMarker = null;
     let actionOverlay = null;
     const segmentColors = ["#FF0000", "#0000FF", "#00AA00", "#FFA500"];
@@ -412,22 +411,28 @@
                 (typeof item === "string") ? item : (item.address || "")
             );
             KakaoGeocoderUtil.geocodeAddresses(customerAddrStrs, function (customerCoordsArray) {
-                let uniqueCustomerCoords = [];
+                // 좌표가 겹치는 배달지를 지우면 정차지 수가 주문 수보다 줄어 아래 구간 처리에서
+                // 주문과 구간이 밀린다. 자리를 그대로 두고 순서만 서버가 정하게 한다.
                 customerCoordsArray.forEach(function (coord, idx) {
-                    if (coord && !uniqueCustomerCoords.some(c => isSamePoint(c, coord))) {
-                        uniqueCustomerCoords.push(coord);
+                    if (coord) {
                         addCustomerMarker(coord.x, coord.y, customerAddrStrs[idx]);
                     }
                 });
-                let optimizedRoute = KakaoGeocoderUtil.RouteOptimizer
-                    .optimizeRouteOrder(storeCoords, uniqueCustomerCoords);
-                // 라이더 위치에서 매장까지 경로 요청 및 애니메이션 (매장은 픽업 구간)
-                requestRouteAndAnimate(driverX, driverY, storeCoords.x, storeCoords.y, "#FF0000", function () {
-                    console.log("매장 도착! 이후 고객 구간");
-                    // 매장에 해당하는 첫 번째 segment-info(픽업 정보)를 "픽업완료"로 업데이트
-                    $card.find("span.segment-info[data-seg-index='0']").text("픽업완료");
-                    // 매장 도착 후 고객 구간 처리를 시작 (여기서부터는 집(배달) 구간)
-                    processRouteSegments(storeCoords, optimizedRoute, $card);
+                KakaoGeocoderUtil.planRoute(storeCoords, customerCoordsArray, function (plan) {
+                    let visitOrder = (plan && plan.order && plan.order.length)
+                        ? plan.order
+                        : customerCoordsArray.map((coord, idx) => idx);
+                    let routeStops = visitOrder
+                        .filter(idx => customerCoordsArray[idx])
+                        .map(idx => ({orderIndex: idx, point: customerCoordsArray[idx]}));
+                    // 라이더 위치에서 매장까지 경로 요청 및 애니메이션 (매장은 픽업 구간)
+                    requestRouteAndAnimate(driverX, driverY, storeCoords.x, storeCoords.y, "#FF0000", function () {
+                        console.log("매장 도착! 이후 고객 구간");
+                        // 매장에 해당하는 첫 번째 segment-info(픽업 정보)를 "픽업완료"로 업데이트
+                        $card.find("span.segment-info[data-seg-index='0']").text("픽업완료");
+                        // 매장 도착 후 고객 구간 처리를 시작 (여기서부터는 집(배달) 구간)
+                        processRouteSegments(storeCoords, routeStops, $card);
+                    });
                 });
             });
         });
@@ -496,22 +501,23 @@
     }
     // 구간별 애니메이션
     // 각 구간별 애니메이션 처리 (수정된 부분)
-    function processRouteSegments(startPoint, optimizedRoute, $card) {
+    function processRouteSegments(startPoint, routeStops, $card) {
         let currentPoint = startPoint;
         function processNextSegment(index) {
-            if (index >= optimizedRoute.length) {
+            if (index >= routeStops.length) {
                 // 모든 고객 구간을 완료하면 최종 배달완료 버튼 표시
                 showFinalDeliveryCompleteButton($card);
                 return;
             }
-            let nextPoint = optimizedRoute[index];
+            let nextPoint = routeStops[index].point;
             showActionButtonOnMap("배달", function () {
                 requestRouteAndAnimate(
                     currentPoint.x, currentPoint.y,
                     nextPoint.x, nextPoint.y,
                     "#0000FF", function () {
-                        // 도착 후 해당 주문(li[data-order-id]) 업데이트 (여기서 집 배달 완료)
-                        let $orderLi = $card.find("li[data-order-id]").eq(index);
+                        // 방문 순서와 카드의 주문 나열 순서는 다르다. 원래 자리를 가리키는
+                        // orderIndex 로 찾아야 엉뚱한 주문이 배달완료로 바뀌지 않는다.
+                        let $orderLi = $card.find("li[data-order-id]").eq(routeStops[index].orderIndex);
                         if ($orderLi.length > 0) {
                             let orderId = $orderLi.data('order-id');
                             console.log("도착 후 처리할 orderId:", orderId);
