@@ -39,3 +39,13 @@ out/
 ### Local config / secrets ###
 src/main/resources/application-local.properties
 .env
+
+### 런타임 업로드 산출물 ###
+# 사용자가 올린 파일은 저장소에 들어가면 안 된다.
+# 디렉터리 자체는 앱이 기동 시 참조하므로 .gitkeep으로 유지한다.
+src/main/resources/static/upload/**/*
+src/main/resources/static/review-img/*
+src/main/resources/static/store-img/**/*
+!src/main/resources/static/upload/**/
+!src/main/resources/static/store-img/**/
+!**/.gitkeep
