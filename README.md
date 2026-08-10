@@ -19,7 +19,7 @@
 <br/>
 <br/>
 
-![main](docs/images/main.png)
+![index](docs/images/index.png)
 
 </div>
 
@@ -44,6 +44,12 @@
 
 아래는 전부 `h2` 프로파일로 직접 띄워 찍은 화면입니다. 데모 데이터가 그대로 들어 있어
 클론 후 같은 화면을 재현할 수 있습니다. 실행 방법은 아래 "1분 만에 실행" 절을 보세요.
+
+### 진입 화면
+
+역할이 셋이라 첫 화면에서 갈립니다. 지도는 카카오 지도 SDK이고, 배달 권역 기준점을 보여줍니다.
+
+![index](docs/images/index.png)
 
 ### 고객 메인
 
@@ -554,6 +560,14 @@ Oracle과 외부 API 키 없이 바로 띄울 수 있습니다. H2 인메모리�
 
 시더는 `global/config/DemoDataSeeder.java` 이고 `@Profile("h2")` 라 운영 프로파일에는
 영향이 없습니다. 회원 테이블에 데이터가 있으면 시딩을 건너뜁니다.
+
+지도까지 보려면 카카오 JavaScript 키를 환경변수로 주면 됩니다. 없어도 나머지 화면은 전부
+동작하고, 첫 화면의 지도 자리만 빕니다. 카카오 디벨로퍼스에서 JS SDK 도메인에
+`http://localhost:9090` 을 등록해야 키가 먹습니다.
+
+```bash
+KAKAO_JAVASCRIPT_KEY=발급받은키 ./gradlew bootRun --args='--spring.profiles.active=h2'
+```
 
 > H2 접속 URL에 `MODE=Oracle` 을 붙였습니다. 엔티티 6개가 `columnDefinition` 에
 > `TRUNC(SYSDATE)` 같은 Oracle 전용 표현을 직접 갖고 있어 일반 모드에서는 테이블 생성이
