@@ -221,49 +221,16 @@ public class KakaoApiUtil {
         return result;
     }
 
-    // 여기에 isSamePoint 메서드를 추가합니다.
+    /**
+     * 두 좌표가 같은 지점인지 본다.
+     *
+     * <p>임계 0.0001도는 위도로 약 11m, 위도 37.44 의 경도로 약 8.8m 다. 같은 건물의
+     * 다른 호수는 이 안에서 한 점으로 뭉개진다. 방문 순서를 원래 항목에 되붙이는 용도로는
+     * 쓰지 말 것. 그 용도는 RouteOptimizer.optimizeRouteOrderIndices 가 인덱스로 처리한다.
+     */
     public static boolean isSamePoint(Point p1, Point p2) {
         double threshold = 0.0001;
         return Math.abs(p1.getX() - p2.getX()) < threshold &&
                 Math.abs(p1.getY() - p2.getY()) < threshold;
-    }
-
-    /**
-     * RouteOptimizer 내부 클래스.
-     * Nearest Neighbor 방식으로 시작점과 여러 목적지 좌표의 최적 방문 순서를 계산합니다.
-     */
-    public static class RouteOptimizer {
-        /**
-         * 시작점과 목적지 리스트를 받아서 최적 방문 순서를 산출합니다.
-         *
-         * @param start 시작점 좌표 (예: 매장 좌표).
-         * @param destinations 목적지 좌표들의 리스트.
-         * @return 최적 방문 순서로 정렬된 좌표 리스트.
-         */
-        public static List<Point> optimizeRouteOrder(Point start, List<Point> destinations) {
-            log.debug("Optimizing route order. destinationCount={}", destinations.size());
-            List<Point> remaining = new ArrayList<>(destinations);
-            List<Point> ordered = new ArrayList<>();
-            Point current = start;
-            while (!remaining.isEmpty()) {
-                int nearestIndex = 0;
-                double nearestDist = Double.MAX_VALUE;
-                for (int i = 0; i < remaining.size(); i++) {
-                    Point p = remaining.get(i);
-                    double dist = Math.hypot(current.getX() - p.getX(), current.getY() - p.getY());
-                    if (dist < nearestDist) {
-                        nearestDist = dist;
-                        nearestIndex = i;
-                    }
-                }
-                Point nextPoint = remaining.get(nearestIndex);
-                log.trace("Selected next route point. point={}, distance={}", nextPoint, nearestDist);
-                ordered.add(nextPoint);
-                current = nextPoint;
-                remaining.remove(nearestIndex);
-            }
-            log.debug("Optimized route order. orderedCount={}", ordered.size());
-            return ordered;
-        }
     }
 }

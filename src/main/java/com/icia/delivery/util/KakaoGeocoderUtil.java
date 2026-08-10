@@ -2,6 +2,8 @@
 package com.icia.delivery.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icia.delivery.domain.routing.GeoPoint;
+import com.icia.delivery.domain.routing.RoutePlanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Kakao Geocoding API 유틸리티 클래스.
- * 주소를 좌표(Point)로 변환하는 메서드와,
- * 최적의 경로 순서를 계산하는 RouteOptimizer 내부 클래스를 포함합니다.
+ * 주소를 좌표로 바꾸는 카카오 지오코딩 호출과, 방문 순서를 정하는 RouteOptimizer 를 담는다.
+ *
+ * <p>방문 순서 계산은 도로망 그래프 위의 다익스트라로 옮겼다. 자세한 내용은 RouteOptimizer 주석에 있다.
  */
 public class KakaoGeocoderUtil {
 
@@ -87,62 +89,63 @@ public class KakaoGeocoderUtil {
     }
 
     /**
-     * 여러 주소를 지오코딩하여 좌표 목록을 반환합니다.
+     * 방문 순서 산출.
      *
-     * @param addresses 주소 문자열 리스트.
-     * @return 각 주소에 대응되는 좌표(Point) 리스트.
-     */
-    public static List<KakaoApiUtil.Point> geocodeAddresses(List<String> addresses) {
-        List<KakaoApiUtil.Point> result = new ArrayList<>();
-        log.debug("Geocoding multiple addresses. count={}", addresses.size());
-        for (String addr : addresses) {
-            KakaoApiUtil.Point point = geocodeAddress(addr);
-            if (point != null) {
-                result.add(point);
-            } else {
-                log.debug("Geocoding returned no point. address={}", addr);
-            }
-        }
-        log.debug("Finished geocoding multiple addresses. successCount={}", result.size());
-        return result;
-    }
-
-    /**
-     * RouteOptimizer 내부 클래스.
-     * Nearest Neighbor 방식으로 시작점과 여러 목적지 좌표의 최적 방문 순서를 계산합니다.
+     * <p>예전에는 위경도 도 차이를 Math.hypot 으로 재서 가장 가까운 곳을 차례로 고르는
+     * 최근접 이웃이었다. 두 가지가 문제였다. 도 단위 유클리드는 위도 보정이 없어 동서
+     * 거리를 약 26% 부풀렸고, 직선 거리라 일방통행과 통과 불가 축을 무시했다.
+     *
+     * <p>지금은 도로망 그래프에서 다익스트라로 정차지 사이 통행 시간을 재고, 그 행렬 위에서
+     * 방문 순서를 푼다. 호출부를 그대로 두려고 클래스와 메서드 이름은 유지한다.
      */
     public static class RouteOptimizer {
+
         /**
-         * 시작점과 목적지 리스트를 받아서 최적 방문 순서를 산출합니다.
+         * 시작점과 목적지 리스트를 받아 방문 순서대로 정렬한 좌표를 돌려준다.
          *
-         * @param start 시작점 좌표 (예: 매장 좌표).
-         * @param destinations 목적지 좌표들의 리스트.
-         * @return 최적 방문 순서로 정렬된 좌표 리스트.
+         * @param start        시작점 좌표(가게 또는 라이더 위치)
+         * @param destinations 목적지 좌표 목록
+         * @return 방문 순서로 재배열한 좌표 목록
          */
-        public static List<KakaoApiUtil.Point> optimizeRouteOrder(KakaoApiUtil.Point start, List<KakaoApiUtil.Point> destinations) {
-            log.debug("Optimizing route order. destinationCount={}", destinations.size());
-            List<KakaoApiUtil.Point> remaining = new ArrayList<>(destinations);
-            List<KakaoApiUtil.Point> ordered = new ArrayList<>();
-            KakaoApiUtil.Point current = start;
-            while (!remaining.isEmpty()) {
-                int nearestIndex = 0;
-                double nearestDist = Double.MAX_VALUE;
-                for (int i = 0; i < remaining.size(); i++) {
-                    KakaoApiUtil.Point p = remaining.get(i);
-                    double dist = Math.hypot(current.getX() - p.getX(), current.getY() - p.getY());
-                    if (dist < nearestDist) {
-                        nearestDist = dist;
-                        nearestIndex = i;
-                    }
-                }
-                KakaoApiUtil.Point nextPoint = remaining.get(nearestIndex);
-                log.trace("Selected next route point. point={}, distance={}", nextPoint, nearestDist);
-                ordered.add(nextPoint);
-                current = nextPoint;
-                remaining.remove(nearestIndex);
+        public static List<KakaoApiUtil.Point> optimizeRouteOrder(KakaoApiUtil.Point start,
+                                                                  List<KakaoApiUtil.Point> destinations) {
+            int[] order = optimizeRouteOrderIndices(start, destinations);
+            List<KakaoApiUtil.Point> ordered = new ArrayList<>(order.length);
+            for (int index : order) {
+                ordered.add(destinations.get(index));
             }
-            log.debug("Optimized route order. orderedCount={}", ordered.size());
             return ordered;
+        }
+
+        /**
+         * 방문 순서를 입력 목록의 인덱스로 돌려준다.
+         *
+         * <p>좌표 대신 인덱스를 쓰면 결과를 원래 항목에 다시 붙일 때 좌표를 비교할 필요가
+         * 없다. 좌표 비교는 같은 건물의 다른 호수처럼 좌표가 겹치는 배달지를 구분하지 못한다.
+         *
+         * @param destinations 목적지 좌표 목록. 좌표를 못 구한 자리는 null 을 넣는다
+         * @return 방문 순서. 값은 destinations 의 인덱스
+         */
+        public static int[] optimizeRouteOrderIndices(KakaoApiUtil.Point start,
+                                                      List<KakaoApiUtil.Point> destinations) {
+            if (destinations == null || destinations.isEmpty()) {
+                return new int[0];
+            }
+            log.debug("Optimizing route order. destinationCount={}", destinations.size());
+            List<GeoPoint> points = new ArrayList<>(destinations.size());
+            for (KakaoApiUtil.Point point : destinations) {
+                points.add(toGeoPoint(point));
+            }
+            int[] order = RoutePlanner.demo().orderDestinations(toGeoPoint(start), points);
+            log.debug("Optimized route order. orderedCount={}", order.length);
+            return order;
+        }
+
+        private static GeoPoint toGeoPoint(KakaoApiUtil.Point point) {
+            if (point == null || point.getX() == null || point.getY() == null) {
+                return null;
+            }
+            return new GeoPoint(point.getX(), point.getY());
         }
     }
 }

@@ -423,9 +423,14 @@ public class OrderService {
                     .collect(Collectors.toList());
             log.debug("Group rider call destination addresses={}", destinationAddresses);
 
-            // KakaoGeocoderUtil.geocodeAddresses는 콜백 방식이 일반적이지만,
-            // 여기서는 동기식(또는 별도 처리)으로 가정합니다.
-            List<KakaoApiUtil.Point> destinationPoints = KakaoGeocoderUtil.geocodeAddresses(destinationAddresses);
+            // 항목과 자리를 맞춘 좌표 목록을 만든다. 좌표를 못 구한 자리는 null 로 남긴다.
+            // 예전에는 좌표를 얻은 것만 모아 두고 결과를 되붙일 때 항목마다 다시 지오코딩해
+            // 좌표를 비교했다. 호출이 두 배로 나갔고, 같은 건물의 다른 호수처럼 좌표가 겹치는
+            // 배달지는 첫 항목에서 멈춰 나머지 순서가 박히지 않았다.
+            List<KakaoApiUtil.Point> destinationPoints = new ArrayList<>(destinationAddresses.size());
+            for (String destinationAddress : destinationAddresses) {
+                destinationPoints.add(KakaoGeocoderUtil.geocodeAddress(destinationAddress));
+            }
             log.trace("Group rider call destination points={}", destinationPoints);
 
             String storeAddressOriginal = allGroupItems.get(0).getStoreAddress();
@@ -434,27 +439,12 @@ public class OrderService {
             log.debug("Group rider call store address normalized. original={}, cleaned={}", storeAddressOriginal, storeAddress);
             log.trace("Group rider call store point={}", storePoint);
 
-            List<KakaoApiUtil.Point> optimizedOrder =
-                    KakaoGeocoderUtil.RouteOptimizer.optimizeRouteOrder(storePoint, destinationPoints);
-            log.trace("Group rider call optimized route={}", optimizedOrder);
-
-            // 최적의 배송 순서에 따라 각 그룹 아이템의 orderSequence 업데이트
-            for (int seq = 1; seq <= optimizedOrder.size(); seq++) {
-                KakaoApiUtil.Point p = optimizedOrder.get(seq - 1);
-                boolean found = false;
-                for (DeliveryGroupItemEntity item : allGroupItems) {
-                    KakaoApiUtil.Point itemPoint = KakaoGeocoderUtil.geocodeAddress(item.getDestinationAddress());
-                    log.trace("Group rider call route point compare. optimized={}, destination={}", p, itemPoint);
-                    if (isSamePoint(p, itemPoint)) {
-                        item.setOrderSequence(seq);
-                        log.debug("Updated group rider call order sequence. orderId={}, sequence={}", item.getOrderId(), seq);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    log.debug("No matching destination for optimized point. point={}", p);
-                }
+            int[] visitOrder =
+                    KakaoGeocoderUtil.RouteOptimizer.optimizeRouteOrderIndices(storePoint, destinationPoints);
+            for (int seq = 0; seq < visitOrder.length; seq++) {
+                DeliveryGroupItemEntity item = allGroupItems.get(visitOrder[seq]);
+                item.setOrderSequence(seq + 1);
+                log.debug("Updated group rider call order sequence. orderId={}, sequence={}", item.getOrderId(), seq + 1);
             }
             deliveryGroupItemRepository.saveAll(allGroupItems);
             log.debug("Completed group rider call route ordering. deliveryId={}", savedGroup.getDeliveryId());
@@ -520,8 +510,11 @@ public class OrderService {
                 .collect(Collectors.toList());
         log.debug("Batch delivery destination addresses={}", destinationAddresses);
 
-        // KakaoGeocoderUtil 사용 (동기식 처리 가정)
-        List<KakaoApiUtil.Point> destinationPoints = KakaoGeocoderUtil.geocodeAddresses(destinationAddresses);
+        // 항목과 자리를 맞춘 좌표 목록. 되붙일 때 좌표를 다시 비교하지 않으려고 인덱스로 다룬다.
+        List<KakaoApiUtil.Point> destinationPoints = new ArrayList<>(destinationAddresses.size());
+        for (String destinationAddress : destinationAddresses) {
+            destinationPoints.add(KakaoGeocoderUtil.geocodeAddress(destinationAddress));
+        }
         log.trace("Batch delivery destination points={}", destinationPoints);
 
         PreStoreEntity preStore = storeRepository.findById(preStoId)
@@ -532,27 +525,12 @@ public class OrderService {
         log.debug("Batch delivery store address normalized. original={}, cleaned={}", storeAddressOriginal, storeAddress);
         log.trace("Batch delivery store point={}", storePoint);
 
-        List<KakaoApiUtil.Point> optimizedOrder =
-                KakaoGeocoderUtil.RouteOptimizer.optimizeRouteOrder(storePoint, destinationPoints);
-        log.trace("Batch delivery optimized route={}", optimizedOrder);
-
-        // 최적의 배송 순서에 따라 각 그룹 아이템의 orderSequence 업데이트
-        for (int seq = 1; seq <= optimizedOrder.size(); seq++) {
-            KakaoApiUtil.Point p = optimizedOrder.get(seq - 1);
-            boolean found = false;
-            for (DeliveryGroupItemEntity item : groupItems) {
-                KakaoApiUtil.Point itemPoint = KakaoGeocoderUtil.geocodeAddress(item.getDestinationAddress());
-                log.trace("Batch delivery route point compare. optimized={}, destination={}", p, itemPoint);
-                if (isSamePoint(p, itemPoint)) {
-                    item.setOrderSequence(seq);
-                    log.debug("Updated batch delivery order sequence. orderId={}, sequence={}", item.getOrderId(), seq);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                log.debug("No matching batch delivery destination for optimized point. point={}", p);
-            }
+        int[] visitOrder =
+                KakaoGeocoderUtil.RouteOptimizer.optimizeRouteOrderIndices(storePoint, destinationPoints);
+        for (int seq = 0; seq < visitOrder.length; seq++) {
+            DeliveryGroupItemEntity item = groupItems.get(visitOrder[seq]);
+            item.setOrderSequence(seq + 1);
+            log.debug("Updated batch delivery order sequence. orderId={}, sequence={}", item.getOrderId(), seq + 1);
         }
         deliveryGroupItemRepository.saveAll(groupItems);
         log.debug("Completed batch delivery route ordering. deliveryId={}", group.getDeliveryId());

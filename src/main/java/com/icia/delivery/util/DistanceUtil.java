@@ -11,13 +11,7 @@ public class DistanceUtil {
      * @return 두 좌표 간의 거리 (미터)
      */
     public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        final int R = 6371000; // 지구 반지름 (미터)
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                   Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                   Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+        // 같은 공식을 두 곳에 두면 상수나 부호를 한쪽만 고치는 사고가 난다. 구현은 GeoDistanceUtil 로 모았다.
+        return GeoDistanceUtil.haversineMeters(lat1, lon1, lat2, lon2);
     }
 }
