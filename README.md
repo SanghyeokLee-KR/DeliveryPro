@@ -42,27 +42,44 @@
 
 ## 서비스 화면
 
-### 메인 페이지
+아래는 전부 `h2` 프로파일로 직접 띄워 찍은 화면입니다. 데모 데이터가 그대로 들어 있어
+클론 후 같은 화면을 재현할 수 있습니다. 실행 방법은 아래 "1분 만에 실행" 절을 보세요.
+
+### 고객 메인
 
 ![main](docs/images/main.png)
 
-### 로그인 페이지
+### 매장 목록
 
-![login](docs/images/login.png)
+카테고리 12종으로 나뉘고, 별점과 리뷰 수, 최소 주문 금액, 예상 배달 시간을 함께 보여줍니다.
 
-### 주문 페이지
+![store-list](docs/images/store-list.png)
+
+### 매장 상세와 주문
+
+메뉴, 리뷰, 정보 탭으로 나뉘고 오른쪽 주문표에 담은 항목이 쌓입니다.
 
 ![order](docs/images/order.png)
 
+### 로그인
+
+![login](docs/images/login.png)
+
 ### 마이페이지
+
+리워드 등급과 포인트, 주문 내역, 리뷰 관리, 배송지 관리를 한곳에 둡니다.
 
 ![mypage](docs/images/mypage.png)
 
 ### 관리자 페이지
 
+회원, 매장, 라이더, 알림, 통계를 좌측 메뉴로 나눴습니다. 아래는 승인된 매장 목록입니다.
+
 ![admin](docs/images/admin.png)
 
 ### 매장 관리 페이지
+
+사장님 계정 하나에 매장을 최대 3개까지 붙일 수 있습니다.
 
 ![store](docs/images/store.png)
 
@@ -513,7 +530,40 @@ src/main/java/com/icia/delivery
 
 ---
 
-## 실행 방법
+## 1분 만에 실행
+
+Oracle과 외부 API 키 없이 바로 띄울 수 있습니다. H2 인메모리로 뜨고, 기동할 때
+데모 데이터가 자동으로 들어갑니다.
+
+```bash
+./gradlew bootRun --args='--spring.profiles.active=h2'
+```
+
+`http://localhost:9090/index` 로 들어가면 됩니다. 데이터베이스 콘솔은 `/h2` 입니다.
+
+| 역할 | 아이디 | 비밀번호 | 로그인 경로 |
+| :--- | :--- | :--- | :--- |
+| 관리자 | `admin` | `admin1234` | `/admin` |
+| 일반 회원 | `user01` | `user1234` | `/mLoginForm` |
+| 사장님 | `boss01` | `boss1234` | `/pLoginForm` |
+| 라이더 | `rider01` | `rider1234` | `/rLoginForm` |
+
+데모 데이터는 매장 4곳(승인 3, 승인대기 1), 메뉴 17개, 주문 5건, 리뷰 3건, 회원 2명,
+라이더 2명입니다. 주문은 픽업중, 배차중, 배달중, 배달완료로 상태를 서로 다르게 넣어
+관리자와 사장님 화면에서 각각 다른 목록이 뜨도록 했습니다.
+
+시더는 `global/config/DemoDataSeeder.java` 이고 `@Profile("h2")` 라 운영 프로파일에는
+영향이 없습니다. 회원 테이블에 데이터가 있으면 시딩을 건너뜁니다.
+
+> H2 접속 URL에 `MODE=Oracle` 을 붙였습니다. 엔티티 6개가 `columnDefinition` 에
+> `TRUNC(SYSDATE)` 같은 Oracle 전용 표현을 직접 갖고 있어 일반 모드에서는 테이블 생성이
+> 실패합니다.
+
+---
+
+## 실행 방법 (Oracle)
+
+운영과 같은 구성으로 띄울 때만 필요합니다.
 
 ### 1. JDK 21 설치 확인
 
@@ -593,8 +643,63 @@ http://localhost:9090
 
 ---
 
+## 팀과 기여
+
+인천일보아카데미 과정에서 5명이 만든 팀 프로젝트입니다. 저는 조장을 맡아 일정과 코드 리뷰를
+관리하면서 서버의 공통 규약과 소셜 로그인, 화면 전반을 담당했습니다.
+
+### 기여 근거에 대한 고지
+
+이 저장소는 팀 작업을 끝낸 뒤 한 번에 올린 것입니다. 커밋이 전부 업로드 이후 시점이고
+작성자 이메일도 하나뿐이라, **git 이력만으로는 팀원별 기여가 구분되지 않습니다.** 아래 담당
+내역은 코드와 화면으로 설명한 것이고 커밋 이력이 이를 뒷받침하지는 않습니다. 확인이 필요하면
+해당 파일을 직접 열어 보시면 됩니다.
+
+### 제가 맡은 부분
+
+**공통 응답과 예외 규약**
+성공과 실패 응답 형태를 `ApiResponse` 하나로 통일하고, HTTP 상태와 코드, 메시지를 묶은
+`ErrorCode` 8종과 `BusinessException` 을 `@RestControllerAdvice` 로 연결했습니다. 예외를 던지는
+지점이 81곳입니다. 이름이 같은 구 핸들러가 남아 있어 bean name을 따로 주고 `@RestController` 가
+붙은 것에만 걸리도록 범위를 좁혔습니다.
+`global/response/ApiResponse.java` `global/exception/ErrorCode.java` `global/exception/GlobalExceptionHandler.java`
+
+**트랜잭션 경계 정리**
+트랜잭션을 컨트롤러에서 서비스 계층으로 옮기고 조회 메서드에 `readOnly` 를 붙였습니다.
+전체 165곳 중 91곳이 조회 전용이고, `spring.jpa.open-in-view=false` 로 지연 로딩 범위도
+서비스 안으로 제한했습니다.
+
+**소셜 로그인 3사 직접 구현**
+네이버, 구글, 카카오의 인가코드 교환과 프로필 조회를 라이브러리 없이 `HttpClient` 로
+구현했습니다. 제공자마다 응답 구조가 달라 카카오는 `kakao_account` 하위 필드까지 따로
+파싱했습니다. 회원, 사장, 라이더 세 계정 도메인 모두 BCrypt로 저장합니다.
+`domain/member/service/AuthService.java`
+
+**묶음배달 도메인**
+라이더 한 명이 여러 주문을 묶는 `delivery_group` / `delivery_group_item` 2단 구조를 설계하고,
+방문 순서는 Nearest Neighbor 휴리스틱으로 계산해 저장합니다. 최적해가 아니라 근사입니다.
+`domain/order/service/OrderService.java`
+
+**외부 의존 제거**
+접속 IP를 외부 API로 조회하던 것을 걷어내고 요청 헤더에서 뽑도록 바꿨습니다.
+`X-Forwarded-For` 부터 `RemoteAddr` 까지 5단으로 폴백하고, 프록시 체인과 헤더 부재 같은
+경계를 테스트 10건으로 덮었습니다.
+`global/service/IpService.java` `src/test/java/.../IpServiceTest.java`
+
+**화면**
+Thymeleaf 템플릿 101개를 전부 서버 바인딩으로 만들고, CSS 95개 파일 19,944줄과 JS 38개 파일
+11,218줄을 프레임워크 없이 직접 작성해 역할별 레이아웃 4종을 구성했습니다.
+
+### 남은 과제
+
+- 테스트가 11건뿐입니다. IP 추출 로직 외에는 사실상 없어서 고칠 때마다 화면을 직접 눌러
+  확인했습니다.
+- 도착 예정 시간이 카카오 API의 소요시간이 아니라 직선거리 기반 근사입니다.
+- 헤더의 마이페이지 링크가 회원 ID 없이 `/myPage/` 로 걸려 있어 404가 납니다. 실제 매핑은
+  `/myPage/{mId}` 입니다.
+
+---
+
 ## Author
 
-**Sanghyeok Lee**
-
-신입 백엔드 개발자 포트폴리오 프로젝트
+**Sanghyeok Lee** ([@SanghyeokLee-KR](https://github.com/SanghyeokLee-KR))
