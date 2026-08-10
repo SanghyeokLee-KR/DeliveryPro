@@ -26,13 +26,12 @@ public class CartController {
         return "/member/cart";
     }
 
-    @RestController
-    public class CartRestController {
-        @PostMapping("/cartList")
+    // 비정적 내부 클래스는 컴포넌트 스캔 대상이 아니라 매핑이 등록되지 않았다.
+    // 바깥 @Controller 의 ResponseEntity 반환 메서드로 옮겨 JSON 응답을 유지한다.
+    @PostMapping("/cartList")
     public ResponseEntity<ApiResponse<List<CartDTO>>> cartList() {
         return ResponseEntity.ok(ApiResponse.success(csvc.cartList()));
     }
-}
 
     @PostMapping("/addCart/{menuId}")
     public ResponseEntity<ApiResponse<CartDTO>>  addCart(@PathVariable Long menuId, @RequestBody OrderDTO orderDTO) {

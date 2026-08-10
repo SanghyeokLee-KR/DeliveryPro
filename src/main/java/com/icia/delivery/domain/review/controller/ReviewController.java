@@ -25,35 +25,27 @@ public class ReviewController {
         return rsvc.saveReview(reviewDTO);
     }
 
-    @RestController
-    @RequestMapping("api/reviews")
-    public class ReviewRestController {
+    // 비정적 내부 클래스는 컴포넌트 스캔 대상이 아니라 매핑이 등록되지 않았다.
+    // 바깥 클래스로 옮기면서 내부 클래스가 갖고 있던 api/reviews 접두사를 각 경로에 직접 붙인다.
+    @PostMapping("/api/reviews/{preStoId}")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getReviewsByPreStoId(@PathVariable Long preStoId) {
+        return ResponseEntity.ok(ApiResponse.success(rsvc.getReviewsByPreStoId(preStoId)));
+    }
 
+    @PostMapping("/api/reviews/member/{memId}")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getReviewsByMemberId(@PathVariable Long memId) {
+        return ResponseEntity.ok(ApiResponse.success(rsvc.getReviewsByMemberId(memId)));
+    }
 
-        @PostMapping("/{preStoId}")
-        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getReviewsByPreStoId(@PathVariable Long preStoId) {
-            return ResponseEntity.ok(ApiResponse.success(rsvc.getReviewsByPreStoId(preStoId)));
-        }
-
-
-        @PostMapping("member/{memId}")
-        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> getReviewsByMemberId(@PathVariable Long memId) {
-            return ResponseEntity.ok(ApiResponse.success(rsvc.getReviewsByMemberId(memId)));
-
-        }
-
-
-
-        @PostMapping("/updateReviewCount/{storeId}")
-        public ResponseEntity<ApiResponse<String>> updateReviewCount(
-                @PathVariable Long storeId,
-                @RequestParam int reviewCount) {
-            try {
-                rsvc.updateReviewCount(storeId, reviewCount);
-                return ResponseEntity.ok(ApiResponse.success("Review count updated."));
-            } catch (Exception e) {
-                throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update review count.", e);
-            }
+    @PostMapping("/api/reviews/updateReviewCount/{storeId}")
+    public ResponseEntity<ApiResponse<String>> updateReviewCount(
+            @PathVariable Long storeId,
+            @RequestParam int reviewCount) {
+        try {
+            rsvc.updateReviewCount(storeId, reviewCount);
+            return ResponseEntity.ok(ApiResponse.success("Review count updated."));
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update review count.", e);
         }
     }
 }

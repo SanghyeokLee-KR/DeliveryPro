@@ -51,23 +51,17 @@ public class BoardController {
         return bsvc.bView(boardId);
     }
 
-    @RestController
-    @RequiredArgsConstructor
-    public class BoardRestController {
+    // 비정적 내부 클래스는 컴포넌트 스캔 대상이 아니라 매핑이 등록되지 않았다.
+    // 바깥 @Controller 의 ResponseEntity 반환 메서드로 옮겨 JSON 응답을 유지한다.
+    @PostMapping("/boardList")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> boardList() {
+        return ResponseEntity.ok(ApiResponse.success(bsvc.boardList()));
+    }
 
-
-        @PostMapping("/boardList")
-        public ResponseEntity<ApiResponse<List<Map<String, Object>>>> boardList() {
-            return ResponseEntity.ok(ApiResponse.success(bsvc.boardList()));
-        }
-
-        @PostMapping("/searchList")
-        public ResponseEntity<ApiResponse<List<BoardDTO>>> searchList(@RequestParam("searchCategory") String searchCategory,
-                                                                      @RequestParam("searchKeyword") String searchKeyword) {
-            return ResponseEntity.ok(ApiResponse.success(bsvc.searchList(searchCategory, searchKeyword)));
-        }
-        // bView : 게시글 상세보기
-
+    @PostMapping("/searchList")
+    public ResponseEntity<ApiResponse<List<BoardDTO>>> searchList(@RequestParam("searchCategory") String searchCategory,
+                                                                  @RequestParam("searchKeyword") String searchKeyword) {
+        return ResponseEntity.ok(ApiResponse.success(bsvc.searchList(searchCategory, searchKeyword)));
     }
 
 }
