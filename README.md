@@ -19,7 +19,7 @@
 <br/>
 <br/>
 
-![index](docs/images/index.png)
+![cover](docs/images/cover.png)
 
 </div>
 
