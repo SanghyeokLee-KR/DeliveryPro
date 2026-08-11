@@ -1,22 +1,29 @@
 /* src/main/resources/static/rider/css/main.css */
 
 /* 메인(지도) 영역 전용 스타일 */
-.main_map-wrap {
-    width: 100%;
-    height: 800px;
-    margin-bottom: 20px;
+
+/*
+ * 지도에 height:100% 를 주면 부모 높이를 그대로 먹어, 아래 붙는 경로 요약 줄이
+ * 화면 밖으로 밀린다. 경로 계산이 돌았다는 것을 보여주는 숫자가 그 줄에 있어
+ * 안 보이면 계산을 안 한 것과 구분되지 않는다. 세로 flex 로 두고 지도만 늘린다.
+ */
+.main-content {
+    margin-left: 400px; /* 사이드바 폭만큼 */
+    padding: 20px;      /* 여유 패딩 */
+    display: flex;
+    flex-direction: column;
 }
 
 #main_map {
     width: 100%;
-    height: 100%;
+    flex: 1 1 auto;
+    min-height: 0; /* flex 항목 기본값이 auto 라 이게 없으면 줄어들지 않는다 */
     position: relative;
     overflow: hidden;
 }
 
-.main-content {
-    margin-left: 400px; /* 사이드바 폭만큼 */
-    padding: 20px;      /* 여유 패딩 */
+#distanceInfoSidebar {
+    flex: 0 0 auto;
 }
 
 /* 탭 전환 영역 */

@@ -89,8 +89,8 @@ class DemoRoadNetworkTest {
     @Test
     @DisplayName("도로를 따라간 경로는 직선 거리보다 길고 중간 교차점을 거친다")
     void routeFollowsRoadsRatherThanStraightLine() {
-        GeoPoint from = new GeoPoint(126.6350, 37.4250);
-        GeoPoint to = new GeoPoint(126.6900, 37.4700);
+        GeoPoint from = new GeoPoint(126.6500, 37.4350);
+        GeoPoint to = new GeoPoint(126.7020, 37.4700);
 
         int fromNode = INDEX.nearest(from.lon(), from.lat(), RoadNetworkProvider.SNAP_LIMIT_METERS);
         int toNode = INDEX.nearest(to.lon(), to.lat(), RoadNetworkProvider.SNAP_LIMIT_METERS);
@@ -118,10 +118,10 @@ class DemoRoadNetworkTest {
         RoutePlanner planner = RoutePlanner.demo();
         GeoPoint store = new GeoPoint(126.6600, 37.4450);
         List<GeoPoint> destinations = List.of(
-                new GeoPoint(126.6880, 37.4720),
-                new GeoPoint(126.6300, 37.4200),
+                new GeoPoint(126.7000, 37.4720),
+                new GeoPoint(126.6520, 37.4340),
                 new GeoPoint(126.6650, 37.4500),
-                new GeoPoint(126.6420, 37.4650));
+                new GeoPoint(126.6560, 37.4650));
 
         RoutePlan plan = planner.plan(store, destinations);
 
@@ -174,9 +174,9 @@ class DemoRoadNetworkTest {
     void nullDestinationDoesNotBreakPlanning() {
         RoutePlanner planner = RoutePlanner.demo();
         List<GeoPoint> destinations = Arrays.asList(
-                new GeoPoint(126.6880, 37.4720),
+                new GeoPoint(126.7000, 37.4720),
                 null,
-                new GeoPoint(126.6420, 37.4650));
+                new GeoPoint(126.6560, 37.4650));
 
         RoutePlan plan = planner.plan(new GeoPoint(126.6600, 37.4450), destinations);
 

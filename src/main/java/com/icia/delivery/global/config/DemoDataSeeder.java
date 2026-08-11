@@ -79,17 +79,18 @@ public class DemoDataSeeder implements ApplicationRunner {
 
     private static final String DELIVERY_AREA = "인천 미추홀구 주안동, 용현동, 숭의동, 도화동, 학익동";
 
-    private static final int ORDER_COUNT = 45;
+    private static final int ORDER_COUNT = 48;
 
     /** 이 번호부터 끝까지가 배차 대기 주문이다. 라이더 배차 화면에 뜨는 것도 이 구간뿐이다. */
     private static final int DISPATCH_FROM = 41;
 
     /**
-     * 배차 대기 주문 중 앞의 세 건은 같은 가게에 몰아 한 묶음으로 만든다.
+     * 배차 대기 주문 중 앞의 다섯 건은 같은 가게에 몰아 한 묶음으로 만든다.
      * 라이더 화면이 가게와 호출 시각으로 카드를 묶으므로, 가게가 다르면 카드가 1건씩 갈라져
-     * 방문 순서 계산이 목적지를 둘 이상 받는 일이 없다.
+     * 방문 순서 계산이 목적지를 둘 이상 받는 일이 없다. 목적지가 다섯이어야 방문 순서를
+     * 바꿔 얻는 이득이 화면에서 눈에 보인다.
      */
-    private static final int GROUP_DEMO_SIZE = 3;
+    private static final int GROUP_DEMO_SIZE = 5;
     private static final int GROUP_DEMO_STORE_INDEX = 0;
 
     private record MenuSeed(String menuCategory, String name, long price, String description) {
@@ -847,8 +848,10 @@ public class DemoDataSeeder implements ApplicationRunner {
                 deliveryStatus = "배달완료";
                 createdAt = now.minusDays(1L + (i % 13)).minusHours(i % 10).minusMinutes((i * 7) % 60);
             } else if (i < 32) {
+                // 가게가 거절한 주문에 배차중을 달면 라이더 배차 목록에 섞여 들어간다.
+                // 실제로는 거절 시점에 배차가 끊기므로 배차취소로 둔다.
                 orderStatus = "거절";
-                deliveryStatus = "배차중";
+                deliveryStatus = "배차취소";
                 createdAt = now.minusDays(2L + (i % 6)).minusHours(i % 5);
             } else if (i < 37) {
                 deliveryStatus = "배달중";
@@ -861,7 +864,11 @@ public class DemoDataSeeder implements ApplicationRunner {
                 createdAt = now.minusMinutes(5L + (i * 3) % 25);
             }
 
-            String deliveryType = groupDemo ? "묶음배달" : DELIVERY_TYPES[i % DELIVERY_TYPES.length];
+            // 배차 대기 구간에서 묶음 데모 밖의 주문까지 묶음배달로 두면 목적지가 하나뿐인
+            // 묶음 카드가 생겨 방문 순서 계산이 무의미해 보인다. 그 구간은 한집배달로 고정한다.
+            String deliveryType = groupDemo ? "묶음배달"
+                    : i >= DISPATCH_FROM ? "한집배달"
+                    : DELIVERY_TYPES[i % DELIVERY_TYPES.length];
             int discount = i % 5 == 0 ? 2000 : 0;
             String customerMessage = CUSTOMER_MESSAGES[i % CUSTOMER_MESSAGES.length];
             Long orderId = saveOrder(store.id, memberId, store.menuIds.get(pickedMenus.get(0)),

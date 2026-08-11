@@ -18,10 +18,15 @@ import com.icia.delivery.util.GeoDistanceUtil;
  */
 public final class DemoRoadNetwork {
 
-    /** 서비스 구역 경계. 데모 시드 주소가 모두 이 범위 안에 든다. */
-    public static final double MIN_LON = 126.620;
-    public static final double MAX_LON = 126.700;
-    public static final double MIN_LAT = 37.415;
+    /**
+     * 서비스 구역 경계. 데모 시드 주소가 모두 이 범위 안에 든다.
+     *
+     * <p>서쪽을 126.645 에서 끊는다. 그보다 서쪽은 인천항 수역이라 격자를 깔면
+     * 배달지와 도로가 바다 위에 놓인다. 지도를 깔고 보면 바로 드러나는 자리다.
+     */
+    public static final double MIN_LON = 126.645;
+    public static final double MAX_LON = 126.710;
+    public static final double MIN_LAT = 37.430;
     public static final double MAX_LAT = 37.480;
 
     private static final int COLS = 25;

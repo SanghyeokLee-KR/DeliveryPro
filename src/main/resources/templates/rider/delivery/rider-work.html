@@ -113,12 +113,27 @@
     /////////////////////////////////////////////////////////////
     // 자동 팔로우 여부 플래그
     let autoFollow = true;
+    // 이번 배차의 정차지 전체. 팔로우를 끌 때 지도를 여기에 맞춘다.
+    let routeBounds = null;
     $(function () {
         $('#autoFollowToggle').on('change', function () {
             autoFollow = $(this).is(':checked');
-            console.log("자동 팔로우 모드:", autoFollow);
+            // 팔로우를 끄는 것은 코스 전체를 보겠다는 뜻이다. 라이더를 따라가던 화면이
+            // 그 자리에 멈추기만 하면 목적지 대부분이 화면 밖에 남는다.
+            if (!autoFollow && routeBounds && typeof map1 !== "undefined" && map1) {
+                map1.setBounds(routeBounds);
+            }
         });
     });
+
+    // 라이더 출발점, 매장, 배달지를 모두 담는 경계를 만들어 둔다.
+    function rememberRouteBounds(points) {
+        let valid = (points || []).filter(p => p && isFinite(p.x) && isFinite(p.y));
+        if (valid.length < 2) return;
+        let bounds = new kakao.maps.LatLngBounds();
+        valid.forEach(p => bounds.extend(new kakao.maps.LatLng(p.y, p.x)));
+        routeBounds = bounds;
+    }
     /////////////////////////////////////////////////////////////
     // 주소 정리: 앞쪽 숫자(지번) 제거
     function cleanAddress(address) {
@@ -445,6 +460,8 @@
                             leg: legByDestination[idx] || null
                         }));
                     showRoutePlanSummary(plan, routeStops.length);
+                    rememberRouteBounds([{x: driverX, y: driverY}, storeCoords]
+                        .concat(routeStops.map(s => s.point)));
                     // 픽업 구간은 계획에 없다. 라이더에서 매장까지만 따로 계획해 대체 경로를 얻는다.
                     KakaoGeocoderUtil.planRoute({x: driverX, y: driverY}, [storeCoords], function (pickupPlan) {
                         let pickupLeg = (pickupPlan && pickupPlan.legs && pickupPlan.legs.length)
