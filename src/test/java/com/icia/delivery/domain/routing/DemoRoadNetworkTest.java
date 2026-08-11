@@ -147,6 +147,29 @@ class DemoRoadNetworkTest {
     }
 
     @Test
+    @DisplayName("같은 교차점에 붙는 두 배달지도 이동 비용과 경로가 남는다")
+    void stopsOnTheSameNodeStillCost() {
+        int node = INDEX.nearest(126.6600, 37.4450, RoadNetworkProvider.SNAP_LIMIT_METERS);
+        GeoPoint center = GRAPH.point(node);
+        // 위도 0.00036도는 약 40m 다. 격자 간격보다 훨씬 짧아 두 점 모두 같은 교차점에 붙는다.
+        GeoPoint north = new GeoPoint(center.lon(), center.lat() + 0.00036);
+        GeoPoint south = new GeoPoint(center.lon(), center.lat() - 0.00036);
+        assertEquals(node, INDEX.nearest(north.lon(), north.lat(), RoadNetworkProvider.SNAP_LIMIT_METERS));
+        assertEquals(node, INDEX.nearest(south.lon(), south.lat(), RoadNetworkProvider.SNAP_LIMIT_METERS));
+
+        RoutePlan plan = RoutePlanner.demo().plan(center, List.of(north, south));
+
+        assertEquals(2, plan.legs().size());
+        for (RoutePlan.Leg leg : plan.legs()) {
+            assertTrue(leg.reachable());
+            assertTrue(leg.seconds() > 0.0, "스냅 거리를 버리면 이동 시간이 0으로 보고된다");
+            assertTrue(leg.meters() > 0.0);
+            assertTrue(leg.polyline().size() >= 2, "노드가 하나뿐이어도 정차지를 이어 선이 남아야 한다");
+        }
+        assertTrue(plan.totalSeconds() > 0.0);
+    }
+
+    @Test
     @DisplayName("좌표를 못 구한 배달지가 섞여도 순서를 만든다")
     void nullDestinationDoesNotBreakPlanning() {
         RoutePlanner planner = RoutePlanner.demo();

@@ -67,7 +67,9 @@ public final class RoutePlanner {
             if (reachable && matrix.nodes()[current] >= 0 && matrix.nodes()[next] >= 0) {
                 DijkstraRouter.Result result = router.oneToMany(
                         matrix.nodes()[current], new int[]{matrix.nodes()[next]});
-                polyline = router.reconstructPolyline(result, matrix.nodes()[current], matrix.nodes()[next]);
+                polyline = withSnapStubs(stops.get(current),
+                        router.reconstructPolyline(result, matrix.nodes()[current], matrix.nodes()[next]),
+                        stops.get(next));
             }
             legs.add(new RoutePlan.Leg(destination, seconds, meters, polyline, reachable));
             totalSeconds += seconds;
@@ -75,5 +77,28 @@ public final class RoutePlanner {
             current = next;
         }
         return new RoutePlan(visitPlan.order(), legs, totalSeconds, totalMeters, visitPlan.exact());
+    }
+
+    /**
+     * 도로 노드 경로 양 끝에 실제 정차지를 이어 붙인다.
+     *
+     * <p>비용에 스냅 거리를 실었으니 그림도 같아야 한다. 두 정차지가 같은 교차점에 붙으면
+     * 노드 경로가 한 점뿐이라, 이어 붙이지 않으면 화면에 선이 그려지지 않는다.
+     */
+    private static List<GeoPoint> withSnapStubs(GeoPoint from, List<GeoPoint> roadPath, GeoPoint to) {
+        List<GeoPoint> polyline = new ArrayList<>(roadPath.size() + 2);
+        addIfNew(polyline, from);
+        for (GeoPoint point : roadPath) {
+            addIfNew(polyline, point);
+        }
+        addIfNew(polyline, to);
+        return polyline;
+    }
+
+    private static void addIfNew(List<GeoPoint> polyline, GeoPoint point) {
+        if (point == null || (!polyline.isEmpty() && polyline.get(polyline.size() - 1).equals(point))) {
+            return;
+        }
+        polyline.add(point);
     }
 }

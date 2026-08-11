@@ -23,7 +23,8 @@ public record RoutePlan(int[] order,
      * @param destinationIndex 도착 배달지의 입력 인덱스
      * @param seconds          구간 통행 시간(초)
      * @param meters           구간 거리(미터)
-     * @param polyline         도로망을 따라간 좌표열. 도달 불가면 빈 목록
+     * @param polyline         도로망을 따라간 좌표열. 양 끝에 정차지에서 도로까지의 진입 구간이 붙는다.
+     *                         도달 불가면 빈 목록
      * @param reachable        도로망으로 도달 가능한지
      */
     public record Leg(int destinationIndex,

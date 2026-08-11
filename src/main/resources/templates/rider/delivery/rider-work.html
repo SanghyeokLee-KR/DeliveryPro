@@ -81,6 +81,8 @@
 
 <!-- 카카오 지도 SDK (appkey 포함) -->
 <script th:src="@{https://dapi.kakao.com/v2/maps/sdk.js(appkey=${@environment.getProperty('kakao.javascript.key')},libraries='services')}" type="text/javascript"></script>
+<!-- SDK 가 뜨지 않았을 때만 같은 이름의 축소 구현을 채워 넣는다. SDK 바로 다음이어야 한다 -->
+<script src="/rider/js/demo-map-fallback.js"></script>
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -144,10 +146,15 @@
                     let coords = {x: result[0].x, y: result[0].y};
                     console.log("[KakaoGeocoderUtil] 좌표:", coords);
                     callback(coords);
-                } else {
-                    console.error("[KakaoGeocoderUtil] 주소 검색 실패:", cleanedAddress);
-                    callback(null);
+                    return;
                 }
+                console.warn("[KakaoGeocoderUtil] 주소 검색 실패:", cleanedAddress);
+                // 키가 막혀 지오코딩이 실패해도 배차와 경로 흐름은 이어져야 한다.
+                if (window.DemoGeocoder) {
+                    window.DemoGeocoder.locate(cleanedAddress, callback);
+                    return;
+                }
+                callback(null);
             });
         },
         geocodeAddresses: function (addresses, callback) {
@@ -422,23 +429,71 @@
                     let visitOrder = (plan && plan.order && plan.order.length)
                         ? plan.order
                         : customerCoordsArray.map((coord, idx) => idx);
+                    // 구간 경로는 순서와 같은 계산에서 나온다. 배달지 인덱스로 찾아 두어야
+                    // 방문 순서와 화면에 그리는 선이 어긋나지 않는다.
+                    let legByDestination = {};
+                    if (plan && plan.legs) {
+                        plan.legs.forEach(function (leg) {
+                            legByDestination[leg.destinationIndex] = leg;
+                        });
+                    }
                     let routeStops = visitOrder
                         .filter(idx => customerCoordsArray[idx])
-                        .map(idx => ({orderIndex: idx, point: customerCoordsArray[idx]}));
-                    // 라이더 위치에서 매장까지 경로 요청 및 애니메이션 (매장은 픽업 구간)
-                    requestRouteAndAnimate(driverX, driverY, storeCoords.x, storeCoords.y, "#FF0000", function () {
-                        console.log("매장 도착! 이후 고객 구간");
-                        // 매장에 해당하는 첫 번째 segment-info(픽업 정보)를 "픽업완료"로 업데이트
-                        $card.find("span.segment-info[data-seg-index='0']").text("픽업완료");
-                        // 매장 도착 후 고객 구간 처리를 시작 (여기서부터는 집(배달) 구간)
-                        processRouteSegments(storeCoords, routeStops, $card);
+                        .map(idx => ({
+                            orderIndex: idx,
+                            point: customerCoordsArray[idx],
+                            leg: legByDestination[idx] || null
+                        }));
+                    showRoutePlanSummary(plan, routeStops.length);
+                    // 픽업 구간은 계획에 없다. 라이더에서 매장까지만 따로 계획해 대체 경로를 얻는다.
+                    KakaoGeocoderUtil.planRoute({x: driverX, y: driverY}, [storeCoords], function (pickupPlan) {
+                        let pickupLeg = (pickupPlan && pickupPlan.legs && pickupPlan.legs.length)
+                            ? pickupPlan.legs[0]
+                            : null;
+                        requestRouteAndAnimate(driverX, driverY, storeCoords.x, storeCoords.y, "#FF0000",
+                            pickupLeg ? pickupLeg.path : null, function () {
+                                console.log("매장 도착! 이후 고객 구간");
+                                // 매장에 해당하는 첫 번째 segment-info(픽업 정보)를 "픽업완료"로 업데이트
+                                $card.find("span.segment-info[data-seg-index='0']").text("픽업완료");
+                                // 매장 도착 후 고객 구간 처리를 시작 (여기서부터는 집(배달) 구간)
+                                processRouteSegments(storeCoords, routeStops, $card);
+                            });
                     });
                 });
             });
         });
     }
+    // 서버 계획의 좌표열({x, y})과 카카오 응답을 같은 형태로 맞춘다.
+    function toLatLngPath(points) {
+        if (!points) {
+            return [];
+        }
+        return points.map(point => new kakao.maps.LatLng(point.y, point.x));
+    }
+    function kakaoRouteCoords(routeResult) {
+        let coords = [];
+        if (routeResult && routeResult.segments) {
+            routeResult.segments.forEach(function (segment) {
+                (segment.coords || []).forEach(function (point) {
+                    coords.push(point);
+                });
+            });
+        }
+        return coords;
+    }
     // 경로 요청 + 폴리라인 + 애니메이션
-    function requestRouteAndAnimate(fromX, fromY, toX, toY, color, onFinish) {
+    // 카카오 응답을 먼저 쓴다. 실제 도로 데이터가 서버의 합성 도로망보다 촘촘해서다.
+    // 키가 없거나 구간이 비어 돌아오면 서버가 계산한 구간 경로로 대체한다.
+    function requestRouteAndAnimate(fromX, fromY, toX, toY, color, fallbackPath, onFinish) {
+        function drawAndAnimate(path) {
+            if (!path || path.length < 2) {
+                console.warn("[requestRouteAndAnimate] 그릴 좌표가 없어 구간을 건너뜁니다.");
+                if (onFinish) onFinish();
+                return;
+            }
+            drawPathOnMap(path, color);
+            animatePath(path, onFinish);
+        }
         $.ajax({
             url: '/pointAjax',
             type: 'POST',
@@ -446,19 +501,26 @@
             dataType: 'json',
             success: function (routeResult) {
                 routeResult = unwrapApiResponse(routeResult);
-                drawRouteOnMapWithColor(routeResult, color);
-                let path = [];
-                routeResult.segments.forEach(function (segment) {
-                    segment.coords.forEach(function (point) {
-                        path.push(new kakao.maps.LatLng(point.y, point.x));
-                    });
-                });
-                animatePath(path, onFinish);
+                let path = toLatLngPath(kakaoRouteCoords(routeResult));
+                drawAndAnimate(path.length >= 2 ? path : toLatLngPath(fallbackPath));
             },
             error: function (err) {
                 console.error("[requestRouteAndAnimate] 경로 오류:", err);
+                drawAndAnimate(toLatLngPath(fallbackPath));
             }
         });
+    }
+    // 서버가 계산한 경로 요약. 화면에 숫자가 남아야 방문 순서 계산이 돌았다는 것이 보인다.
+    function showRoutePlanSummary(plan, stopCount) {
+        if (!plan) {
+            $("#distanceInfoSidebar").text("경로 계획을 받지 못했습니다.");
+            return;
+        }
+        let km = (plan.totalMeters / 1000).toFixed(2);
+        let minutes = Math.ceil(plan.totalSeconds / 60);
+        let quality = plan.exact ? "정확해" : "근사해";
+        $("#distanceInfoSidebar").text(
+            `서버 경로 계획: 배달지 ${stopCount}곳 · 총 ${km}km · 약 ${minutes}분 · 방문 순서 ${quality}`);
     }
     // 라이더 아이콘 애니메이션
     function animatePath(path, onFinish) {
@@ -510,11 +572,12 @@
                 return;
             }
             let nextPoint = routeStops[index].point;
+            let legPath = routeStops[index].leg ? routeStops[index].leg.path : null;
             showActionButtonOnMap("배달", function () {
                 requestRouteAndAnimate(
                     currentPoint.x, currentPoint.y,
                     nextPoint.x, nextPoint.y,
-                    "#0000FF", function () {
+                    "#0000FF", legPath, function () {
                         // 방문 순서와 카드의 주문 나열 순서는 다르다. 원래 자리를 가리키는
                         // orderIndex 로 찾아야 엉뚱한 주문이 배달완료로 바뀌지 않는다.
                         let $orderLi = $card.find("li[data-order-id]").eq(routeStops[index].orderIndex);
@@ -807,7 +870,8 @@
         }
         // 그룹화 (storeId + callTime 기준)
         const groupedByKey = groupOrders.reduce((groups, order) => {
-            let storeId = order.storeId ? order.storeId.toString() : order.storeAddress;
+            // 주문 DTO 의 가게 식별자는 prestoId 다. storeId 는 없는 필드라 늘 주소 문자열로 대체돼 왔다.
+            let storeId = order.prestoId ? order.prestoId.toString() : order.storeAddress;
             let callTime = order.callTime ? order.callTime.trim() : "";
             let key = storeId + "_" + callTime;
             if (!groups[key]) groups[key] = [];
@@ -1117,13 +1181,7 @@
     }
     /////////////////////////////////////////////////////////////
     // 경로 그리기
-    function drawRouteOnMapWithColor(routeResult, polyColor) {
-        let path = [];
-        routeResult.segments.forEach(function (segment) {
-            segment.coords.forEach(function (point) {
-                path.push(new kakao.maps.LatLng(point.y, point.x));
-            });
-        });
+    function drawPathOnMap(path, polyColor) {
         let polyline = new kakao.maps.Polyline({
             path: path,
             strokeWeight: 5,

@@ -10,6 +10,10 @@ import com.icia.delivery.domain.coupon.entity.CouponEntity;
 import com.icia.delivery.domain.coupon.repository.CouponRepository;
 import com.icia.delivery.domain.deliveryaddress.entity.DeliveryAddressEntity;
 import com.icia.delivery.domain.deliveryaddress.repository.DeliveryAddressRepository;
+import com.icia.delivery.domain.deliverygroup.entity.DeliveryGroupEntity;
+import com.icia.delivery.domain.deliverygroup.entity.DeliveryGroupItemEntity;
+import com.icia.delivery.domain.deliverygroup.repository.DeliveryGroupItemRepository;
+import com.icia.delivery.domain.deliverygroup.repository.DeliveryGroupRepository;
 import com.icia.delivery.domain.member.entity.MemberEntity;
 import com.icia.delivery.domain.member.repository.MemberRepository;
 import com.icia.delivery.domain.notification.entity.NotificationEntity;
@@ -77,6 +81,17 @@ public class DemoDataSeeder implements ApplicationRunner {
 
     private static final int ORDER_COUNT = 45;
 
+    /** 이 번호부터 끝까지가 배차 대기 주문이다. 라이더 배차 화면에 뜨는 것도 이 구간뿐이다. */
+    private static final int DISPATCH_FROM = 41;
+
+    /**
+     * 배차 대기 주문 중 앞의 세 건은 같은 가게에 몰아 한 묶음으로 만든다.
+     * 라이더 화면이 가게와 호출 시각으로 카드를 묶으므로, 가게가 다르면 카드가 1건씩 갈라져
+     * 방문 순서 계산이 목적지를 둘 이상 받는 일이 없다.
+     */
+    private static final int GROUP_DEMO_SIZE = 3;
+    private static final int GROUP_DEMO_STORE_INDEX = 0;
+
     private record MenuSeed(String menuCategory, String name, long price, String description) {
     }
 
@@ -111,17 +126,24 @@ public class DemoDataSeeder implements ApplicationRunner {
     private static final class SeededStore {
         private final Long id;
         private final String name;
+        private final String address;
         private final int deliveryFee;
         private final List<Long> menuIds = new ArrayList<>();
         private final List<String> menuNames = new ArrayList<>();
         private final List<Long> menuPrices = new ArrayList<>();
         private final List<Integer> ratings = new ArrayList<>();
 
-        private SeededStore(Long id, String name, int deliveryFee) {
+        private SeededStore(Long id, String name, String address, int deliveryFee) {
             this.id = id;
             this.name = name;
+            this.address = address;
             this.deliveryFee = deliveryFee;
         }
+    }
+
+    /** 배차 대기 주문. 배달 그룹을 만들 때 필요한 값만 들고 있는다. */
+    private record DispatchOrder(Long orderId, Long storeId, String storeAddress, String userAddress,
+                                 String deliveryType, int deliveryFee, String customerRequest) {
     }
 
     private static final OwnerSeed[] OWNERS = {
@@ -543,6 +565,8 @@ public class DemoDataSeeder implements ApplicationRunner {
     private final BoardRepository boardRepository;
     private final CouponRepository couponRepository;
     private final NotificationRepository notificationRepository;
+    private final DeliveryGroupRepository deliveryGroupRepository;
+    private final DeliveryGroupItemRepository deliveryGroupItemRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -573,10 +597,10 @@ public class DemoDataSeeder implements ApplicationRunner {
         seedBoards(memberIds, now);
         seedNotifications(memberIds, riderIds, openStores, ownerIds, now);
 
-        log.info("데모 데이터 시딩 완료. 회원 {}, 사장님 {}, 가게 {}, 메뉴 {}, 라이더 {}, 주문 {}, 리뷰 {}",
+        log.info("데모 데이터 시딩 완료. 회원 {}, 사장님 {}, 가게 {}, 메뉴 {}, 라이더 {}, 주문 {}, 리뷰 {}, 배달그룹 {}",
                 memberRepository.count(), preMemRepository.count(), storeRepository.count(),
                 storeMenuRepository.count(), riderRepository.count(),
-                orderRepository.count(), reviewRepository.count());
+                orderRepository.count(), reviewRepository.count(), deliveryGroupRepository.count());
     }
 
     private void seedAdmin(LocalDateTime now) {
@@ -729,7 +753,7 @@ public class DemoDataSeeder implements ApplicationRunner {
             for (int s = 0; s < stores.length; s++) {
                 StoreSeed store = stores[s];
                 Long storeId = saveStore(store, category, ownerIds.get(store.ownerUserId()), now);
-                SeededStore seeded = new SeededStore(storeId, store.name(), store.deliveryFee());
+                SeededStore seeded = new SeededStore(storeId, store.name(), store.address(), store.deliveryFee());
                 int menuCount = 5 + ((c + s) % 4);
                 // 같은 사장님의 지점끼리 메뉴 구성과 가격을 조금씩 달리한다.
                 int priceOffset = s * 500;
@@ -797,9 +821,12 @@ public class DemoDataSeeder implements ApplicationRunner {
      * 별점은 만든 리뷰를 가게별로 모아 두었다가 집계에 쓴다.
      */
     private void seedOrdersAndReviews(List<SeededStore> openStores, List<Long> memberIds, LocalDateTime now) {
+        List<DispatchOrder> dispatched = new ArrayList<>();
         for (int i = 0; i < ORDER_COUNT; i++) {
-            SeededStore store = openStores.get(i % openStores.size());
-            Long memberId = memberIds.get((i * 3 + 1) % memberIds.size());
+            boolean groupDemo = i >= DISPATCH_FROM && i < DISPATCH_FROM + GROUP_DEMO_SIZE;
+            SeededStore store = openStores.get(groupDemo ? GROUP_DEMO_STORE_INDEX : i % openStores.size());
+            int memberIndex = (i * 3 + 1) % memberIds.size();
+            Long memberId = memberIds.get(memberIndex);
 
             int itemCount = 1 + (i % 2);
             List<Integer> pickedMenus = new ArrayList<>();
@@ -826,7 +853,7 @@ public class DemoDataSeeder implements ApplicationRunner {
             } else if (i < 37) {
                 deliveryStatus = "배달중";
                 createdAt = now.minusMinutes(20L + (i * 6) % 90);
-            } else if (i < 41) {
+            } else if (i < DISPATCH_FROM) {
                 deliveryStatus = "픽업중";
                 createdAt = now.minusMinutes(12L + (i * 5) % 40);
             } else {
@@ -834,13 +861,20 @@ public class DemoDataSeeder implements ApplicationRunner {
                 createdAt = now.minusMinutes(5L + (i * 3) % 25);
             }
 
+            String deliveryType = groupDemo ? "묶음배달" : DELIVERY_TYPES[i % DELIVERY_TYPES.length];
             int discount = i % 5 == 0 ? 2000 : 0;
+            String customerMessage = CUSTOMER_MESSAGES[i % CUSTOMER_MESSAGES.length];
             Long orderId = saveOrder(store.id, memberId, store.menuIds.get(pickedMenus.get(0)),
-                    orderStatus, deliveryStatus, DELIVERY_TYPES[i % DELIVERY_TYPES.length],
+                    orderStatus, deliveryStatus, deliveryType,
                     PAYMENT_METHODS[i % PAYMENT_METHODS.length],
                     itemsSum + store.deliveryFee - discount, store.deliveryFee, discount,
-                    CUSTOMER_MESSAGES[i % CUSTOMER_MESSAGES.length],
+                    customerMessage,
                     DELIVERY_MESSAGES[i % DELIVERY_MESSAGES.length], createdAt);
+
+            if ("배차중".equals(deliveryStatus)) {
+                dispatched.add(new DispatchOrder(orderId, store.id, store.address,
+                        MEMBERS[memberIndex].address(), deliveryType, store.deliveryFee, customerMessage));
+            }
 
             for (int k = 0; k < itemCount; k++) {
                 int index = pickedMenus.get(k);
@@ -857,6 +891,52 @@ public class DemoDataSeeder implements ApplicationRunner {
             if (itemCount == 2 && i % 4 == 1) {
                 saveReview(orderId, store, memberId, pickedMenus.get(1), i + 7, createdAt.plusHours(5));
             }
+        }
+        seedDeliveryGroups(dispatched, now);
+    }
+
+    /**
+     * 배차 대기 주문에 배달 그룹을 붙인다.
+     *
+     * <p>라이더 화면은 그룹이 있어야 호출 시각과 배달 그룹 번호를 받는다. 그룹이 없으면
+     * 카드에 수락할 대상이 없어 경로 계산까지 가지 못한다. 같은 가게의 묶음배달은 한 그룹으로,
+     * 한집배달은 주문마다 그룹을 따로 만든다. 라이더가 아직 안 잡았으므로 rider_no 는 비운다.
+     */
+    private void seedDeliveryGroups(List<DispatchOrder> dispatched, LocalDateTime now) {
+        Map<String, List<DispatchOrder>> grouped = new LinkedHashMap<>();
+        for (DispatchOrder order : dispatched) {
+            String key = "묶음배달".equals(order.deliveryType())
+                    ? "묶음-" + order.storeId()
+                    : "한집-" + order.orderId();
+            grouped.computeIfAbsent(key, k -> new ArrayList<>()).add(order);
+        }
+
+        int index = 0;
+        for (List<DispatchOrder> members : grouped.values()) {
+            DispatchOrder head = members.get(0);
+            LocalDateTime calledAt = now.minusMinutes(6L + index * 3L);
+
+            DeliveryGroupEntity group = new DeliveryGroupEntity();
+            group.setStoreId(head.storeId());
+            group.setDeliveryType(head.deliveryType());
+            group.setDeliveryStatus("배차중");
+            group.setCustomerRequest(head.customerRequest());
+            group.setDeliveryFee(members.stream().mapToInt(DispatchOrder::deliveryFee).sum());
+            group.setCreatedAt(calledAt);
+            group.setCallTime(calledAt);
+            Long deliveryId = deliveryGroupRepository.save(group).getDeliveryId();
+
+            int sequence = 1;
+            for (DispatchOrder member : members) {
+                DeliveryGroupItemEntity item = new DeliveryGroupItemEntity();
+                item.setDeliveryId(deliveryId);
+                item.setOrderId(member.orderId());
+                item.setOrderSequence(sequence++);
+                item.setStoreAddress(member.storeAddress());
+                item.setDestinationAddress(member.userAddress());
+                deliveryGroupItemRepository.save(item);
+            }
+            index++;
         }
     }
 

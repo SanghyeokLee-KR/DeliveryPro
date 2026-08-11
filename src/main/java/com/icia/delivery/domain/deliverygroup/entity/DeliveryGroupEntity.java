@@ -27,7 +27,8 @@ public class DeliveryGroupEntity {
     @Column(name = "delivery_id")
     private Long deliveryId;               // PK: 배달 그룹 ID
 
-    @Column(name = "rider_no", nullable = false)
+    // 배차중 그룹은 아직 잡은 라이더가 없다. riderCall 도 이 자리에 null 을 넣는다.
+    @Column(name = "rider_no")
     private Long riderNo;                  // 라이더 (FK)
 
     @Column(name = "store_id", nullable = false)
