@@ -13,7 +13,7 @@
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=flat-square&logo=thymeleaf&logoColor=white)
 ![WebSocket](https://img.shields.io/badge/WebSocket-STOMP%2FSockJS-010101?style=flat-square)
 
-도메인 패키지 19개 · 화면 101개 · 테스트 41건 · 데모 매장 28곳
+도메인 패키지 19개 · 화면 101개 · 테스트 41건 · 데모 매장 52곳
 
 **Oracle 없이 한 줄로 실행됩니다.** 아래 [1분 만에 실행](#1분-만에-실행)을 보세요.
 
@@ -78,7 +78,7 @@ Oracle과 외부 API 키 없이 바로 띄울 수 있습니다. H2 인메모리�
 | 사장님 | `boss01` | `boss1234` | `/pLoginForm` |
 | 라이더 | `rider01` | `rider1234` | `/rLoginForm` |
 
-데모 데이터는 매장 28곳(승인 25, 승인대기 3), 메뉴 184개, 주문 48건, 리뷰 35건, 회원 10명,
+데모 데이터는 매장 52곳(승인 49, 승인대기 3), 메뉴 336개, 주문 48건, 리뷰 35건, 회원 10명,
 라이더 8명, 배달 그룹 3건입니다. 주문은 픽업중, 배차중, 배달중, 배달완료로 상태를 서로 다르게
 넣어 관리자와 사장님 화면에서 각각 다른 목록이 뜨도록 했습니다. 배차 대기 주문 중 다섯 건은 같은
 매장으로 묶어 두었습니다. 라이더 화면에서 목적지가 다섯인 카드를 수락해야 방문 순서 계산이
@@ -137,7 +137,7 @@ KAKAO_JAVASCRIPT_KEY=발급받은키 ./gradlew bootRun --args='--spring.profiles
 
 카테고리 12종으로 나뉘고, 별점과 리뷰 수, 최소 주문 금액, 예상 배달 시간을 함께 보여줍니다.
 
-![store-list](docs/images/store-list.png)
+![store-list](docs/images/store-list.jpg)
 
 ### 매장 상세와 주문
 
